@@ -6,7 +6,7 @@ Single source-of-truth index of all work tracks in this repository.
 
 | Track | Design doc | Status | Review |
 |-------|-----------|--------|--------|
-| Raindrop Game | [2026-06-12_RAINDROP_GAME_DESIGN.md](2026-06-12_RAINDROP_GAME_DESIGN.md) | 🔄 in progress | (PIR on completion) |
+| Raindrop Game | [2026-06-12_RAINDROP_GAME_DESIGN.md](2026-06-12_RAINDROP_GAME_DESIGN.md) | ✅ done (all 8 phases; capstone 6/6) | [PIR](2026-06-12_RAINDROP_GAME_PIR.md) |
 
 ## Supporting documents
 
