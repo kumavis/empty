@@ -25,7 +25,7 @@ Linked documents: [research](../research/2026-06-12_raindrop_game.md) ·
 | 3 | AI personalities | ✅ done | 5 policies, all view-pure; X5 completed with a reactive-AI scale test; 28 tests green |
 | 4 | Campaign levels + solvability tests | ✅ done | 6 levels tuned via harness; all solutions win, all declared controls lose; greedy measured (wins tutorial, loses finale); L4 finding: at α=0.5 the myopic and optimal moves coincide — greedy claim moved to L6 |
 | 5 | CLI (interactive + scripted) | ✅ done | scripted victories L1 + L5 (plot:target syntax), honest losses, error recovery, X9 rendering; 62 tests green |
-| 6 | Web UI (static ESM page) | ⬜ not started | |
+| 6 | Web UI (static ESM page) | ✅ done (logic-free shell; visual QA = manual) | Web Worker owns GameState per user requirement; protocol core tested headlessly (full L1 victory through postMessage messages, X4 across the boundary); structural drift guards as tests; module graph serves statically |
 | 7 | Capstone demo, README/CLAUDE.md, cleanup, PIR | ⬜ not started | |
 
 ## 1. Problem statement

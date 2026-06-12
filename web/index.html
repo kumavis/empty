@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raindrop — a game of trust and rain</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>" />
+  <style>
+    :root {
+      --bg: #101820; --panel: #18222e; --ink: #dbe7f3; --dim: #7e93a8;
+      --accent: #5ec2ff; --gold: #ffd479; --green: #7fe3a8; --red: #ff9d9d;
+      --edge: #3a5a78;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font: 15px/1.45 "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; justify-content: center;
+    }
+    h1 { font-size: 1.2rem; margin: 0 0 4px; font-weight: 600; }
+    h1 small { color: var(--dim); font-weight: 400; }
+    #board-wrap { flex: 1 1 480px; max-width: 640px; }
+    #board { width: 100%; aspect-ratio: 1; background: var(--panel); border-radius: 14px; }
+    #panel { flex: 1 1 340px; max-width: 460px; display: flex; flex-direction: column; gap: 12px; }
+    .card { background: var(--panel); border-radius: 14px; padding: 14px 16px; }
+    .goal { color: var(--gold); }
+    .status-banner { font-weight: 600; padding: 10px 14px; border-radius: 10px; display: none; }
+    .status-banner.won { display: block; background: #1d3a2a; color: var(--green); }
+    .status-banner.lost { display: block; background: #3a2222; color: var(--red); }
+    .muted { color: var(--dim); font-size: 0.9rem; }
+    select, button {
+      background: #243345; color: var(--ink); border: 1px solid #34495e;
+      border-radius: 8px; padding: 7px 12px; font: inherit; cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #06212f; font-weight: 700; border: none; }
+    button:disabled { opacity: 0.45; cursor: default; }
+    .sliders label { display: grid; grid-template-columns: 7em 1fr 3.2em; gap: 8px; align-items: center; margin: 4px 0; }
+    .sliders input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .plot-group { margin-bottom: 10px; }
+    .plot-group h3 { margin: 6px 0 2px; font-size: 0.95rem; color: var(--accent); }
+    #forecast-list { margin: 6px 0 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; }
+    #forecast-list li { display: flex; justify-content: space-between; }
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .drop { animation: fall 0.9s ease-in forwards; }
+    .gain { animation: rise 1.4s ease-out forwards; font-weight: 700; }
+    @keyframes fall { from { transform: translateY(-220px); opacity: 0.9; } to { transform: translateY(0); opacity: 0; } }
+    @keyframes rise { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-26px); opacity: 0; } }
+  </style>
+</head>
+<body>
+  <div id="board-wrap">
+    <h1>💧 Raindrop <small>— a game of trust and rain</small></h1>
+    <svg id="board" viewBox="0 0 600 600" role="img" aria-label="The garden"></svg>
+  </div>
+  <div id="panel">
+    <div class="card">
+      <div class="row">
+        <select id="level-select" aria-label="Level"></select>
+        <button id="restart">Restart</button>
+        <span id="round" class="muted"></span>
+      </div>
+      <p id="story" class="muted"></p>
+      <p class="goal" id="goal"></p>
+      <div id="banner" class="status-banner"></div>
+      <div class="row">
+        <button id="end-round" class="primary">End round — let it rain</button>
+        <button id="hint">Hint</button>
+        <button id="next" style="display:none">Next level →</button>
+      </div>
+      <p id="hint-text" class="muted" style="display:none"></p>
+    </div>
+    <div class="card">
+      <strong>Your trust</strong>
+      <div class="muted">Weights are relative — only the ratios matter.</div>
+      <div id="sliders" class="sliders"></div>
+    </div>
+    <div class="card">
+      <strong>Forecast</strong> <span class="muted">(what ending the round now would bring)</span>
+      <ul id="forecast-list"></ul>
+    </div>
+  </div>
+  <script type="module" src="./ui.js"></script>
+</body>
+</html>
