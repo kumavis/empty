@@ -1,0 +1,14 @@
+{
+  "name": "raindrop-game",
+  "version": "0.1.0",
+  "description": "Raindrop — a game of trust and rain. The raindrop continuous-issuance mechanism (EigenTrust over a token-weighted trust network) as the core mechanic of a puzzle-strategy game.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/",
+    "probe": "node scripts/probes/2026-06-12_design_probes.mjs",
+    "acceptance": "node examples/2026-06-12-raindrop-game.js",
+    "play": "node src/cli.js",
+    "web": "npx -y serve@latest -l 8137 ."
+  }
+}
