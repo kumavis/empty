@@ -1,0 +1,12 @@
+#+TITLE: Standup 2026-06-12
+#+NOTE: User's personal notes. Assistant treats this file as read-only after creation.
+
+* Yesterday
+- (first working interval in this repo — nothing prior)
+
+* Today
+- Requested: implement raindrop (https://kumavis.github.io/raindrop-paper/paper.md)
+  as the core mechanic of a game, following GENERIC_CLAUDE_WORKFLOW.md.
+
+* Blockers
+-
