@@ -62,7 +62,7 @@ SCENES = [
         "id": "mutable",
         "lead": 0.5,
         "tail": 0.9,
-        "text": "So why is JavaScript such an easy target? Reason one: everything is mutable. Any package can overwrite Array prototype map, and instantly, the entire app is compromised.",
+        "text": "So why is JavaScript such an easy target? In a word: flexibility. Remember that word, because the same flexibility that makes JavaScript vulnerable is exactly what will let us make it safe. First, the danger. Reason one: everything is mutable. Any package can overwrite Array prototype map, and instantly, the entire app is compromised.",
     },
     {
         "id": "ambient",
@@ -74,7 +74,7 @@ SCENES = [
         "id": "hardened",
         "lead": 0.5,
         "tail": 0.9,
-        "text": "Enter LavaMoat. It's built on Hardened JavaScript. Lockdown freezes the primordials: nobody tampers with shared built-ins, ever. And Compartments give each package its own isolated globals. It touches only what you explicitly hand it.",
+        "text": "Enter LavaMoat. It's built on Hardened JavaScript: that same flexibility, turned into defense. Lockdown freezes the primordials: nobody tampers with shared built-ins, ever. And Compartments give each package its own isolated globals. It touches only what you explicitly hand it.",
     },
     {
         "id": "policy",

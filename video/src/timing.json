@@ -2,35 +2,35 @@
   "title": {
     "audio": "audio/title.mp3",
     "lead": 0.4,
-    "audioSec": 6.687,
-    "durationSec": 7.887,
+    "audioSec": 6.825,
+    "durationSec": 8.025,
     "marks": [
-      0.0,
-      5.443
+      0,
+      5.466
     ]
   },
   "deps": {
     "audio": "audio/deps.mp3",
     "lead": 0.5,
-    "audioSec": 17.408,
-    "durationSec": 18.808,
+    "audioSec": 16.943,
+    "durationSec": 18.343,
     "marks": [
-      0.0,
-      3.574,
-      5.65,
-      7.82,
-      12.996
+      0,
+      3.562,
+      5.453,
+      7.785,
+      12.717
     ]
   },
   "incident": {
     "audio": "audio/incident.mp3",
     "lead": 0.5,
-    "audioSec": 13.322,
-    "durationSec": 14.722,
+    "audioSec": 13.766,
+    "durationSec": 15.166,
     "marks": [
-      0.0,
-      2.216,
-      8.39
+      0,
+      2.204,
+      8.46
     ]
   },
   "timeline": {
@@ -39,7 +39,7 @@
     "audioSec": 25.234,
     "durationSec": 26.634,
     "marks": [
-      0.0,
+      0,
       1.554,
       5.163,
       8.075,
@@ -53,73 +53,76 @@
   "stages": {
     "audio": "audio/stages.mp3",
     "lead": 0.5,
-    "audioSec": 13.244,
-    "durationSec": 14.644,
+    "audioSec": 13.021,
+    "durationSec": 14.421,
     "marks": [
-      0.0,
-      3.411,
-      7.659,
-      10.339
+      0,
+      3.214,
+      7.624,
+      10.188
     ]
   },
   "mutable": {
     "audio": "audio/mutable.mp3",
     "lead": 0.5,
-    "audioSec": 12.121,
-    "durationSec": 13.521,
+    "audioSec": 22.653,
+    "durationSec": 24.053,
     "marks": [
-      0.0,
-      3.179,
-      5.534
+      0,
+      3.284,
+      5.14,
+      12.034,
+      14.203,
+      16.477
     ]
   },
   "ambient": {
     "audio": "audio/ambient.mp3",
     "lead": 0.5,
-    "audioSec": 13.401,
-    "durationSec": 14.801,
+    "audioSec": 13.673,
+    "durationSec": 15.073,
     "marks": [
-      0.0,
-      2.309,
-      6.626
+      0,
+      2.239,
+      6.533
     ]
   },
   "hardened": {
     "audio": "audio/hardened.mp3",
     "lead": 0.5,
-    "audioSec": 15.177,
-    "durationSec": 16.577,
+    "audioSec": 17.709,
+    "durationSec": 19.109,
     "marks": [
-      0.0,
-      1.426,
-      4.083,
-      8.864,
-      12.671
+      0,
+      1.438,
+      6.73,
+      11.291,
+      15.178
     ]
   },
   "policy": {
     "audio": "audio/policy.mp3",
     "lead": 0.5,
-    "audioSec": 16.849,
-    "durationSec": 18.249,
+    "audioSec": 16.664,
+    "durationSec": 18.064,
     "marks": [
-      0.0,
-      1.298,
-      11.351,
-      14.077,
-      15.515
+      0,
+      1.391,
+      11.479,
+      14.263,
+      15.678
     ]
   },
   "toolkit": {
     "audio": "audio/toolkit.mp3",
     "lead": 0.5,
-    "audioSec": 11.781,
-    "durationSec": 13.181,
+    "audioSec": 11.802,
+    "durationSec": 13.202,
     "marks": [
-      0.0,
-      2.134,
-      5.198,
-      7.715
+      0,
+      2.111,
+      5.337,
+      7.761
     ]
   },
   "outro": {
@@ -128,7 +131,7 @@
     "audioSec": 27.402,
     "durationSec": 29.902,
     "marks": [
-      0.0,
+      0,
       6.767,
       8.414,
       10.467,

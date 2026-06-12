@@ -70,28 +70,40 @@ export const Hardened: React.FC = () => {
   const { frame, fps } = useClock();
   return (
     <SceneShell id="hardened">
-      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 60 }}>
+      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 44 }}>
         <SceneHeading frame={frame} fps={fps} color={colors.gray}>
           the foundation:{' '}
           <span style={{ color: colors.cyan }}>Hardened JavaScript</span>{' '}
           <span style={{ color: colors.dim, fontWeight: 600 }}>(SES, by Agoric)</span>
         </SceneHeading>
+        <div
+          style={{
+            fontFamily: fonts.heading,
+            fontSize: 38,
+            fontWeight: 600,
+            color: colors.dim,
+            opacity: fadeAt(frame, fps, 2.1, 0.5),
+          }}
+        >
+          that same <span style={{ color: colors.cyan, fontWeight: 800 }}>flexibility</span>,
+          turned into defense
+        </div>
         <div style={{ display: 'flex', flexDirection: 'row', gap: 70 }}>
-          <Column at={4.7} label="lockdown() — freeze the foundations" frame={frame} fps={fps}>
+          <Column at={7.3} label="lockdown() — freeze the foundations" frame={frame} fps={fps}>
             <Code
               code={LOCKDOWN}
               fontSize={27}
-              typeStartSec={5.0}
+              typeStartSec={7.6}
               typeDurSec={3.2}
               width={780}
               accent={colors.cyan}
             />
           </Column>
-          <Column at={9.5} label="Compartment — isolate each package" frame={frame} fps={fps}>
+          <Column at={11.9} label="Compartment — isolate each package" frame={frame} fps={fps}>
             <Code
               code={COMPARTMENT}
               fontSize={27}
-              typeStartSec={9.8}
+              typeStartSec={12.2}
               typeDurSec={3.2}
               width={780}
               accent={colors.cyan}
