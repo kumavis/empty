@@ -64,41 +64,41 @@ begin('[Phase 1] engine parity & properties');
 }
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 2] a game exists — staging, forecast, round resolution, goals');
-// {
-//   const { createGame, stageTrust, endRound, getView, forecast } =
-//     await import('../src/game/game.js');
-//   const { testLevel } = await import('../test/fixtures.js'); // tiny 3-plot level
-//   let game = createGame(testLevel);
-//
-//   assert.throws(() => stageTrust(game, 'you', 'you', 1), /self/i, 'self-trust rejected (X3)');
-//   assert.throws(() => stageTrust(game, 'you', 'brook', -1), /negative/i, 'negative rejected');
-//
-//   game = stageTrust(game, 'you', 'brook', 5);
-//   const fc = forecast(game);
-//   const { state: after, report } = endRound(game);
-//   assert.deepEqual(fc.allocation, report.allocation, 'forecast ≡ endRound (X4)');
-//   assert.equal(after.round, 1);
-//
-//   // Scale invariance (X5): staging 5 or 5000 on the only target is identical.
-//   let g2 = stageTrust(createGame(testLevel), 'you', 'brook', 5000);
-//   assert.deepEqual(endRound(g2).report.allocation, report.allocation, 'only ratios matter');
-//
-//   const view = getView(after);
-//   assert.ok(view.plots.every((p) => typeof p.personality === 'string'),
-//     'personalities are public information (X9)');
-//   assert.ok(close(view.plots.reduce((s, p) => s + p.share, 0), 1), 'shares sum to 1');
-// }
+begin('[Phase 2] a game exists — staging, forecast, round resolution, goals');
+{
+  const { createGame, stageTrust, endRound, getView, forecast } =
+    await import('../src/game/game.js');
+  const { testLevel } = await import('../test/fixtures.js'); // tiny 3-plot level
+  let game = createGame(testLevel);
+
+  assert.throws(() => stageTrust(game, 'you', 'you', 1), /self/i, 'self-trust rejected (X3)');
+  assert.throws(() => stageTrust(game, 'you', 'brook', -1), /negative/i, 'negative rejected');
+
+  game = stageTrust(game, 'you', 'brook', 5);
+  const fc = forecast(game);
+  const { state: after, report } = endRound(game);
+  assert.deepEqual(fc.allocation, report.allocation, 'forecast ≡ endRound (X4)');
+  assert.equal(after.round, 1);
+
+  // Scale invariance (X5): staging 5 or 5000 on the only target is identical.
+  let g2 = stageTrust(createGame(testLevel), 'you', 'brook', 5000);
+  assert.deepEqual(endRound(g2).report.allocation, report.allocation, 'only ratios matter');
+
+  const view = getView(after);
+  assert.ok(view.plots.every((p) => typeof p.personality === 'string'),
+    'personalities are public information (X9)');
+  assert.ok(close(view.plots.reduce((s, p) => s + p.share, 0), 1), 'shares sum to 1');
+}
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 2] goal edge semantics (X8)');
-// {
-//   const { goalMetOnFinalRoundWins, byRoundMeansEndOfRound, tieIsNotLeadership } =
-//     await import('../test/fixtures.js');
-//   assert.equal(goalMetOnFinalRoundWins(), 'won', 'win checked before loss');
-//   assert.equal(byRoundMeansEndOfRound(), 'won', 'byRound N = end of round N');
-//   assert.equal(tieIsNotLeadership(), 'lost', 'leaderAtRound needs strict lead');
-// }
+begin('[Phase 2] goal edge semantics (X8)');
+{
+  const { goalMetOnFinalRoundWins, byRoundMeansEndOfRound, tieIsNotLeadership } =
+    await import('../test/fixtures.js');
+  assert.equal(goalMetOnFinalRoundWins(), 'won', 'win checked before loss');
+  assert.equal(byRoundMeansEndOfRound(), 'won', 'byRound N = end of round N');
+  assert.equal(tieIsNotLeadership(), 'lost', 'leaderAtRound needs strict lead');
+}
 
 // ---------------------------------------------------------------------------
 // begin('[Phase 4] campaign: level 1 is winnable through the real API');
