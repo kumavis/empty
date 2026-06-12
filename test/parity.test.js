@@ -73,18 +73,25 @@ test('multi-round simulation parity (fixed + percentage + burn)', { skip }, asyn
       getDefaultsForRow: oracleFallbacks.trustSet,
     });
 
+    // The oracle's simulate() invokes eigentrust at ITS defaults (1e-6) and
+    // tracks supply incrementally — mirror both explicitly for bit-equality.
     let balances = [...initialBalances];
+    let totalSupply = balances.reduce((a, b) => a + b, 0);
     for (let r = 0; r < rounds; r++) {
       const res = issuanceRound({
         balances,
+        totalSupply,
         trustMatrix,
         alpha: 0.15,
         issuanceAmount: amount,
         issuanceMode: mode,
         burnRatio,
+        errorThreshold: 1e-6,
+        maxIterations: 1000,
         getDefaultsForRow: oracleFallbacks.trustSet,
       });
       balances = res.balances;
+      totalSupply = res.totalSupply;
       assert.deepEqual(
         balances,
         theirs.balanceHistory[r + 1],

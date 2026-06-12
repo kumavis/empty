@@ -20,7 +20,7 @@ Linked documents: [research](../research/2026-06-12_raindrop_game.md) ·
 | Phase | Description | Status | Notes |
 |-------|-------------|--------|-------|
 | 0 | Scaffolding + acceptance spec + parity skeleton | ✅ done | 358127c (scaffolding), Phase 0 commit; spec baseline green, parity suite skipped pending Phase 1 |
-| 1 | Engine: `eigentrust` + `issuanceRound` (+ parity, property tests) | ⬜ not started | |
+| 1 | Engine: `eigentrust` + `issuanceRound` (+ parity, property tests) | ✅ done | bit-exact parity with oracle (results AND iteration counts); 11 tests green; acceptance Phase 1 section active |
 | 2 | Game core: state, staging, round resolution, goals | ⬜ not started | |
 | 3 | AI personalities | ⬜ not started | |
 | 4 | Campaign levels + solvability tests | ⬜ not started | |

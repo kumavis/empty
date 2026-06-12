@@ -33,35 +33,35 @@ begin('[Phase 0] baseline canary — the oracle reproduces the design §4 worked
 }
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 1] engine parity & properties');
-// {
-//   const { eigentrust, issuanceRound } = await import('../src/raindrop.js');
+begin('[Phase 1] engine parity & properties');
+{
+  const { eigentrust, issuanceRound } = await import('../src/raindrop.js');
 
-//  // Same inputs, same params -> same allocation as the oracle.
-//  const params = {
-//    trustMatrix: [[0, 1, 0], [0, 0, 1], [0, 1, 0]],
-//    trustedSetWeights: [100, 100, 100],
-//    alpha: 0.15,
-//    errorThreshold: 1e-12,
-//  };
-//  const ours = eigentrust(params);
-//  const theirs = oracleEigentrust(params);
-//  assert.deepEqual(ours.result, theirs.result, 'engine ≡ oracle on the worked example');
-//  assert.equal(ours.converged, true);
+ // Same inputs, same params -> same allocation as the oracle.
+ const params = {
+   trustMatrix: [[0, 1, 0], [0, 0, 1], [0, 1, 0]],
+   trustedSetWeights: [100, 100, 100],
+   alpha: 0.15,
+   errorThreshold: 1e-12,
+ };
+ const ours = eigentrust(params);
+ const theirs = oracleEigentrust(params);
+ assert.deepEqual(ours.result, theirs.result, 'engine ≡ oracle on the worked example');
+ assert.equal(ours.converged, true);
 
-//  // One issuance round: 10% of supply minted, distributed by g.
-//  const round = issuanceRound({
-//    balances: [100, 100, 100],
-//    trustMatrix: params.trustMatrix,
-//    alpha: 0.15,
-//    issuanceAmount: 0.1,
-//    issuanceMode: 'percentage',
-//  });
-//  assert.ok(close(round.minted, 30), 'mints 10% of 300');
-//  assert.ok(close(round.balances.reduce((a, b) => a + b, 0), 330), 'supply accounting');
-//  assert.ok(close(round.balances[0], 101.5, 1e-3), 'player harvests g·ΔS');
-//  ok(`round: minted ${round.minted}, balances [${round.balances.map((x) => x.toFixed(2)).join(', ')}]`);
-//}
+ // One issuance round: 10% of supply minted, distributed by g.
+ const round = issuanceRound({
+   balances: [100, 100, 100],
+   trustMatrix: params.trustMatrix,
+   alpha: 0.15,
+   issuanceAmount: 0.1,
+   issuanceMode: 'percentage',
+ });
+ assert.ok(close(round.minted, 30), 'mints 10% of 300');
+ assert.ok(close(round.balances.reduce((a, b) => a + b, 0), 330), 'supply accounting');
+ assert.ok(close(round.balances[0], 101.5, 1e-3), 'player harvests g·ΔS');
+ ok(`round: minted ${round.minted}, balances [${round.balances.map((x) => x.toFixed(2)).join(', ')}]`);
+}
 
 // ---------------------------------------------------------------------------
 // begin('[Phase 2] a game exists — staging, forecast, round resolution, goals');
