@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.js\"",
     "probe": "node scripts/probes/2026-06-12_design_probes.mjs",
     "acceptance": "node examples/2026-06-12-raindrop-game.js",
     "play": "node src/cli.js",
