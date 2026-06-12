@@ -133,12 +133,13 @@ begin('[Phase 4] the Sybil Garden teaches what the probes proved');
 }
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 5] the CLI is a real entry point — scripted victory');
-// {
-//   const { execFileSync } = await import('node:child_process');
-//   const out = execFileSync('node', ['src/cli.js', '--level', '1', '--script',
-//     'test/solutions/level1.script'], { encoding: 'utf8' });
-//   assert.match(out, /you won|victory/i, 'level 1 victory through the CLI');
-// }
+begin('[Phase 5] the CLI is a real entry point — scripted victory');
+{
+  const { execFileSync } = await import('node:child_process');
+  const out = execFileSync('node', ['src/cli.js', '--level', '1', '--script',
+    'test/solutions/level1.script'], { encoding: 'utf8' });
+  assert.match(out, /you won|victory/i, 'level 1 victory through the CLI');
+  ok('CLI playthrough of First Rain ends in victory');
+}
 
 console.log('\nacceptance spec: all active sections pass.');
