@@ -23,7 +23,7 @@ Linked documents: [research](../research/2026-06-12_raindrop_game.md) ·
 | 1 | Engine: `eigentrust` + `issuanceRound` (+ parity, property tests) | ✅ done | bit-exact parity with oracle (results AND iteration counts); 11 tests green; acceptance Phase 1 section active |
 | 2 | Game core: state, staging, round resolution, goals | ✅ done | X3/X4/X5/X8/X9 + S2/S3 tested; 21 tests green; X5's "AI responses scale-invariant" half completes in Phase 3 (only loyalist exists yet) |
 | 3 | AI personalities | ✅ done | 5 policies, all view-pure; X5 completed with a reactive-AI scale test; 28 tests green |
-| 4 | Campaign levels + solvability tests | ⬜ not started | |
+| 4 | Campaign levels + solvability tests | ✅ done | 6 levels tuned via harness; all solutions win, all declared controls lose; greedy measured (wins tutorial, loses finale); L4 finding: at α=0.5 the myopic and optimal moves coincide — greedy claim moved to L6 |
 | 5 | CLI (interactive + scripted) | ⬜ not started | |
 | 6 | Web UI (static ESM page) | ⬜ not started | |
 | 7 | Capstone demo, README/CLAUDE.md, cleanup, PIR | ⬜ not started | |

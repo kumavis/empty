@@ -101,30 +101,36 @@ begin('[Phase 2] goal edge semantics (X8)');
 }
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 4] campaign: level 1 is winnable through the real API');
-// {
-//   const { createGame, stageTrust, endRound } = await import('../src/game/game.js');
-//   const { levels, solutions } = await import('../src/game/levels.js');
-//   let game = createGame(levels[0]);
-//   for (const moves of solutions[levels[0].id]) {
-//     for (const [target, weight] of moves) game = stageTrust(game, 'you', target, weight);
-//     ({ state: game } = endRound(game));
-//     if (game.status !== 'playing') break;
-//   }
-//   assert.equal(game.status, 'won', 'checked-in solution beats First Rain');
-// }
+begin('[Phase 4] campaign: level 1 is winnable through the real API');
+{
+  const { createGame, stageTrust, endRound } = await import('../src/game/game.js');
+  const { levels, solutions } = await import('../src/game/levels.js');
+  let game = createGame(levels[0]);
+  for (const moves of solutions[levels[0].id]) {
+    // Moves are [fromPlot, targetPlot, weight] triples; delegations persist.
+    for (const [from, target, weight] of moves) {
+      game = stageTrust(game, from, target, weight);
+    }
+    ({ state: game } = endRound(game));
+    if (game.status !== 'playing') break;
+  }
+  while (game.status === 'playing') ({ state: game } = endRound(game));
+  assert.equal(game.status, 'won', 'checked-in solution beats First Rain');
+  ok(`First Rain won at round ${game.round} with ${game.balances[0].toFixed(1)} tokens`);
+}
 
 // ---------------------------------------------------------------------------
-// begin('[Phase 4] the Sybil Garden teaches what the probes proved');
-// {
-//   // Honest split conserves (P2); the ring reconstructs self-trust (P6).
-//   const { ringDemo } = await import('../src/game/levels.js');
-//   const { honest, ring } = ringDemo();
-//   assert.ok(close(honest.groupAllocation, honest.baselineAllocation, 1e-12),
-//     'honest split conserves to machine precision');
-//   assert.ok(ring.groupAllocation > honest.groupAllocation * 2,
-//     'the ring captures what self-trust would');
-// }
+begin('[Phase 4] the Sybil Garden teaches what the probes proved');
+{
+  // Honest split conserves (P2); the ring reconstructs self-trust (P6).
+  const { ringDemo } = await import('../src/game/levels.js');
+  const { honest, ring } = ringDemo();
+  assert.ok(close(honest.groupAllocation, honest.baselineAllocation, 1e-12),
+    'honest split conserves to machine precision');
+  assert.ok(ring.groupAllocation > honest.groupAllocation * 2,
+    'the ring captures what self-trust would');
+  ok(`split ${honest.groupAllocation.toFixed(4)} = merged ${honest.baselineAllocation.toFixed(4)}; ring ${ring.groupAllocation.toFixed(4)}`);
+}
 
 // ---------------------------------------------------------------------------
 // begin('[Phase 5] the CLI is a real entry point — scripted victory');
