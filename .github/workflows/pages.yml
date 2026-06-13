@@ -1,0 +1,55 @@
+name: Pages
+
+# Test the game, then publish it to GitHub Pages. The deploy job only runs
+# after the suite, acceptance spec, and capstone all pass, so a broken build
+# never reaches the published site.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: npm run acceptance
+      - run: npm run capstone
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble site
+        # The browser game is zero-build ESM: web/ imports ../src/ with
+        # relative paths, so the published tree must keep both directories
+        # side by side. The root index.html redirects into web/.
+        run: |
+          mkdir -p _site
+          cp -r web src index.html _site/
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
