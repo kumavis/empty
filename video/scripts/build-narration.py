@@ -7,11 +7,12 @@ With scene ids, only those clips are regenerated; other scenes keep their
 existing timing.json entries (so their hardcoded beat constants stay valid).
 
 Uses Piper TTS (https://github.com/OHF-Voice/piper1-gpl) with the
-`en_GB-cori-high` voice. Each sentence is synthesized separately and
-joined with explicit silence, which both gives us per-sentence start
-times (the `marks` array, used to sync animations to the narration) and
-avoids piper's --sentence-silence flag — some builds fill that inserted
-"silence" with uninitialized memory, producing loud static bursts.
+`en_GB-alan-medium` voice (British English, male). Each sentence is
+synthesized separately and joined with explicit silence, which both gives
+us per-sentence start times (the `marks` array, used to sync animations
+to the narration) and avoids piper's --sentence-silence flag — some
+builds fill that inserted "silence" with uninitialized memory, producing
+loud static bursts.
 """
 import json
 import os
@@ -24,7 +25,7 @@ import soundfile as sf
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 AUDIO_DIR = os.path.join(ROOT, "public", "audio")
-MODEL = os.path.join(ROOT, "voices", "en_GB-cori-high.onnx")
+MODEL = os.path.join(ROOT, "voices", "en_GB-alan-medium.onnx")
 SENTENCE_GAP = 0.3  # seconds of silence inserted between sentences
 
 SCENES = [
@@ -56,7 +57,7 @@ SCENES = [
         "id": "stages",
         "lead": 0.5,
         "tail": 0.9,
-        "text": "A malicious package can strike anywhere in your pipeline. At install: lifecycle scripts run arbitrary code on your machine. At build: it rides inside your tooling. And at runtime: it ships in the app your users trust.",
+        "text": "There's someone in your codebase, and you can't trust them. A malicious package can strike anywhere in your pipeline. At install: lifecycle scripts run arbitrary code on your machine. At build: it rides inside your tooling. And at runtime: it ships in the app your users trust.",
     },
     {
         "id": "mutable",
@@ -74,7 +75,7 @@ SCENES = [
         "id": "hardened",
         "lead": 0.5,
         "tail": 0.9,
-        "text": "Enter LavaMoat. It's built on Hardened JavaScript. Lockdown freezes the primordials: nobody tampers with shared built-ins, ever. And Compartments give each package its own isolated globals. It touches only what you explicitly hand it.",
+        "text": "Enter LavaMoat. It's built on Hardened JavaScript. Lockdown freezes the primordials: nobody tampers with shared built-ins, ever. And Compartments give each package its own isolated globals. It touches only what you explicitly hand it. The goal isn't just isolation. It's fearless cooperation: packages working together, without having to trust each other.",
     },
     {
         "id": "policy",
