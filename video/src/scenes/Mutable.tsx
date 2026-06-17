@@ -17,7 +17,7 @@ const IMPACT = `
 ['user', 'data'].map(render)   // hijacked!
 `;
 
-const IMPACT_AT = 9.6;
+const IMPACT_AT = 11.0;
 
 export const Mutable: React.FC = () => {
   const { frame, fps } = useClock();
@@ -37,11 +37,11 @@ export const Mutable: React.FC = () => {
         >
           why is JavaScript such an easy target?
         </div>
-        <SceneHeading frame={frame} fps={fps} color={colors.red} at={3.8}>
+        <SceneHeading frame={frame} fps={fps} color={colors.red} at={3.95}>
           #1 — everything is mutable
         </SceneHeading>
-        <div style={{ opacity: fadeAt(frame, fps, 6.0, 0.4) }}>
-          <Code code={ATTACK} fontSize={40} typeStartSec={6.2} typeDurSec={2.0} width={1240} />
+        <div style={{ opacity: fadeAt(frame, fps, 6.4, 0.4) }}>
+          <Code code={ATTACK} fontSize={40} typeStartSec={6.6} typeDurSec={2.0} width={1240} />
         </div>
         <div
           style={{
@@ -52,7 +52,7 @@ export const Mutable: React.FC = () => {
           <Code
             code={IMPACT}
             fontSize={40}
-            typeStartSec={9.8}
+            typeStartSec={11.2}
             typeDurSec={1.4}
             width={1240}
             accent={colors.red}

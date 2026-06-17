@@ -32,16 +32,16 @@ $ lavamoat app.js   # enforced
 `;
 
 const COMPARTMENTS = [
-  { label: 'my-app', at: 2.0 },
-  { label: 'pkg: abc', at: 2.5 },
-  { label: 'pkg: xyz', at: 3.0 },
+  { label: 'my-app', at: 2.2 },
+  { label: 'pkg: abc', at: 2.8 },
+  { label: 'pkg: xyz', at: 3.4 },
 ];
-const KERNEL_AT = 3.5;
+const KERNEL_AT = 4.0;
 
 export const Policy: React.FC = () => {
   const { frame, fps } = useClock();
   const kernelIn = springAt(frame, fps, KERNEL_AT, { damping: 16 });
-  const cliIn = springAt(frame, fps, 12.0, { damping: 14 });
+  const cliIn = springAt(frame, fps, 13.0, { damping: 14 });
   return (
     <SceneShell id="policy" shakes={[{ at: KERNEL_AT, amp: 6 }]}>
       <ImpactFlash atSec={KERNEL_AT} color={colors.lavaBottom} peak={0.12} />
@@ -68,10 +68,9 @@ export const Policy: React.FC = () => {
                     style={{
                       width: 220,
                       height: 230,
-                      borderRadius: 18,
-                      border: `3px solid ${colors.lavaBottom}`,
+                      borderRadius: 14,
+                      border: `2px solid ${colors.lavaBottom}`,
                       background: colors.panel,
-                      boxShadow: `0 0 26px ${colors.lavaBottom}33`,
                       transform: `scale(${s})`,
                       display: 'flex',
                       flexDirection: 'column',
@@ -128,15 +127,16 @@ export const Policy: React.FC = () => {
             <div
               style={{
                 height: 96,
-                borderRadius: 18,
-                background: `linear-gradient(90deg, ${colors.lavaTop}, ${colors.lavaBottom})`,
+                borderRadius: 14,
+                background: colors.panel,
+                border: `2px solid ${colors.lavaBottom}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: fonts.heading,
                 fontWeight: 800,
                 fontSize: 38,
-                color: '#fff',
+                color: colors.lavaBottom,
                 transform: `scaleX(${kernelIn})`,
               }}
             >
@@ -153,7 +153,7 @@ export const Policy: React.FC = () => {
                 code={CLI}
                 title="policy is generated automatically"
                 fontSize={27}
-                typeStartSec={12.3}
+                typeStartSec={13.3}
                 typeDurSec={2.2}
                 accent={colors.green}
               />

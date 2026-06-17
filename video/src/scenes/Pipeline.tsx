@@ -61,13 +61,9 @@ export const Pipeline: React.FC<{
                 style={{
                   width: 280,
                   height: 280,
-                  borderRadius: 28,
+                  borderRadius: 16,
                   background: colors.panel,
-                  border: `3px solid ${active > 0.05 ? accent : colors.panelBorder}`,
-                  boxShadow:
-                    active > 0.05
-                      ? `0 0 ${40 * active}px ${accent}55`
-                      : '0 18px 40px rgba(0,0,0,0.4)',
+                  border: `2px solid ${active > 0.05 ? accent : colors.panelBorder}`,
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',

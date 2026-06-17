@@ -1,15 +1,24 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { springAt, useClock } from '../components/anim';
+import { fadeAt, springAt, useClock } from '../components/anim';
 import { ImpactFlash } from '../components/Effects';
 import { Icon } from '../components/Icon';
 import { SceneShell } from '../components/SceneShell';
-import { colors } from '../theme';
+import { colors, fonts } from '../theme';
+import timing from '../timing.json';
 import { Pipeline, SceneHeading } from './Pipeline';
 
 // horizontal offsets of the three stage boxes within the pipeline layout
 const STAGE_X = [-442, 0, 442];
-const BEATS = [4.0, 8.3, 10.9];
+
+// Beats from the narration marks:
+// 0 "There's someone in your codebase, and you can't trust them."
+// 1 "A malicious package can strike anywhere in your pipeline."
+// 2 install · 3 build · 4 runtime
+const M = (timing.stages.marks as number[]).map((m) => m + timing.stages.lead);
+const HOOK_AT = M[0];
+const HEAD_AT = M[1];
+const BEATS = [M[2], M[3], M[4]];
 
 export const Stages: React.FC = () => {
   const { frame, fps } = useClock();
@@ -26,8 +35,19 @@ export const Stages: React.FC = () => {
       {BEATS.map((at) => (
         <ImpactFlash key={at} atSec={at} peak={0.1} />
       ))}
-      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 170 }}>
-        <SceneHeading frame={frame} fps={fps}>
+      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 60 }}>
+        <div
+          style={{
+            fontFamily: fonts.heading,
+            fontSize: 40,
+            fontWeight: 600,
+            color: colors.red,
+            opacity: fadeAt(frame, fps, HOOK_AT, 0.5) * (1 - fadeAt(frame, fps, HEAD_AT, 0.5) * 0.45),
+          }}
+        >
+          there&rsquo;s someone in your codebase — and you can&rsquo;t trust them
+        </div>
+        <SceneHeading frame={frame} fps={fps} at={HEAD_AT}>
           a malicious dependency can strike{' '}
           <span style={{ color: colors.red }}>at every stage</span>
         </SceneHeading>
@@ -36,6 +56,7 @@ export const Stages: React.FC = () => {
             frame={frame}
             fps={fps}
             accent={colors.red}
+            appearAt={HEAD_AT + 0.2}
             stages={[
               {
                 icon: 'tree',
