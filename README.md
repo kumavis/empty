@@ -5,7 +5,7 @@ javascript supplychain security — generated entirely with code.
 
 [![Watch the LavaMoat explainer video](./lavamoat-explainer-preview.gif)](./lavamoat-explainer.mp4)
 
-**[▶ Click the preview to watch the full video](./lavamoat-explainer.mp4)** (3:09, 1080p, narrated)
+**[▶ Click the preview to watch the full video](./lavamoat-explainer.mp4)** (3:46, 1080p, narrated)
 
 - **[`lavamoat-explainer.mp4`](./lavamoat-explainer.mp4)** — the rendered video
 - **[`video/`](./video)** — the [Remotion](https://remotion.dev) project

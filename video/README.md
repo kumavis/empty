@@ -16,13 +16,17 @@ event-stream headline screenshots.
    web3.js & lottie-player (2024), the chalk & debug takeover (2B weekly
    downloads) and the self-replicating Shai-Hulud worm (~800 packages,
    25k+ repos across two waves, 2025), axios / node-ipc / Red Hat (2026)
-5. **Attack surface** — install (lifecycle scripts) → build (tooling) → runtime
+5. **Attack surface** — "there's someone in your codebase, and you can't trust them"
+   (naugtur); a malicious package strikes at install → build → runtime
 6. **Why JS is easy to attack #1** — everything is mutable (`Array.prototype.map = ...`)
 7. **#2 — ambient authority** — any package can `fetch(process.env)` unnoticed
-8. **The foundation** — Hardened JavaScript (SES): `lockdown()` + `Compartment`
+8. **The foundation** — "Enter LavaMoat", built on Hardened JavaScript (SES):
+   `lockdown()` + `Compartment`; the goal is not just isolation but
+   *fearless cooperation* (naugtur)
 9. **How LavaMoat works** — every package in its own compartment, enforced by an
    auto-generated `policy.json`
-10. **Adopt incrementally** — `@lavamoat/allow-scripts`, `lavamoat-node`, bundler plugins
+10. **Adopt incrementally** — each product gets a slowly spinning wireframe solid:
+    tetrahedron `@lavamoat/allow-scripts`, cube `lavamoat-node`, sphere `@lavamoat/webpack`
 11. **Outro** — battle-tested at MetaMask; "Never use dependencies? Unrealistic.
     Audit all of node_modules? Impossible. Contain every package with LavaMoat?
     Solved." (adapted from the MetaMask LavaMoat blog post);
@@ -68,21 +72,24 @@ to the narration.
 ## Regenerating narration
 
 Narration is synthesized locally with [Piper TTS](https://github.com/OHF-Voice/piper1-gpl)
-(voice: `en_GB-cori-high`). Each sentence is synthesized separately and joined
-with explicit silence — this yields the per-sentence `marks` and sidesteps
-piper's `--sentence-silence` flag, which in some builds fills the inserted
-silence with uninitialized memory (loud static bursts). To tweak the script,
-edit the texts in `scripts/build-narration.py`, then:
+(voice: `en_GB-alan-medium`, British English, male). Each sentence is
+synthesized separately and joined with explicit silence — this yields the
+per-sentence `marks` and sidesteps piper's `--sentence-silence` flag, which in
+some builds fills the inserted silence with uninitialized memory (loud static
+bursts). To tweak the script, edit the texts in `scripts/build-narration.py`,
+then:
 
 ```sh
 pip install piper-tts numpy soundfile
-mkdir -p voices && cd voices && python3 -m piper.download_voices en_GB-cori-high && cd ..
-npm run narration       # rebuilds public/audio/*.mp3 + src/timing.json
+mkdir -p voices && cd voices && python3 -m piper.download_voices en_GB-alan-medium && cd ..
+npm run narration               # rebuild all clips + src/timing.json
+npm run narration -- outro      # or just one scene (keeps the others' timing)
 ```
 
-`ffmpeg` is required (audio encoding + duration probing). If you change the
-text, re-check the hardcoded beat constants in `src/scenes/*` against the
-printed marks (the Outro reads its marks from timing.json directly).
+`ffmpeg` is required (audio encoding + duration probing). Most scenes derive
+their animation beats from the `marks` in `src/timing.json`; the few with
+hardcoded constants (`src/scenes/Incident|Mutable|Ambient|Policy`) should be
+re-checked against the printed marks if you change their text.
 
 ## Credits
 
