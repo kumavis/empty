@@ -271,7 +271,7 @@ const laserGroup = new THREE.Group();
 scene.add(laserGroup);
 
 const lasers = laserConfigs.map(cfg => {
-  const geom = new THREE.LineGeometry();
+  const geom = new LineGeometry();
   geom.setPositions([0, 0, 0, 0, 0, 0]);
   const mat = new LineMaterial({
     color: new THREE.Color(cfg.color),
