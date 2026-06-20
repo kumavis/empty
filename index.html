@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mirror Field — actuating reflective grid</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #140019; }
+  #app { position: fixed; inset: 0; }
+  #info {
+    position: fixed; left: 16px; top: 14px; z-index: 10;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: #e7d7ff; pointer-events: none; user-select: none;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+  }
+  #info h1 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.5px; color: #f2e9ff; }
+  #info p  { margin: 4px 0 0; font-size: 11px; opacity: 0.65; }
+  .lil-gui { --background-color: #1c0b2eef; --widget-color: #34184f; --focus-color: #6a2fb0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="info">
+  <h1>MIRROR FIELD</h1>
+  <p>drag to orbit · scroll to zoom · use the panel to switch patterns &amp; aim the lasers</p>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+// ---------------------------------------------------------------------------
+// Config
+// ---------------------------------------------------------------------------
+const SPAN   = 46;          // world size of the field
+const GRID_N = 52;          // mirrors per side
+const HALF   = SPAN / 2;
+const CELL   = SPAN / GRID_N;
+const PLATE  = CELL * 0.86; // mirror plate footprint
+const THICK  = CELL * 0.14; // mirror thickness
+
+const params = {
+  pattern: 'Ripple',
+  amp: 1.8,
+  freq: 0.5,
+  speed: 1.8,
+  roughness: 0.2,
+  bloomStrength: 0.85,
+  bloomThreshold: 0.16,
+  autoRotate: true,
+  rotateSpeed: 0.6,
+  showLasers: true,
+  animateLasers: true,
+  bounces: 3,
+};
+
+const state = { time: 0, patternFn: null };
+
+// ---------------------------------------------------------------------------
+// Renderer / scene / camera
+// ---------------------------------------------------------------------------
+const app = document.getElementById('app');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#140019'); // deep dark purple
+
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 1000);
+camera.position.set(0, 26, 40);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.target.set(0, 0.5, 0);
+controls.autoRotate = params.autoRotate;        // turntable
+controls.autoRotateSpeed = params.rotateSpeed;
+controls.minDistance = 14;
+controls.maxDistance = 95;
+controls.maxPolarAngle = 1.46;
+
+// ---------------------------------------------------------------------------
+// Environment map (procedural) — gives the mirrors their reflective glints.
+// Background stays solid deep-purple; the env only drives reflections.
+// ---------------------------------------------------------------------------
+function makeEnvTexture() {
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 512;
+  const g = c.getContext('2d');
+
+  const grad = g.createLinearGradient(0, 0, 0, 512);
+  grad.addColorStop(0.0, '#241043');
+  grad.addColorStop(0.5, '#0c0418');
+  grad.addColorStop(1.0, '#04010a');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 1024, 512);
+
+  const glow = (x, y, r, col, a) => {
+    const rg = g.createRadialGradient(x, y, 0, x, y, r);
+    rg.addColorStop(0, col);
+    rg.addColorStop(1, 'rgba(0,0,0,0)');
+    g.globalAlpha = a;
+    g.fillStyle = rg;
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+    g.globalAlpha = 1;
+  };
+  // bright reflected highlights -> these become the sweeping glints
+  glow(190, 150, 150, '#ffffff', 0.95);
+  glow(520, 110, 130, '#ff5fd8', 0.7);
+  glow(815, 185, 160, '#5fe8ff', 0.7);
+  glow(360, 300, 110, '#ffb066', 0.5);
+  glow(690, 360, 130, '#a17bff', 0.6);
+  glow(60,  330, 90,  '#ffffff', 0.4);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = makeEnvTexture();
+scene.environment = pmrem.fromEquirectangular(envTex).texture;
+envTex.dispose();
+
+// soft fill so the metal isn't pitch black where the env is dark
+scene.add(new THREE.HemisphereLight(0x4a2d7a, 0x080010, 0.25));
+const key = new THREE.DirectionalLight(0xc9b8ff, 0.5);
+key.position.set(-12, 24, 10);
+scene.add(key);
+
+// ---------------------------------------------------------------------------
+// Mirror grid (instanced thin plates)
+// ---------------------------------------------------------------------------
+const plateGeo = new THREE.BoxGeometry(PLATE, THICK, PLATE);
+const plateMat = new THREE.MeshStandardMaterial({
+  color: 0xdfe6ff,
+  metalness: 0.96,
+  roughness: params.roughness,
+  envMapIntensity: 1.15,
+});
+const COUNT = GRID_N * GRID_N;
+const mirrors = new THREE.InstancedMesh(plateGeo, plateMat, COUNT);
+mirrors.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+mirrors.frustumCulled = false;
+scene.add(mirrors);
+
+// cache the base xz position of each instance
+const baseX = new Float32Array(COUNT);
+const baseZ = new Float32Array(COUNT);
+{
+  let i = 0;
+  for (let gx = 0; gx < GRID_N; gx++) {
+    for (let gz = 0; gz < GRID_N; gz++) {
+      baseX[i] = -HALF + (gx + 0.5) * CELL;
+      baseZ[i] = -HALF + (gz + 0.5) * CELL;
+      i++;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Patterns: each is height = f(x, z, t, params)
+// ---------------------------------------------------------------------------
+let drops = [];
+let nextDrop = 0;
+function updateRain(t) {
+  if (t > nextDrop) {
+    drops.push({
+      x: (Math.random() * 2 - 1) * HALF * 0.9,
+      z: (Math.random() * 2 - 1) * HALF * 0.9,
+      t0: t,
+    });
+    nextDrop = t + 0.35 + Math.random() * 0.5;
+  }
+  if (drops.length > 40) drops.shift();
+  drops = drops.filter(d => t - d.t0 < 6.5);
+}
+function rainHeight(x, z, t, p) {
+  let h = 0;
+  for (let k = 0; k < drops.length; k++) {
+    const d = drops[k];
+    const age = t - d.t0;
+    if (age < 0) continue;
+    const r = Math.hypot(x - d.x, z - d.z);
+    h += p.amp * Math.sin(p.freq * 2.2 * r - p.speed * 2.2 * age) *
+         Math.exp(-age * 0.85) * Math.exp(-r * 0.07);
+  }
+  return h;
+}
+
+const patterns = {
+  'Wave': (x, z, t, p) => p.amp * Math.sin(p.freq * x - p.speed * t),
+  'Ripple': (x, z, t, p) => {
+    const r = Math.hypot(x, z);
+    return p.amp * Math.sin(p.freq * r - p.speed * t);
+  },
+  'Interference': (x, z, t, p) =>
+    p.amp * 0.6 * (Math.sin(p.freq * x - p.speed * t) +
+                   Math.sin(p.freq * z - p.speed * t * 0.9)),
+  'Spiral': (x, z, t, p) => {
+    const r = Math.hypot(x, z), a = Math.atan2(z, x);
+    return p.amp * Math.sin(p.freq * r + 3 * a - p.speed * t);
+  },
+  'Twist': (x, z, t, p) => {
+    const r = Math.hypot(x, z), a = Math.atan2(z, x);
+    return p.amp * Math.sin(p.freq * r - p.speed * t + 2 * a) * Math.cos(a * 0.5);
+  },
+  'Diagonal': (x, z, t, p) =>
+    p.amp * Math.sin(p.freq * 0.7071 * (x + z) - p.speed * t),
+  'Checker Pulse': (x, z, t, p) =>
+    p.amp * Math.sin(p.freq * x) * Math.sin(p.freq * z) * Math.sin(p.speed * t),
+  'Radial Pulse': (x, z, t, p) => {
+    const r = Math.hypot(x, z);
+    return p.amp * Math.cos(p.freq * r * 1.4) * Math.sin(p.speed * t - r * 0.12);
+  },
+  'Noise Field': (x, z, t, p) =>
+    p.amp * (
+      Math.sin(p.freq * x        + t * p.speed * 0.5) * 0.5 +
+      Math.sin(p.freq * z * 1.3  - t * p.speed * 0.4) * 0.3 +
+      Math.sin(p.freq * (x + z) * 0.7 + t * p.speed * 0.3) * 0.25 +
+      Math.sin(p.freq * (x - z) * 1.1 - t * p.speed * 0.6) * 0.2
+    ),
+  'Rain Drops': (x, z, t, p) => rainHeight(x, z, t, p),
+};
+state.patternFn = patterns[params.pattern];
+
+function heightAt(x, z, t) { return state.patternFn(x, z, t, params); }
+function normalAt(x, z, t, out) {
+  const e = 0.2;
+  const hx = heightAt(x + e, z, t) - heightAt(x - e, z, t);
+  const hz = heightAt(x, z + e, t) - heightAt(x, z - e, t);
+  return out.set(-hx / (2 * e), 1, -hz / (2 * e)).normalize();
+}
+
+// ---------------------------------------------------------------------------
+// Lasers — ray-traced beams that bounce off the (heightfield) mirror surface.
+// Bounce points spawn glowing markers + a pooled point-light, so the laser
+// light visibly "lands" on the mirrors.
+// ---------------------------------------------------------------------------
+const WHITE = new THREE.Color(0xffffff);
+
+const laserConfigs = [
+  { enabled: true, color: '#ff2d9b', posX: -20, posY: 7, posZ: -6, yaw: 90,  pitch: -14 },
+  { enabled: true, color: '#29e3ff', posX:  20, posY: 8, posZ:  8, yaw: -90, pitch: -16 },
+  { enabled: true, color: '#b6ff3a', posX:   4, posY: 9, posZ: -20, yaw: 0,  pitch: -15 },
+];
+
+const laserGroup = new THREE.Group();
+scene.add(laserGroup);
+
+const lasers = laserConfigs.map(cfg => {
+  const geom = new LineGeometry();
+  geom.setPositions([0, 0, 0, 0, 0, 0]);
+  const mat = new LineMaterial({
+    color: new THREE.Color(cfg.color),
+    linewidth: 0.13,
+    worldUnits: true,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  mat.resolution.set(innerWidth, innerHeight);
+  const line = new Line2(geom, mat);
+  line.frustumCulled = false;
+  laserGroup.add(line);
+  return { cfg, geom, mat, line };
+});
+
+// pooled bounce markers (glowing spheres)
+const MARKERS = 28;
+const markerGeo = new THREE.SphereGeometry(0.42, 16, 16);
+const markerPool = [];
+for (let i = 0; i < MARKERS; i++) {
+  const m = new THREE.Mesh(
+    markerGeo,
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  m.visible = false;
+  scene.add(m);
+  markerPool.push(m);
+}
+
+// pooled point-lights (fixed count to avoid shader recompiles)
+const LIGHTS = 8;
+const lightPool = [];
+for (let i = 0; i < LIGHTS; i++) {
+  const l = new THREE.PointLight(0xffffff, 0, 14, 2);
+  scene.add(l);
+  lightPool.push(l);
+}
+
+// scratch
+const _o = new THREE.Vector3();
+const _d = new THREE.Vector3();
+const _n = new THREE.Vector3();
+
+function march(o, d) {
+  const maxT = 220, step = 0.45, t = state.time, bound = HALF + 2.5;
+  let dist = 0;
+  let prev = o.y - heightAt(o.x, o.z, t);
+  while (dist < maxT) {
+    const nd = dist + step;
+    const px = o.x + d.x * nd, py = o.y + d.y * nd, pz = o.z + d.z * nd;
+    if (Math.abs(px) > bound || Math.abs(pz) > bound || py > 42) return null;
+    const f = py - heightAt(px, pz, t);
+    if (prev > 0 && f <= 0) {
+      let lo = dist, hi = nd;
+      for (let k = 0; k < 10; k++) {
+        const m = (lo + hi) * 0.5;
+        const fm = (o.y + d.y * m) - heightAt(o.x + d.x * m, o.z + d.z * m, t);
+        if (fm > 0) lo = m; else hi = m;
+      }
+      const tt = (lo + hi) * 0.5;
+      const point = new THREE.Vector3(o.x + d.x * tt, o.y + d.y * tt, o.z + d.z * tt);
+      const normal = normalAt(point.x, point.z, t, new THREE.Vector3());
+      return { point, normal };
+    }
+    prev = f;
+    dist = nd;
+  }
+  return null;
+}
+
+function traceLaser(origin, dir) {
+  const pts = [origin.x, origin.y, origin.z];
+  const hits = [];
+  _o.copy(origin);
+  _d.copy(dir).normalize();
+  for (let b = 0; b <= params.bounces; b++) {
+    const hit = march(_o, _d);
+    if (!hit) {
+      pts.push(_o.x + _d.x * 80, _o.y + _d.y * 80, _o.z + _d.z * 80);
+      break;
+    }
+    pts.push(hit.point.x, hit.point.y, hit.point.z);
+    hits.push(hit.point);
+    _d.reflect(hit.normal);
+    _o.copy(hit.point).addScaledVector(hit.normal, 0.06).addScaledVector(_d, 0.06);
+    if (b === params.bounces) {
+      pts.push(_o.x + _d.x * 80, _o.y + _d.y * 80, _o.z + _d.z * 80);
+    }
+  }
+  return { pts, hits };
+}
+
+function dirFromAngles(yawDeg, pitchDeg, out) {
+  const y = THREE.MathUtils.degToRad(yawDeg);
+  const p = THREE.MathUtils.degToRad(pitchDeg);
+  return out.set(Math.cos(p) * Math.sin(y), Math.sin(p), Math.cos(p) * Math.cos(y));
+}
+
+function updateLasers(t) {
+  laserGroup.visible = params.showLasers;
+  let markerIdx = 0;
+  let lightIdx = 0;
+
+  if (params.showLasers) {
+    for (let i = 0; i < lasers.length; i++) {
+      const { cfg, geom, mat, line } = lasers[i];
+      line.visible = cfg.enabled;
+      if (!cfg.enabled) continue;
+
+      // optional gentle auto-sweep
+      let yaw = cfg.yaw, pitch = cfg.pitch, py = cfg.posY;
+      if (params.animateLasers) {
+        yaw   += Math.sin(t * 0.5 + i * 2.1) * 24;
+        pitch += Math.sin(t * 0.37 + i * 1.3) * 5;
+        py    += Math.sin(t * 0.6 + i) * 1.2;
+      }
+      const origin = new THREE.Vector3(cfg.posX, py, cfg.posZ);
+      const dir = dirFromAngles(yaw, pitch, new THREE.Vector3());
+
+      const { pts, hits } = traceLaser(origin, dir);
+      geom.setPositions(pts);
+      geom.attributes.instanceStart.needsUpdate = true;
+      mat.color.set(cfg.color).lerp(WHITE, 0.25);
+
+      const col = new THREE.Color(cfg.color);
+      for (let h = 0; h < hits.length; h++) {
+        if (markerIdx < markerPool.length) {
+          const m = markerPool[markerIdx++];
+          m.visible = true;
+          m.position.copy(hits[h]);
+          m.material.color.copy(col).lerp(WHITE, 0.4);
+          const s = 0.7 + 0.3 * Math.sin(t * 6 + h);
+          m.scale.setScalar(s);
+        }
+        if (lightIdx < lightPool.length) {
+          const l = lightPool[lightIdx++];
+          l.position.copy(hits[h]).addScaledVector(normalAt(hits[h].x, hits[h].z, t, _n), 1.2);
+          l.color.copy(col);
+          l.intensity = 26;
+          l.distance = 13;
+        }
+      }
+    }
+  }
+
+  for (let i = markerIdx; i < markerPool.length; i++) markerPool[i].visible = false;
+  for (let i = lightIdx; i < lightPool.length; i++) lightPool[i].intensity = 0;
+}
+
+// ---------------------------------------------------------------------------
+// Post-processing (bloom for the glints + laser glow)
+// ---------------------------------------------------------------------------
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(innerWidth, innerHeight),
+  params.bloomStrength, 0.55, params.bloomThreshold
+);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// ---------------------------------------------------------------------------
+// GUI
+// ---------------------------------------------------------------------------
+const gui = new GUI({ title: 'Mirror Field' });
+
+const fp = gui.addFolder('Pattern');
+fp.add(params, 'pattern', Object.keys(patterns)).name('shape')
+  .onChange(v => { state.patternFn = patterns[v]; drops = []; nextDrop = 0; });
+fp.add(params, 'amp', 0, 5, 0.05).name('amplitude');
+fp.add(params, 'freq', 0.1, 1.5, 0.01).name('frequency');
+fp.add(params, 'speed', 0, 6, 0.05).name('speed');
+
+const fl = gui.addFolder('Look');
+fl.add(params, 'roughness', 0, 0.6, 0.01).name('mirror roughness')
+  .onChange(v => (plateMat.roughness = v));
+fl.add(params, 'bloomStrength', 0, 2, 0.01).name('glint glow')
+  .onChange(v => (bloom.strength = v));
+fl.add(params, 'bloomThreshold', 0, 0.6, 0.01).name('glow threshold')
+  .onChange(v => (bloom.threshold = v));
+fl.add(params, 'autoRotate').name('turntable')
+  .onChange(v => (controls.autoRotate = v));
+fl.add(params, 'rotateSpeed', 0, 3, 0.05).name('turn speed')
+  .onChange(v => (controls.autoRotateSpeed = v));
+
+const fL = gui.addFolder('Lasers');
+fL.add(params, 'showLasers').name('show lasers');
+fL.add(params, 'animateLasers').name('auto-sweep');
+fL.add(params, 'bounces', 0, 6, 1).name('max bounces');
+lasers.forEach((laser, i) => {
+  const f = fL.addFolder('laser ' + (i + 1));
+  f.add(laser.cfg, 'enabled').name('on');
+  f.addColor(laser.cfg, 'color').name('color');
+  f.add(laser.cfg, 'posX', -HALF, HALF, 0.1).name('x');
+  f.add(laser.cfg, 'posY', 1, 24, 0.1).name('height');
+  f.add(laser.cfg, 'posZ', -HALF, HALF, 0.1).name('z');
+  f.add(laser.cfg, 'yaw', -180, 180, 1).name('yaw');
+  f.add(laser.cfg, 'pitch', -89, 5, 1).name('pitch');
+  f.close();
+});
+
+// ---------------------------------------------------------------------------
+// Animate
+// ---------------------------------------------------------------------------
+const clock = new THREE.Clock();
+const dummy = new THREE.Object3D();
+const UP = new THREE.Vector3(0, 1, 0);
+const nrm = new THREE.Vector3();
+const quat = new THREE.Quaternion();
+
+function updateMirrors(t) {
+  for (let i = 0; i < COUNT; i++) {
+    const x = baseX[i], z = baseZ[i];
+    const h = heightAt(x, z, t);
+    normalAt(x, z, t, nrm);
+    quat.setFromUnitVectors(UP, nrm);
+    dummy.position.set(x, h, z);
+    dummy.quaternion.copy(quat);
+    dummy.scale.set(1, 1, 1);
+    dummy.updateMatrix();
+    mirrors.setMatrixAt(i, dummy.matrix);
+  }
+  mirrors.instanceMatrix.needsUpdate = true;
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = state.time = clock.getElapsedTime();
+  if (params.pattern === 'Rain Drops') updateRain(t);
+  updateMirrors(t);
+  updateLasers(t);
+  controls.update();
+  composer.render();
+}
+animate();
+
+// ---------------------------------------------------------------------------
+// Resize
+// ---------------------------------------------------------------------------
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  bloom.setSize(innerWidth, innerHeight);
+  lasers.forEach(l => l.mat.resolution.set(innerWidth, innerHeight));
+});
+</script>
+</body>
+</html>
