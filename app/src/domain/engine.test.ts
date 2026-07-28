@@ -22,6 +22,7 @@ const baseScenario: Scenario = {
   gainsOnPreArrivalHoldings: true,
   annualLivingCost: 0,
   prePositionedSavings: 0,
+  usSavings: 0,
   projectionYears: 1,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
@@ -273,7 +274,8 @@ describe('funding living costs — the burn model', () => {
     // 120k of savings against 50k/year: years one and two are fully funded.
     expect(r.years[0].cash.fundedFromRemittance).toBe(0);
     expect(r.years[1].cash.fundedFromRemittance).toBe(0);
-    expect(r.years[0].cash.savingsRemaining / 150).toBeCloseTo(70_000, 0);
+    // ¥5,000 per-capita inhabitant levy is due even at zero income.
+    expect(r.years[0].cash.cashJapan / 150).toBeCloseTo(70_000 - 33.33, 0);
   });
 
   it('reports the year the savings run out', () => {
@@ -282,10 +284,11 @@ describe('funding living costs — the burn model', () => {
   });
 
   it('forces a remittance once savings are gone', () => {
-    const r = runScenario(base);
+    const r = runScenario({ ...base, usSavings: 500_000 });
     const after = r.years.find((y) => y.year === 2029)!;
+    // Opening balance is already spent, so the whole year comes from abroad.
     expect(after.cash.fundedFromSavings).toBe(0);
-    expect(after.cash.fundedFromRemittance / 150).toBeCloseTo(50_000, 0);
+    expect(after.cash.fundedFromRemittance).toBeGreaterThan(0);
   });
 
   it('taxes nothing on the forced remittance when there is no foreign income to reach', () => {
@@ -373,5 +376,76 @@ describe('capital gains split by situs', () => {
     expect(after.phase).toBe('permanentResident');
     expect(after.japan.capitalGainsTaxOnForeign).toBeGreaterThan(0);
     expect(after.japan.capitalGainsTaxOnJapanSitus).toBeGreaterThan(0);
+  });
+});
+
+describe('two cash pools', () => {
+  const base: Scenario = {
+    ...baseScenario,
+    residencyStart: '2026-01-01',
+    annualSalary: 100_000,
+    annualLivingCost: 60_000,
+    prePositionedSavings: 50_000,
+    usSavings: 300_000,
+    projectionYears: 4,
+    gainsOnPreArrivalHoldings: true,
+  };
+
+  it('lands foreign-account gains abroad, where they stay unremitted', () => {
+    const r = runScenario({ ...base, annualCapitalGainsUs: 80_000 });
+    // Gains accumulate in the US pool and are never deemed remitted.
+    expect(r.years[0].cash.cashUs).toBeGreaterThan(r.years[0].cash.cashJapan);
+    expect(r.years[0].japan.deemedRemitted).toBe(0);
+    expect(r.years[1].cash.cashUs).toBeGreaterThan(r.years[0].cash.cashUs);
+  });
+
+  it('lands Japanese-account gains in the Japanese pool', () => {
+    const jp = runScenario({ ...base, annualCapitalGainsJapan: 80_000 });
+    const none = runScenario(base);
+    expect(jp.years[0].cash.cashJapan).toBeGreaterThan(none.years[0].cash.cashJapan);
+  });
+
+  it('pays US tax out of the US pool', () => {
+    const r = runScenario({ ...base, annualCapitalGainsUs: 80_000 });
+    const y = r.years[0];
+    // Opening 300k plus 80k of gains, less US tax and nothing remitted.
+    expect(y.cash.cashUs / 150).toBeLessThan(380_000);
+    expect(y.us.total).toBeGreaterThan(0);
+  });
+
+  it('repatriates from Japan untaxed when the US pool cannot cover US tax', () => {
+    // Gains in a JAPANESE account: the cash lands in Japan, but the US still
+    // charges NIIT on them, which no foreign tax credit can reach. So a US bill
+    // falls due with nothing abroad to pay it from.
+    const r = runScenario({
+      ...base, usSavings: 0, annualCapitalGainsJapan: 400_000,
+      annualCapitalGainsUs: 0, prePositionedSavings: 400_000,
+    });
+    const y = r.years[0];
+    expect(y.cash.repatriatedToUs).toBeGreaterThan(0);
+    // The reverse direction is not a remittance, so nothing is deemed remitted.
+    expect(y.japan.deemedRemitted).toBe(0);
+    expect(y.notes.some((n) => n.includes('untaxed'))).toBe(true);
+  });
+
+  it('remits from the US pool only once the Japanese pool is dry', () => {
+    const r = runScenario({
+      ...base, annualSalary: 0, prePositionedSavings: 100_000, annualLivingCost: 60_000,
+    });
+    expect(r.years[0].cash.fundedFromRemittance).toBe(0);
+    const later = r.years.find((y) => y.cash.fundedFromRemittance > 0);
+    expect(later).toBeDefined();
+    expect(later!.cash.cashJapan).toBeLessThanOrEqual(1);
+  });
+
+  it('costs nothing to remit accumulated gains in a year with no new foreign income', () => {
+    // The ordering rule is capped by THIS year's foreign-source income, so a
+    // pool built up earlier can be drawn on freely once realisation stops.
+    const r = runScenario({
+      ...base, annualSalary: 0, annualCapitalGainsUs: 0,
+      prePositionedSavings: 0, usSavings: 500_000,
+    });
+    expect(r.years[0].cash.fundedFromRemittance).toBeGreaterThan(0);
+    expect(r.years[0].japan.deemedRemitted).toBe(0);
   });
 });

@@ -29,6 +29,7 @@ const DEFAULT: Scenario = {
   gainsOnPreArrivalHoldings: true,
   annualLivingCost: 130_000,
   prePositionedSavings: 60_000,
+  usSavings: 400_000,
   projectionYears: 8,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
@@ -278,6 +279,16 @@ export default function App() {
           />
 
           <Field
+            label="Savings held abroad"
+            type="text"
+            prefix="$"
+            value={String(scenario.usSavings)}
+            check={(raw) => checkMoney(raw, 'Savings held abroad', { max: 1_000_000_000 })}
+            onCommit={(v) => set({ usSavings: Number(v) })}
+            secondary={`${both(scenario.usSavings)} · sending any of it to Japan is a remittance; the reverse is untaxed`}
+          />
+
+          <Field
             label="Years to project"
             type="number"
             value={String(scenario.projectionYears)}
@@ -367,6 +378,7 @@ export default function App() {
                     <th scope="col">US</th>
                     <th scope="col">Combined</th>
                     <th scope="col">Cash in Japan</th>
+                    <th scope="col">Cash in US</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -380,7 +392,8 @@ export default function App() {
                       <td className="num--jp">{usd(y.japan.total / fx)}</td>
                       <td className="num--us">{usd(y.us.total)}</td>
                       <td><strong>{usd(y.combined / fx)}</strong></td>
-                      <td>{usd(y.cash.savingsRemaining / fx)}</td>
+                      <td className="num--jp">{usd(y.cash.cashJapan / fx)}</td>
+                      <td className="num--us">{usd(y.cash.cashUs / fx)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -396,7 +409,7 @@ export default function App() {
               </table>
             </div>
             <p className="muted small" style={{ marginTop: 10 }}>
-              Combined total {both(totalUsd)}.
+              Combined total {usd(totalUsd)} ({both(totalUsd)}).
             </p>
           </section>
 

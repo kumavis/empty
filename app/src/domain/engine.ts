@@ -35,8 +35,10 @@ export function runScenario(scenario: Scenario): ScenarioResult {
   const gainsUs = toJpy(scenario.annualCapitalGainsUs, fx);
   const livingCost = toJpy(scenario.annualLivingCost, fx);
 
-  let savings = toJpy(scenario.prePositionedSavings, fx);
+  let cashJapan = toJpy(scenario.prePositionedSavings, fx);
+  let cashUs = toJpy(scenario.usSavings, fx);
   let savingsExhaustedIn: number | null = null;
+  let underfundedIn: number | null = null;
   let carryforwardGeneral = 0;
   let carryforwardPassive = 0;
 
@@ -72,23 +74,34 @@ export function runScenario(scenario: Scenario): ScenarioResult {
 
     let fundedFromSavings = 0;
     let fundedFromRemittance = 0;
-    let savingsAfter = savings;
+    let cashJapanAfter = cashJapan;
+
+    /**
+     * What the foreign pool could send this year. Measured before US tax, so
+     * the Japanese fixed point below does not have to nest inside the US
+     * computation; any resulting shortfall abroad is settled afterwards by
+     * moving money the other way, which is untaxed and so cannot distort the
+     * Japanese answer.
+     */
+    const sendableFromUs = Math.max(0, cashUs + gainsUs);
 
     for (let pass = 0; pass < 4; pass++) {
-      const netSalary = Math.max(0, salary - japan.total);
-      const shortfall = livingCost - netSalary;
+      // Inflows land where the asset sits: salary and Japanese-account gains in
+      // Japan, foreign-account gains abroad. Japanese tax and living costs are
+      // paid out of the Japanese pool.
+      const yearFlow = salary + gainsJapan - livingCost - japan.total;
+      const beforeRemitting = cashJapan + yearFlow;
 
-      if (shortfall <= 0) {
-        // Salary more than covers living costs. The surplus is already-taxed
-        // money sitting in Japan, so it joins the same pot: both it and the
-        // pre-positioned savings can be spent without remitting anything.
-        fundedFromSavings = 0;
+      if (beforeRemitting >= 0) {
+        // The year is self-funding, or the opening balance covers the gap.
+        fundedFromSavings = Math.max(0, Math.min(cashJapan, -yearFlow));
         fundedFromRemittance = 0;
-        savingsAfter = savings - shortfall;
+        cashJapanAfter = beforeRemitting;
       } else {
-        fundedFromSavings = Math.min(shortfall, savings);
-        fundedFromRemittance = shortfall - fundedFromSavings;
-        savingsAfter = savings - fundedFromSavings;
+        // The opening balance is fully consumed; the rest must come from abroad.
+        fundedFromSavings = Math.max(0, cashJapan);
+        fundedFromRemittance = Math.min(-beforeRemitting, sendableFromUs);
+        cashJapanAfter = beforeRemitting + fundedFromRemittance;
       }
 
       // Only a non-permanent resident is exposed to the ordering rule at all.
@@ -110,10 +123,16 @@ export function runScenario(scenario: Scenario): ScenarioResult {
       });
     }
 
-    if (savings > 0 && savingsAfter <= 0.5 && savingsExhaustedIn === null) {
+    if (cashJapan > 0 && cashJapanAfter <= 0.5 && savingsExhaustedIn === null) {
       savingsExhaustedIn = year;
     }
-    savings = savingsAfter;
+
+    // A pool that cannot be covered from either side means the plan is short of
+    // money, not that a balance is negative. Clamp and say so.
+    if (cashJapanAfter < 0) {
+      underfundedIn = underfundedIn ?? year;
+      cashJapanAfter = 0;
+    }
 
     // --- The US side, in USD -----------------------------------------------
     const us = computeUsYear({
@@ -133,6 +152,23 @@ export function runScenario(scenario: Scenario): ScenarioResult {
 
     carryforwardGeneral = us.carryforwardGeneral;
     carryforwardPassive = us.carryforwardPassive;
+
+    // --- Settle the two pools ----------------------------------------------
+    // Foreign-account gains land abroad and stay there; US tax is paid from
+    // there too. Anything remitted to Japan has already left.
+    let cashUsAfter = cashUs + gainsUs - us.total * fx - fundedFromRemittance;
+    let repatriatedToUs = 0;
+
+    if (cashUsAfter < 0) {
+      // Money moving Japan to US is NOT a remittance — ITA art. 7 reaches
+      // inbound transfers only — so covering a US tax bill this way is free.
+      repatriatedToUs = Math.min(-cashUsAfter, Math.max(0, cashJapanAfter));
+      cashUsAfter += repatriatedToUs;
+      cashJapanAfter -= repatriatedToUs;
+    }
+
+    cashJapan = cashJapanAfter;
+    cashUs = cashUsAfter;
 
     const combined = japan.total + us.total * fx;
     const economicIncome = resident ? salary + gainsJapan + gainsUs : 0;
@@ -159,9 +195,17 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         : []),
       ...(fundedFromRemittance > 0 && phase === 'nonPermanentResident'
         ? [
-            'Cash in Japan is spent, so living costs now have to be remitted. ' +
-              'Every remitted dollar beyond Japan-source income paid abroad reaches foreign ' +
-              'income under the ordering rule.',
+            'Cash in Japan is spent, so the shortfall had to be remitted from abroad. The ' +
+              'ordering rule is capped by THIS year\'s foreign-source income, so remitting ' +
+              'accumulated gains from an earlier year, in a year with no new foreign income, ' +
+              'costs nothing.',
+          ]
+        : []),
+      ...(repatriatedToUs > 0
+        ? [
+            'Cash was moved from Japan back to the US to meet the US tax bill. That direction ' +
+              'is untaxed — ITA art. 7 reaches inbound transfers only — so it costs nothing ' +
+              'and does not touch the ordering rule.',
           ]
         : []),
       ...japan.notes,
@@ -198,7 +242,9 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         livingCost,
         fundedFromSavings,
         fundedFromRemittance,
-        savingsRemaining: savingsAfter,
+        repatriatedToUs,
+        cashJapan: cashJapanAfter,
+        cashUs: cashUsAfter,
       },
       combined,
       effectiveRate: economicIncome > 0 ? combined / economicIncome : 0,
@@ -237,6 +283,14 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         'opposite directions. Japan taxes the Japanese-account gains as they arise but they ' +
         'keep their US credit; the foreign-held gains can be sheltered from Japan but then ' +
         'stay US-source under IRC 865(g)(2) with no credit to claim.',
+    );
+  }
+
+  if (underfundedIn !== null) {
+    warnings.push(
+      `The plan runs short of money in ${underfundedIn}: living costs and tax exceed everything ` +
+        'available on both sides. Figures from that year on assume the shortfall is met somehow, ' +
+        'so treat them as the floor rather than the answer.',
     );
   }
 

@@ -476,13 +476,25 @@ code { font-family: var(--mono); font-size: 0.88em; }
 .boundary { stroke: var(--shu); stroke-width: 2; stroke-dasharray: 3 3; }
 .boundary-label { font-family: var(--mono); font-size: 9px; fill: var(--shu); }
 
-.savings-area { fill: var(--series-savings); opacity: 0.18; }
-.savings-line { fill: none; stroke: var(--series-savings); stroke-width: 2; stroke-linejoin: round; }
+/* Hue follows jurisdiction here exactly as in the flow panel: vermilion is
+   Japan, blue is the US, everywhere on the page. */
+.cash-area { opacity: 0.12; }
+.cash-area--jp { fill: var(--series-jp); }
+.cash-area--us { fill: var(--series-us); }
+.panel-label {
+  font-family: var(--mono); font-size: 9px; fill: var(--ink-faint);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.cash-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.cash-line--jp { stroke: var(--series-jp); }
+.cash-line--us { stroke: var(--series-us); stroke-dasharray: 5 3; }
 .endpoint { fill: var(--shu); stroke: var(--surface); stroke-width: 2; }
 .endpoint-label { font-family: var(--mono); font-size: 9px; fill: var(--shu); }
 
 .chartwrap g.dim { opacity: 0.42; transition: opacity 0.12s; }
-.swatch--savings { background: var(--series-savings); opacity: 0.55; }
+.swatch--line-jp, .swatch--line-us { height: 3px; border: none; border-radius: 2px; }
+.swatch--line-jp { background: var(--series-jp); }
+.swatch--line-us { background: var(--series-us); }
 
 .tip {
   position: absolute; top: 10px; z-index: 5; pointer-events: none;

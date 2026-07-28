@@ -45,8 +45,10 @@ export function toCsv(scenario: Scenario, result: ScenarioResult, generatedAt: s
     ['Foreign holdings pre-date arrival', scenario.gainsOnPreArrivalHoldings ? 'yes' : 'no',
       'Enforcement Order art. 17(1) specified securities test'],
     ['Annual living cost (USD)', scenario.annualLivingCost, ''],
-    ['Pre-positioned savings (USD)', scenario.prePositionedSavings,
+    ['Pre-positioned savings in Japan (USD)', scenario.prePositionedSavings,
       'Moved before domicile attached, so outside the remittance regime'],
+    ['Savings held abroad (USD)', scenario.usSavings,
+      'Sending any of it to Japan is a remittance; the reverse direction is untaxed'],
     ['Projection years', scenario.projectionYears, ''],
     ['Exchange rate (JPY per USD)', fx, 'Held constant across the projection'],
     ['FEIE elected', scenario.elections.claimFeie ? 'yes' : 'no', 'IRC section 911'],
@@ -70,7 +72,7 @@ export function toCsv(scenario: Scenario, result: ScenarioResult, generatedAt: s
     'US: total (USD)',
     'Combined (USD)', 'Combined (JPY)', 'Effective rate',
     'Living cost (USD)', 'Funded from cash in Japan (USD)', 'Funded by remittance (USD)',
-    'Cash in Japan at year end (USD)',
+    'Repatriated to US (USD)', 'Cash in Japan at year end (USD)', 'Cash in US at year end (USD)',
   ]));
 
   for (const y of result.years) {
@@ -86,7 +88,8 @@ export function toCsv(scenario: Scenario, result: ScenarioResult, generatedAt: s
       y.us.excessCredits, y.us.niit, y.us.total,
       usd(y.combined), y.combined, y.effectiveRate,
       usd(y.cash.livingCost), usd(y.cash.fundedFromSavings),
-      usd(y.cash.fundedFromRemittance), usd(y.cash.savingsRemaining),
+      usd(y.cash.fundedFromRemittance), usd(y.cash.repatriatedToUs),
+      usd(y.cash.cashJapan), usd(y.cash.cashUs),
     ]));
   }
 
@@ -94,7 +97,7 @@ export function toCsv(scenario: Scenario, result: ScenarioResult, generatedAt: s
     'TOTAL', '', '', '', '', '', '', '',
     usd(result.totals.japan), result.totals.japan,
     '', '', '', '', '', usd(result.totals.us),
-    usd(result.totals.combined), result.totals.combined, '', '', '', '', '',
+    usd(result.totals.combined), result.totals.combined, '', '', '', '', '', '', '',
   ]));
   lines.push('');
 

@@ -152,6 +152,12 @@ export interface Scenario {
    * triggering the ordering rule — until they run out.
    */
   prePositionedSavings: number;
+  /**
+   * Liquid savings left in a US or other foreign account, in USD. Moving any of
+   * it to Japan IS a remittance and meets the ordering rule; moving money the
+   * other way is not, because ITA art. 7 reaches inbound transfers only.
+   */
+  usSavings: number;
   /** Number of years to project from the year residency begins. */
   projectionYears: number;
   elections: Elections;
@@ -196,21 +202,32 @@ export interface YearResult {
     total: number;
   };
 
-  /** Where the money to live on came from, and what is left. */
+  /**
+   * Two pools of cash, because which side of the border money sits on is what
+   * the whole remittance regime turns on.
+   *
+   * Salary and Japanese-account gains land in Japan; foreign-account gains land
+   * abroad and stay there, which is exactly what "unremitted" means. Japanese
+   * tax and living costs are paid out of the Japanese pool, US tax out of the
+   * foreign one.
+   */
   cash: {
     /** Salary net of Japanese tax, available in Japan without remitting. */
     netSalaryInJapan: number;
     livingCost: number;
-    /** Living cost met by drawing down cash already in Japan. */
+    /** Obligations met by drawing down cash already in Japan. */
     fundedFromSavings: number;
-    /** Living cost that had to be remitted, triggering the ordering rule. */
+    /** Obligations that had to be remitted, meeting the ordering rule. */
     fundedFromRemittance: number;
     /**
-     * Cash available in Japan at year end: pre-positioned savings plus any
-     * accumulated salary surplus. Both can be spent without remitting, so the
-     * model treats them as one pot.
+     * Moved from Japan back to the US to cover US tax. NOT a remittance: ITA
+     * art. 7 reaches inbound transfers only, so this direction is untaxed.
      */
-    savingsRemaining: number;
+    repatriatedToUs: number;
+    /** Cash in Japan at year end. */
+    cashJapan: number;
+    /** Cash held abroad at year end, including unremitted foreign gains. */
+    cashUs: number;
   };
 
   combined: number;
