@@ -101,16 +101,53 @@ Validate the glossary before committing:
 It checks the schema, unique ids across all files, that every `seeAlso` target
 resolves, and that **every cited source path actually exists in the repo**.
 
+## The calculator
+
+A TypeScript webapp in [`app/`](app/) — Vite, React, and a tax engine kept in pure
+modules under `app/src/domain/` so it is testable independently of the UI.
+
+```bash
+cd app
+npm install
+npm run dev        # http://localhost:5173
+npm test           # 22 tests anchoring the engine to the worked examples in docs/
+npm run typecheck
+```
+
+| Module | Implements |
+|---|---|
+| `domain/phases.ts` | The two clocks — income tax (days, ignores visa) and exit tax (visa, ignores days) |
+| `domain/japan.ts` | Remittance ordering rule, specified-securities test, pro-rata allocation |
+| `domain/us.ts` | §865(g)(2) interlock, per-basket §904 limitation, uncreditable NIIT |
+| `domain/engine.ts` | Multi-year projection; Japan first, since its tax decides US sourcing |
+| `domain/rates.ts` | Rate tables, versioned by tax year |
+
+Every Japanese term in the UI goes through the `<T>` component, which renders the
+English translation with the Japanese in parentheses and opens a popup carrying
+the definition, its citations into `sources/`, and any false-friend warning. It
+reads `docs/glossary/*.json` directly, so the research stays the single source of
+truth and the two cannot drift.
+
+The tests are the interesting part: they encode the worked example from
+[doc 02 §5](docs/02-japan-remittance-basis.md) end to end, the NTA's own rate-table
+example, and the finding that a work-visa holder is never exposed to the exit tax
+however large the portfolio. **When a test and a document disagree, the document
+is the authority.**
+
+### Known approximations, surfaced in the UI rather than hidden
+
+- A **transition year is not apportioned.** Enforcement Order art. 17(4)(vi)
+  requires splitting the year at the status change; the model applies the year-end
+  phase to the whole year and says so in its notes.
+- The **§904(b)(2)(B) factor is estimated**, not transcribed from the Form 1116
+  instructions.
+- The **§865(g)(2) test is applied in aggregate**, though the statute's "any sale"
+  wording suggests it is per-sale (doc 05 open question 4).
+
 ## Status
 
 **Done** — primary sources archived; ten cited briefs written; glossary populated
-and validating.
-
-**Next** — the interactive calculator and strategy explorer: a **TypeScript
-webapp** with a popup term dictionary backed by `docs/glossary/`. Its input model
-is specified in [`docs/09-strategy-levers.md`](docs/09-strategy-levers.md) §5, and
-the arithmetic it must implement is in doc 02 §4 (the Japanese remittance ordering
-rule), doc 03 (rate tables) and doc 06 §4 (the foreign tax credit algorithm).
+and validating; calculator built, typechecking, and tested.
 
 **Before the calculator's output can be relied on**, close the open questions
 flagged in the briefs — principally: Japanese inhabitant tax rules and their
