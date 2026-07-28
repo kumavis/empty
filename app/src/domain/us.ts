@@ -37,10 +37,17 @@ export interface UsYearInput {
   year: number;
   /** Compensation for services performed abroad — foreign-source, general basket. */
   foreignEarnedIncome: number;
-  /** Long-term capital gains. */
-  capitalGains: number;
-  /** Japanese tax paid on those gains, which decides sourcing under 865(g)(2). */
-  japaneseTaxOnGains: number;
+  /**
+   * Gains split by where the securities sit, because IRC 865(g)(2) is applied
+   * to each bucket separately. The statute says "any sale", implying a
+   * sale-by-sale test (doc 05 open question 4); testing per bucket is closer to
+   * that than one aggregate test, and it surfaces the asymmetry that matters:
+   * the gains Japan taxes are the ones that keep their US credit.
+   */
+  japanSitusGains: number;
+  japaneseTaxOnJapanSitusGains: number;
+  foreignGains: number;
+  japaneseTaxOnForeignGains: number;
   /** Japanese tax on salary — general basket. */
   japaneseTaxOnEarned: number;
   foreignInvestmentIncome: number;
@@ -69,8 +76,12 @@ export function computeUsYear(input: UsYearInput): UsYearOutput {
   const { rates } = forYear(US_RATES, input.year);
   const notes: string[] = [];
 
+  const capitalGains = input.japanSitusGains + input.foreignGains;
+  const japaneseTaxOnGains =
+    input.japaneseTaxOnJapanSitusGains + input.japaneseTaxOnForeignGains;
+
   const grossIncome =
-    input.foreignEarnedIncome + input.capitalGains + input.foreignInvestmentIncome;
+    input.foreignEarnedIncome + capitalGains + input.foreignInvestmentIncome;
 
   // --- IRC 911 -------------------------------------------------------------
   // Earned income only. Never reaches capital gains (doc 05 section 2).
@@ -86,7 +97,7 @@ export function computeUsYear(input: UsYearInput): UsYearOutput {
   }
 
   const ordinaryIncome = Math.max(0, input.foreignEarnedIncome - feieExcluded);
-  const investmentIncome = input.capitalGains + input.foreignInvestmentIncome;
+  const investmentIncome = capitalGains + input.foreignInvestmentIncome;
   const totalTaxableIncome = Math.max(
     0,
     ordinaryIncome + investmentIncome - rates.standardDeduction,
@@ -124,15 +135,33 @@ export function computeUsYear(input: UsYearInput): UsYearOutput {
   }
 
   // --- The section 904 limitation, per basket ------------------------------
-  const foreignSourceGains = gainIsForeignSource(input.capitalGains, input.japaneseTaxOnGains)
-    ? input.capitalGains
-    : 0;
+  // Tested per bucket, so a sheltered foreign gain going US-source does not drag
+  // a fully-taxed Japanese-account gain out of the foreign basket with it.
+  const japanSitusIsForeign = gainIsForeignSource(
+    input.japanSitusGains, input.japaneseTaxOnJapanSitusGains,
+  );
+  const foreignIsForeign = gainIsForeignSource(
+    input.foreignGains, input.japaneseTaxOnForeignGains,
+  );
+  const foreignSourceGains =
+    (japanSitusIsForeign ? input.japanSitusGains : 0) +
+    (foreignIsForeign ? input.foreignGains : 0);
 
-  if (input.capitalGains > 0 && foreignSourceGains === 0) {
+  if (input.foreignGains > 0 && !foreignIsForeign) {
     notes.push(
-      'Japanese tax on the gains is under 10% of the gain, so IRC 865(g)(2) leaves them ' +
-        'US-source. There is no passive-basket limitation room, and no Japanese tax to credit ' +
-        'either — the gain simply bears full US tax.',
+      'Japanese tax on the foreign-held gains is under 10% of the gain, so IRC 865(g)(2) ' +
+        'leaves them US-source. There is no passive-basket limitation room and no Japanese ' +
+        'tax to credit — the gain simply bears full US tax. This is the cost of the shelter: ' +
+        'it saves Japanese tax, not US tax.',
+    );
+  }
+
+  if (input.japanSitusGains > 0 && japanSitusIsForeign && input.foreignGains > 0 && !foreignIsForeign) {
+    notes.push(
+      'The two gain buckets source in opposite directions. Japan taxed the Japanese-account ' +
+        'gains at over 10%, so those are foreign-source and creditable; the sheltered ' +
+        'foreign-held gains stay US-source and are not. The gains you cannot shelter are the ' +
+        'ones that earn US credit relief.',
     );
   }
 
@@ -163,7 +192,7 @@ export function computeUsYear(input: UsYearInput): UsYearOutput {
   const passiveLimit = limitation(passiveNumerator);
 
   const generalAvailable = creditableEarnedTax + input.carryforwardGeneral;
-  const passiveAvailable = input.japaneseTaxOnGains + input.carryforwardPassive;
+  const passiveAvailable = japaneseTaxOnGains + input.carryforwardPassive;
 
   const creditGeneral = Math.min(generalAvailable, generalLimit);
   const creditPassive = Math.min(passiveAvailable, passiveLimit);

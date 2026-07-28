@@ -17,7 +17,8 @@ const baseScenario: Scenario = {
   priorPresence: [],
   visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
   annualSalary: 0,
-  annualCapitalGains: 0,
+  annualCapitalGainsJapan: 0,
+  annualCapitalGainsUs: 0,
   gainsOnPreArrivalHoldings: true,
   annualLivingCost: 0,
   prePositionedSavings: 0,
@@ -208,6 +209,7 @@ describe('doc 02 section 5 worked example, end to end', () => {
       salaryPaidInJapan: 0,
       foreignInvestmentIncomeAbroad: 0,
       foreignInvestmentIncomePaidInJapan: 0,
+      japanSitusGains: 0,
       remittance: 15_000_000,
       shelterableGains: 8_000_000,
       arisingBasisGains: 2_000_000,
@@ -227,6 +229,7 @@ describe('doc 02 section 5 worked example, end to end', () => {
       salaryPaidInJapan: 0,
       foreignInvestmentIncomeAbroad: 0,
       foreignInvestmentIncomePaidInJapan: 0,
+      japanSitusGains: 0,
       remittance: 12_000_000,
       shelterableGains: 8_000_000,
       arisingBasisGains: 0,
@@ -244,6 +247,7 @@ describe('doc 02 section 5 worked example, end to end', () => {
       salaryPaidInJapan: 0,
       foreignInvestmentIncomeAbroad: 0,
       foreignInvestmentIncomePaidInJapan: 0,
+      japanSitusGains: 0,
       remittance: 0,
       shelterableGains: 8_000_000,
       arisingBasisGains: 0,
@@ -292,17 +296,82 @@ describe('funding living costs — the burn model', () => {
   });
 
   it('exposes foreign income once a remittance is forced in a year with gains', () => {
-    const r = runScenario({ ...base, annualCapitalGains: 80_000 });
+    const r = runScenario({ ...base, annualCapitalGainsUs: 80_000 });
     const exposed = r.years.find((y) => y.year === 2029)!;
     // Savings are gone, so living costs are remitted and reach the sheltered gain.
     expect(exposed.japan.deemedRemitted).toBeGreaterThan(0);
   });
 
   it('buys sheltered years directly by pre-positioning more', () => {
-    const lean = runScenario({ ...base, annualCapitalGains: 80_000 });
+    const lean = runScenario({ ...base, annualCapitalGainsUs: 80_000 });
     const fat = runScenario({
-      ...base, annualCapitalGains: 80_000, prePositionedSavings: 260_000,
+      ...base, annualCapitalGainsUs: 80_000, prePositionedSavings: 260_000,
     });
     expect(fat.totals.combined).toBeLessThan(lean.totals.combined);
+  });
+});
+
+describe('capital gains split by situs', () => {
+  const base: Scenario = {
+    ...baseScenario,
+    residencyStart: '2026-01-01',
+    annualSalary: 200_000,
+    annualLivingCost: 60_000,
+    prePositionedSavings: 500_000,   // large, so no remittance is ever forced
+    projectionYears: 3,
+    gainsOnPreArrivalHoldings: true,
+  };
+
+  it('taxes Japanese-account gains on an arising basis with nothing remitted', () => {
+    const r = runScenario({ ...base, annualCapitalGainsJapan: 100_000 });
+    const y = r.years[0];
+    // Never a specified security under art. 17(1), so the shelter cannot reach it.
+    expect(y.japan.deemedRemitted).toBe(0);
+    expect(y.japan.capitalGainsTaxOnJapanSitus / 150).toBeCloseTo(100_000 * 0.20315, 0);
+  });
+
+  it('shelters foreign-held gains entirely when nothing is remitted', () => {
+    const r = runScenario({ ...base, annualCapitalGainsUs: 100_000 });
+    expect(r.years[0].japan.capitalGainsTaxOnForeign).toBe(0);
+  });
+
+  it('leaves the sheltered foreign gain US-source, so the US taxes it in full', () => {
+    const sheltered = runScenario({ ...base, annualCapitalGainsUs: 100_000 });
+    // No Japanese tax paid, so IRC 865(g)(2) fails and no credit is available.
+    expect(sheltered.years[0].japan.capitalGainsTaxOnForeign).toBe(0);
+    expect(sheltered.years[0].us.total).toBeGreaterThan(0);
+  });
+
+  it('keeps the US credit on the gain Japan actually taxed', () => {
+    // The asymmetry: the bucket you CANNOT shelter is the one that earns relief.
+    const jp = runScenario({ ...base, annualCapitalGainsJapan: 100_000 });
+    const us = runScenario({ ...base, annualCapitalGainsUs: 100_000 });
+    expect(jp.years[0].us.creditPassive).toBeGreaterThan(0);
+    expect(us.years[0].us.creditPassive).toBe(0);
+  });
+
+  it('sources the two buckets in opposite directions in the same year', () => {
+    const r = runScenario({
+      ...base, annualCapitalGainsJapan: 100_000, annualCapitalGainsUs: 100_000,
+    });
+    const y = r.years[0];
+    // Japan taxed one bucket and not the other, from one combined input.
+    expect(y.japan.capitalGainsTaxOnJapanSitus).toBeGreaterThan(0);
+    expect(y.japan.capitalGainsTaxOnForeign).toBe(0);
+    expect(y.notes.some((n) => n.includes('opposite directions'))).toBe(true);
+  });
+
+  it('taxes both buckets once worldwide taxation begins', () => {
+    const r = runScenario({
+      ...base,
+      residencyStart: '2026-01-01',
+      projectionYears: 8,
+      annualCapitalGainsJapan: 50_000,
+      annualCapitalGainsUs: 50_000,
+    });
+    const after = r.years[r.years.length - 1];
+    expect(after.phase).toBe('permanentResident');
+    expect(after.japan.capitalGainsTaxOnForeign).toBeGreaterThan(0);
+    expect(after.japan.capitalGainsTaxOnJapanSitus).toBeGreaterThan(0);
   });
 });

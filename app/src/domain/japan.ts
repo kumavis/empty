@@ -117,9 +117,19 @@ export interface JapanYearInput {
   foreignInvestmentIncomeAbroad: number;
   foreignInvestmentIncomePaidInJapan: number;
   remittance: number;
-  /** Gains on specified securities — shelterable while a non-permanent resident. */
+  /**
+   * Gains on securities held in a JAPANESE account or sold through a Japanese
+   * broker. Enforcement Order art. 17(1) requires a foreign market, foreign
+   * broker or foreign account for a security to be "specified", so these fail
+   * the test whenever they were acquired and are non-foreign-source income.
+   * ITA art. 7(1)(ii) taxes a non-permanent resident on all non-foreign-source
+   * income, so these are taxed on an arising basis in every resident phase and
+   * can never be sheltered by non-remittance.
+   */
+  japanSitusGains: number;
+  /** Gains on specified securities held abroad — shelterable while a non-permanent resident. */
   shelterableGains: number;
-  /** Gains on everything else — taxed on an arising basis. */
+  /** Gains on securities held abroad but acquired after arrival — arising basis. */
   arisingBasisGains: number;
 }
 
@@ -129,6 +139,9 @@ export interface JapanYearOutput {
   deemedRemitted: number;
   employmentTax: number;
   capitalGainsTax: number;
+  /** Split out so IRC 865(g)(2) can be tested per bucket rather than in aggregate. */
+  capitalGainsTaxOnJapanSitus: number;
+  capitalGainsTaxOnForeign: number;
   inhabitantTax: number;
   total: number;
   notes: string[];
@@ -145,6 +158,8 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
       deemedRemitted: 0,
       employmentTax: 0,
       capitalGainsTax: 0,
+      capitalGainsTaxOnJapanSitus: 0,
+      capitalGainsTaxOnForeign: 0,
       inhabitantTax: 0,
       total: 0,
       notes: ['Non-resident: Japan taxes only Japan-source income. Remittances are irrelevant.'],
@@ -233,13 +248,28 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
   const employmentTax = national + surtax;
 
   // --- Separate self-assessment taxation (申告分離課税) ----------------------
-  const taxableGains = worldwide
+  // Foreign-held gains: sheltered while a non-permanent resident unless deemed
+  // remitted, plus anything acquired after arrival which is taxed as it arises.
+  const taxableForeignGains = worldwide
     ? input.shelterableGains + input.arisingBasisGains
     : remittedGains + input.arisingBasisGains;
+
   const cgRate = listedSecuritiesRate(rates, input.year);
   // The 20.315% headline already contains the 5% local component, so inhabitant
   // tax below is charged on aggregate income only, to avoid double-counting.
-  const capitalGainsTax = taxableGains * cgRate;
+  const capitalGainsTaxOnForeign = taxableForeignGains * cgRate;
+  // Japanese-account gains are taxed at the same rate but on an arising basis in
+  // every resident phase — remittance never enters the question.
+  const capitalGainsTaxOnJapanSitus = input.japanSitusGains * cgRate;
+  const capitalGainsTax = capitalGainsTaxOnForeign + capitalGainsTaxOnJapanSitus;
+
+  if (!worldwide && input.japanSitusGains > 0) {
+    notes.push(
+      'Gains in a Japanese account are non-foreign-source, so ITA art. 7(1)(ii) taxes them ' +
+        'in full however little is remitted. The remittance basis does not reach them — but ' +
+        'because Japan does tax them, they keep their US foreign tax credit.',
+    );
+  }
 
   if (!worldwide && input.arisingBasisGains > 0) {
     notes.push(
@@ -257,6 +287,8 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
     deemedRemitted: ordering.deemedRemitted,
     employmentTax,
     capitalGainsTax,
+    capitalGainsTaxOnJapanSitus,
+    capitalGainsTaxOnForeign,
     inhabitantTax,
     total: employmentTax + capitalGainsTax + inhabitantTax,
     notes,

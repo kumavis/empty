@@ -3,6 +3,7 @@ import { Chart } from './components/Chart';
 import { Field } from './components/Field';
 import { Glossary } from './components/Glossary';
 import { T } from './components/Term';
+import { csvFilename, toCsv } from './domain/csv';
 import { runScenario } from './domain/engine';
 import { jpy, toJpy, usd, usdCompact } from './domain/money';
 import { checkDate, checkDeparture, checkMoney, checkRate, checkYears } from './domain/validate';
@@ -23,7 +24,8 @@ const DEFAULT: Scenario = {
   priorPresence: [],
   visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
   annualSalary: 180_000,
-  annualCapitalGains: 120_000,
+  annualCapitalGainsJapan: 20_000,
+  annualCapitalGainsUs: 100_000,
   gainsOnPreArrivalHoldings: true,
   annualLivingCost: 130_000,
   prePositionedSavings: 60_000,
@@ -89,6 +91,28 @@ export default function App() {
       ? result.years.reduce((s, y) => s + y.effectiveRate, 0) / result.years.length
       : 0;
 
+  /**
+   * Hands the reviewer the whole projection: the inputs it was run with, both
+   * currencies, the components rather than only totals, and the caveats. A
+   * blob URL keeps it entirely client-side, which the artifact CSP requires.
+   */
+  const downloadCsv = () => {
+    const generatedAt = new Date().toISOString();
+    const blob = new Blob([`\ufeff${toCsv(scenario, result, generatedAt)}`], {
+      // The BOM makes Excel read the yen sign and the Japanese terms as UTF-8
+      // rather than as the local codepage.
+      type: 'text/csv;charset=utf-8',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = csvFilename(scenario, generatedAt);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
   const totalUsd = result.totals.combined / fx;
   const jpUsd = result.totals.japan / fx;
   const usUsd = result.totals.us / fx;
@@ -106,9 +130,14 @@ export default function App() {
             are in US dollars, with the yen the statute is written in alongside.
           </p>
         </div>
-        <button className="btn btn--primary" onClick={() => setShowGlossary(true)}>
-          Term dictionary
-        </button>
+        <div className="header__actions">
+          <button className="btn" onClick={downloadCsv}>
+            Download CSV
+          </button>
+          <button className="btn btn--primary" onClick={() => setShowGlossary(true)}>
+            Term dictionary
+          </button>
+        </div>
       </header>
 
       <div className="banner">
@@ -192,13 +221,13 @@ export default function App() {
           />
 
           <Field
-            label="Capital gains realised"
+            label="Capital gains — US / foreign account"
             type="text"
             prefix="$"
-            value={String(scenario.annualCapitalGains)}
-            check={(raw) => checkMoney(raw, 'Capital gains', { max: 100_000_000 })}
-            onCommit={(v) => set({ annualCapitalGains: Number(v) })}
-            secondary={both(scenario.annualCapitalGains)}
+            value={String(scenario.annualCapitalGainsUs)}
+            check={(raw) => checkMoney(raw, 'Foreign capital gains', { max: 100_000_000 })}
+            onCommit={(v) => set({ annualCapitalGainsUs: Number(v) })}
+            secondary={`${both(scenario.annualCapitalGainsUs)} · shelterable from Japan, but then US-source with no credit`}
           />
 
           <label className="field--check">
@@ -208,13 +237,23 @@ export default function App() {
               onChange={(e) => set({ gainsOnPreArrivalHoldings: e.target.checked })}
             />
             <span>
-              On holdings bought before arrival
+              Foreign holdings bought before arrival
               <small>
                 Only these are specified securities under Enforcement Order art. 17(1), and only
                 these are shelterable.
               </small>
             </span>
           </label>
+
+          <Field
+            label="Capital gains — Japanese account"
+            type="text"
+            prefix="$"
+            value={String(scenario.annualCapitalGainsJapan)}
+            check={(raw) => checkMoney(raw, 'Japanese capital gains', { max: 100_000_000 })}
+            onCommit={(v) => set({ annualCapitalGainsJapan: Number(v) })}
+            secondary={`${both(scenario.annualCapitalGainsJapan)} · never shelterable, but keeps its US foreign tax credit`}
+          />
 
           <Field
             label="Cost of living in Japan"

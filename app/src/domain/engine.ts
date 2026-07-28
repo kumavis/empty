@@ -31,7 +31,8 @@ export function runScenario(scenario: Scenario): ScenarioResult {
 
   // Everything below is in yen; the inputs arrive in dollars.
   const salary = toJpy(scenario.annualSalary, fx);
-  const gains = toJpy(scenario.annualCapitalGains, fx);
+  const gainsJapan = toJpy(scenario.annualCapitalGainsJapan, fx);
+  const gainsUs = toJpy(scenario.annualCapitalGainsUs, fx);
   const livingCost = toJpy(scenario.annualLivingCost, fx);
 
   let savings = toJpy(scenario.prePositionedSavings, fx);
@@ -43,10 +44,10 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     const { phase, changedOn } = phaseForYear(year, scenario);
     const resident = phase !== 'nonResident';
 
-    // Gains on pre-arrival holdings are specified securities and shelterable;
-    // anything bought after arrival is taxed on an arising basis regardless.
-    const shelterableGains = scenario.gainsOnPreArrivalHoldings ? gains : 0;
-    const arisingBasisGains = scenario.gainsOnPreArrivalHoldings ? 0 : gains;
+    // Only FOREIGN-HELD gains can ever be shelterable, and then only if the
+    // holdings pre-date arrival. Japanese-account gains fail art. 17(1) outright.
+    const shelterableGains = scenario.gainsOnPreArrivalHoldings ? gainsUs : 0;
+    const arisingBasisGains = scenario.gainsOnPreArrivalHoldings ? 0 : gainsUs;
 
     /**
      * Japanese tax and the forced remittance are mutually dependent: tax
@@ -64,6 +65,7 @@ export function runScenario(scenario: Scenario): ScenarioResult {
       foreignInvestmentIncomeAbroad: 0,
       foreignInvestmentIncomePaidInJapan: 0,
       remittance: 0,
+      japanSitusGains: gainsJapan,
       shelterableGains,
       arisingBasisGains,
     });
@@ -102,6 +104,7 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         foreignInvestmentIncomeAbroad: 0,
         foreignInvestmentIncomePaidInJapan: 0,
         remittance,
+        japanSitusGains: gainsJapan,
         shelterableGains,
         arisingBasisGains,
       });
@@ -116,8 +119,10 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     const us = computeUsYear({
       year,
       foreignEarnedIncome: salary / fx,
-      capitalGains: gains / fx,
-      japaneseTaxOnGains: japan.capitalGainsTax / fx,
+      japanSitusGains: gainsJapan / fx,
+      japaneseTaxOnJapanSitusGains: japan.capitalGainsTaxOnJapanSitus / fx,
+      foreignGains: gainsUs / fx,
+      japaneseTaxOnForeignGains: japan.capitalGainsTaxOnForeign / fx,
       japaneseTaxOnEarned: (japan.employmentTax + japan.inhabitantTax) / fx,
       foreignInvestmentIncome: 0,
       filingStatus: scenario.filingStatus,
@@ -130,7 +135,7 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     carryforwardPassive = us.carryforwardPassive;
 
     const combined = japan.total + us.total * fx;
-    const economicIncome = resident ? salary + gains : 0;
+    const economicIncome = resident ? salary + gainsJapan + gainsUs : 0;
 
     const notes: string[] = [
       // Enforcement Order art. 17(4)(vi) confines the remittance rules to the
@@ -173,6 +178,8 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         deemedRemitted: japan.deemedRemitted,
         employmentTax: japan.employmentTax,
         capitalGainsTax: japan.capitalGainsTax,
+        capitalGainsTaxOnJapanSitus: japan.capitalGainsTaxOnJapanSitus,
+        capitalGainsTaxOnForeign: japan.capitalGainsTaxOnForeign,
         inhabitantTax: japan.inhabitantTax,
         total: japan.total,
       },
@@ -216,11 +223,20 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     );
   }
 
-  if (!scenario.gainsOnPreArrivalHoldings && scenario.annualCapitalGains > 0) {
+  if (!scenario.gainsOnPreArrivalHoldings && scenario.annualCapitalGainsUs > 0) {
     warnings.push(
-      'Gains are on holdings acquired after arrival, so they are not specified securities ' +
-        'under Enforcement Order art. 17(1) and are taxed on an arising basis whether or not ' +
-        'anything is remitted. The shelter does not reach them.',
+      'Foreign-held gains are on holdings acquired after arrival, so they are not specified ' +
+        'securities under Enforcement Order art. 17(1) and are taxed on an arising basis ' +
+        'whether or not anything is remitted. The shelter does not reach them.',
+    );
+  }
+
+  if (scenario.annualCapitalGainsJapan > 0 && scenario.annualCapitalGainsUs > 0) {
+    warnings.push(
+      'Gains are split across a Japanese and a foreign account, and the two are treated in ' +
+        'opposite directions. Japan taxes the Japanese-account gains as they arise but they ' +
+        'keep their US credit; the foreign-held gains can be sheltered from Japan but then ' +
+        'stay US-source under IRC 865(g)(2) with no credit to claim.',
     );
   }
 
@@ -237,7 +253,11 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     );
   }
 
-  const coveredAssets = toJpy(scenario.annualCapitalGains * scenario.projectionYears * 5, fx);
+  const coveredAssets = toJpy(
+    (scenario.annualCapitalGainsJapan + scenario.annualCapitalGainsUs) *
+      scenario.projectionYears * 5,
+    fx,
+  );
   const exit = exitTaxExposure(scenario, coveredAssets);
   if (exit.exposed) warnings.push(`Exit tax: ${exit.reason}`);
 

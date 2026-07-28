@@ -128,12 +128,20 @@ export interface Scenario {
   visaPeriods: VisaPeriod[];
   /** Annual salary in USD for services performed in Japan. Japan-source however paid. */
   annualSalary: number;
-  /** Annual realised capital gains in USD. */
-  annualCapitalGains: number;
   /**
-   * Whether the gains arise on holdings acquired BEFORE arrival. Only those are
-   * specified securities under Enforcement Order art. 17(1) and so shelterable;
-   * anything bought after arrival is taxed on an arising basis.
+   * Annual realised gains, USD, on securities in a JAPANESE account or sold via
+   * a Japanese broker. Enforcement Order art. 17(1) needs a foreign market,
+   * broker or account, so these are never specified securities and never
+   * shelterable — Japan taxes them as they arise. Because Japan does tax them,
+   * they satisfy IRC 865(g)(2) and keep their US foreign tax credit.
+   */
+  annualCapitalGainsJapan: number;
+  /** Annual realised gains, USD, on securities held in a US or other foreign account. */
+  annualCapitalGainsUs: number;
+  /**
+   * Whether the foreign-held gains arise on holdings acquired BEFORE arrival.
+   * Only those are specified securities under Enforcement Order art. 17(1) and
+   * so shelterable; anything bought after arrival is taxed on an arising basis.
    */
   gainsOnPreArrivalHoldings: boolean;
   /** Annual cost of living in Japan, in USD. Drives the remittance requirement. */
@@ -168,6 +176,9 @@ export interface YearResult {
     deemedRemitted: number;
     employmentTax: number;
     capitalGainsTax: number;
+    /** Split by situs, since the two source in opposite directions for the US. */
+    capitalGainsTaxOnJapanSitus: number;
+    capitalGainsTaxOnForeign: number;
     inhabitantTax: number;
     total: number;
   };
