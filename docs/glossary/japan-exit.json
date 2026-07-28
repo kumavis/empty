@@ -1,0 +1,156 @@
+[
+  {
+    "id": "exit-tax",
+    "en": "Exit tax",
+    "ja": "国外転出時課税制度",
+    "romaji": "kokugai tenshutsu-ji kazei seido",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "A deemed disposal at market value of covered financial assets when a qualifying resident leaves Japan.",
+    "definition": "On ceasing to have both a domicile and a residence in Japan, a resident holding covered securities is treated as having sold them at market value, and the resulting gain is taxed. It does not apply where covered assets are worth less than 100 million yen, or where the person's qualifying period of residence in Japan within the preceding ten years is five years or less. A deferral election is available on appointing a tax agent and lodging security.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 60-2(1) and (5)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": [
+      "departure-jp",
+      "table-1-status",
+      "tax-agent",
+      "hundred-million-threshold"
+    ],
+    "falseFriend": "Nothing to do with the US expatriation tax under IRC section 877A, which applies only on renouncing US citizenship. The two share a nickname and nothing else."
+  },
+  {
+    "id": "hundred-million-threshold",
+    "en": "100 million yen exit tax threshold",
+    "ja": "一億円",
+    "romaji": "ichi-oku en",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "The exit tax does not apply where covered assets are worth less than 100 million yen at departure.",
+    "definition": "One of two alternative exclusions in Income Tax Act art. 60-2(5). Because the exclusions are alternatives rather than cumulative, satisfying either one is enough: a portfolio below the threshold escapes regardless of residence history, and a qualifying short residence history escapes regardless of portfolio size.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 60-2(5)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": [
+      "exit-tax",
+      "table-1-status"
+    ]
+  },
+  {
+    "id": "table-1-status",
+    "en": "Appended Table 1 status of residence",
+    "ja": "出入国管理及び難民認定法別表第一の在留資格",
+    "romaji": "shutsunyūkoku kanri oyobi nanmin ninteihō beppyō dai-ichi no zairyū shikaku",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "Activity-based work and study visas; time spent under them is excluded from the exit tax's five-year clock.",
+    "definition": "Appended Table 1 of the Immigration Control Act lists activity-based statuses such as Engineer, Specialist in Humanities, Intra-company Transferee, Business Manager, Highly Skilled Professional and Student. Enforcement Order art. 170(3)(i) excludes periods spent under these statuses from the residence count that determines exit tax exposure, so an ordinary work-visa holder never starts the clock however long they stay. Appended Table 2 statuses, such as Permanent Resident and Spouse of a Japanese National, do count.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 170(3)(i)",
+        "source": "sources/japan-statutes/income-tax-enforcement-order.xml",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": [
+      "exit-tax",
+      "table-2-status",
+      "non-permanent-resident"
+    ],
+    "falseFriend": "This visa-based test governs only the exit tax. Income tax residency and the non-permanent resident phases ignore visa category entirely and count days of presence instead."
+  },
+  {
+    "id": "table-2-status",
+    "en": "Appended Table 2 status of residence",
+    "ja": "出入国管理及び難民認定法別表第二の在留資格",
+    "romaji": "shutsunyūkoku kanri oyobi nanmin ninteihō beppyō dai-ni no zairyū shikaku",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "Status-based residence permissions such as Permanent Resident and Spouse of a Japanese National; time under them starts the exit tax clock.",
+    "definition": "Appended Table 2 covers statuses based on personal position rather than activity: Permanent Resident, Spouse or Child of a Japanese National, Spouse or Child of a Permanent Resident, and Long-Term Resident. These periods are not excluded by Enforcement Order art. 170(3)(i), so they accumulate toward the exit tax's five-year test. Taking immigration Permanent Residence is therefore a tax decision as well as a convenience one.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 170(3)(i), by implication",
+        "source": "sources/japan-statutes/income-tax-enforcement-order.xml",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": [
+      "table-1-status",
+      "exit-tax"
+    ]
+  },
+  {
+    "id": "tax-agent",
+    "en": "Tax agent",
+    "ja": "納税管理人",
+    "romaji": "nōzei kanrinin",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "A representative in Japan appointed to handle filings after departure; also fixes the exit tax valuation date.",
+    "definition": "Appointing a tax agent before departure preserves the ordinary filing timetable and, where the exit tax applies, secures valuation at the time of departure rather than three months before the scheduled departure date. It is also a precondition of the exit tax deferral election. Cheap to arrange and consequential if overlooked.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 60-2(1)(i)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": [
+      "exit-tax",
+      "departure-jp",
+      "tax-deferral-election"
+    ]
+  },
+  {
+    "id": "tax-deferral-election",
+    "en": "Exit tax deferral election",
+    "ja": "納税猶予",
+    "romaji": "nōzei yūyo",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "An election to defer the exit tax charge, requiring a tax agent and security.",
+    "definition": "Available under Income Tax Act art. 137-2 where the exit tax applies. Deferral runs for a period extendable on application, and requires appointing a tax agent and lodging security. Selling the assets during the deferral crystallises the tax; returning to Japan still holding them can unwind the charge. The detailed terms are not yet verified in this repository.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 170(3)(ii), referring to ITA art. 137-2",
+        "source": "sources/japan-statutes/income-tax-enforcement-order.xml",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": [
+      "exit-tax",
+      "tax-agent"
+    ]
+  },
+  {
+    "id": "inheritance-tax-jp",
+    "en": "Inheritance tax",
+    "ja": "相続税",
+    "romaji": "sōzokuzei",
+    "jurisdiction": "JP",
+    "category": "japan-exit",
+    "short": "Japanese inheritance tax reaches 55% and, in some configurations, applies to a foreign national's worldwide assets.",
+    "definition": "Scope turns on the same Appended Table 1 and Table 2 distinction as the exit tax, together with a test based on years of residence within a look-back period, as modified by reforms in 2017 and 2021 aimed at not deterring foreign workers. A work-visa holder is generally limited to Japan-situs assets, while Table 2 status and long residence can expose worldwide assets. None of this is yet verified here, and the exposure can exceed every income tax consideration in this repository combined.",
+    "citations": [
+      {
+        "label": "No archived source yet — Flagged at doc 04 section 4",
+        "source": "docs/04-japan-exit-tax-and-leaving.md",
+        "url": "https://laws.e-gov.go.jp/law/325AC0000000073"
+      }
+    ],
+    "seeAlso": [
+      "table-1-status",
+      "table-2-status",
+      "exit-tax"
+    ]
+  }
+]

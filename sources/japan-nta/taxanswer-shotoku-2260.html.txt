@@ -1,0 +1,146 @@
+すべての機能をご利用いただくにはJavascriptを有効にしてください。
+
+  1. [ホーム](/)
+  2. [税の情報・手続・用紙](/taxes/index.htm)
+  3. [税について調べる](/taxes/shiraberu/index.htm)
+  4. [タックスアンサー（よくある税の質問）](/taxes/shiraberu/taxanswer/index2.htm)
+  5. No.2260 所得税の税率
+
+
+# No.2260 所得税の税率
+
+[令和7年4月1日現在法令等]
+
+## 対象税目
+
+所得税
+
+## 概要
+
+所得税の税率は、分離課税に対するものなどを除くと、5パーセントから45パーセントの7段階に区分されています。
+
+## 計算方法・計算式
+
+課税される所得金額（1,000円未満の端数金額を切り捨てた後の金額です。）に対する所得税の金額は、次の「所得税の速算表」を使用すると簡単に求められます。
+
+課税される所得金額 |  税率 |  控除額  
+---|---|---  
+1,000円 から 1,949,000円まで |  5％ |  0円  
+1,950,000円 から 3,299,000円まで |  10％ |  97,500円  
+3,300,000円 から 6,949,000円まで | 20％ | 427,500円  
+6,950,000円 から 8,999,000円まで | 23％ | 636,000円  
+9,000,000円 から 17,999,000円まで |  33％ |  1,536,000円  
+18,000,000円 から 39,999,000円まで |  40％ |  2,796,000円  
+40,000,000円 以上 |  45％ |  4,796,000円  
+  
+※１ 令和7年分からは、基準所得金額（確定申告を要しない配当所得等を含めるなどした一定の所得金額）が3億3,000万円を超える場合で、その超える部分の金額の22.5％相当額が、その年分の通常の所得税及び復興特別所得税を上回るときは、その上回る部分の所得税額が加算されます。
+
+※２ 平成25年から令和19年までの各年分の確定申告においては、所得税と復興特別所得税（原則としてその年分の基準所得税額の2.1パーセント）を併せて申告・納付することとなります。
+
+## 具体例
+
+（課税される所得金額が7,000,000円の場合）
+
+求める税額は次のようになります。
+
+7,000,000円×0.23 - 636,000円= 974,000円
+
+※ 平成25年から令和19年までの各年分の確定申告においては、所得税と復興特別所得税（原則としてその年分の基準所得税額の2.1パーセント）を併せて申告・納付することとなります。
+
+## 根拠法令等
+
+所法89、通法118、措法41の19、復興財確法8、9、10、13、18
+
+## 関連リンク
+
+◆パンフレット・手引き
+
+・[確定申告書等の様式・手引き等](/taxes/shiraberu/shinkoku/syotoku/index.htm)
+
+◆各種様式
+
+・[申告書・申告書付表と税額計算書等 一覧（申告所得税）](/taxes/tetsuzuki/shinsei/annai/shinkoku/annai/1557_2.htm)
+
+◆[確定申告書等作成コーナー](https://www.keisan.nta.go.jp/kyoutu/ky/sm/top#bsctrl)
+
+画面の案内に沿って金額を入力することによりご自宅等で確定申告書等の作成・提出ができます。
+
+必要な付表や明細書も、入力することで自動的に作成されます。
+
+## お問い合わせ先
+
+国税に関するご相談は、国税局電話相談センター等で行っていますので、[税についての相談窓口](/taxes/shiraberu/shirabekata/9200.htm#a02)をご覧になって、電話相談をご利用ください。
+
+このコンテンツはお役にたちましたか？
+
+はい いいえ
+
+ご協力ありがとうございました
+
+[ 今後の改善のための参考とさせていただくため、  
+アンケートを実施しています。ぜひご協力をお願いいたします。アンケートへ ](/suggestion/taxanser/input_form.html)
+
+このページの先頭へ
+
+## [税の情報・手続・用紙](/taxes/index.htm)
+
+### [税について調べる](/taxes/shiraberu/index.htm)
+
+  * [所得税（確定申告書等作成コーナー）](/taxes/shiraberu/shinkoku/kakutei.htm)
+  * [タックスアンサー（よくある税の質問）](/taxes/shiraberu/taxanswer/index2.htm)
+  * [税の相談](/taxes/shiraberu/sodan/index.htm)
+  * [税目別情報](/taxes/shiraberu/zeimokubetsu/index.htm)
+  * [路線価図・評価倍率表](http://www.rosenka.nta.go.jp/)
+  * [災害関連情報](/taxes/shiraberu/saigai/index.htm)
+  * [国際税務関係情報](/taxes/shiraberu/kokusai/index.htm)
+  * [税についての上手な調べ方](/taxes/shiraberu/shirabekata/info.htm)
+
+
+### [申告手続・用紙](/taxes/tetsuzuki/index.htm)
+
+  * [申告・申請・届出等、用紙（手続の案内・様式）](/taxes/tetsuzuki/shinsei/index.htm)
+  * [社会保障・税番号制度(マイナンバー)](/taxes/tetsuzuki/mynumberinfo/index.htm)
+
+
+### [納税・納税証明書手続](/taxes/nozei/index.htm)
+
+  * [納税に関する総合案内](/taxes/nozei/annai/index.htm)
+  * [納税証明書](/taxes/nozei/nozei-shomei/01.htm)
+  * [延納・物納申請等](/taxes/nozei/enno-butsuno/01.htm)
+  * [延滞税](/taxes/nozei/entaizei/keisan/entai.htm)
+
+
+### [税理士に関する情報](/taxes/zeirishi/index.htm)
+
+  * [新着情報](/taxes/zeirishi/index.htm#news)
+  * [税理士制度](/taxes/zeirishi/zeirishiseido/seido.htm)
+  * [税理士試験](/taxes/zeirishi/zeirishishiken/zeirishi.htm)
+  * [税理士に関する懲戒処分等](/taxes/zeirishi/chokai/chokai.htm)
+  * [税理士をお探しの方](/taxes/zeirishi/search/search.htm)
+  * [税理士関係法令等・Q＆A](/taxes/zeirishi/zeirishiseido/qa.htm)
+
+
+### [お酒に関する情報](/taxes/sake/index.htm)
+
+  * [酒税関係及び各種施策](/taxes/sake/index.htm#syuzei)
+  * [一般的な酒税の取扱い](/taxes/sake/index.htm#ippan)
+  * [専門的な酒税の取扱い](/taxes/sake/index.htm#senmonsyuzei)
+  * [専門的な酒税の相談](/taxes/sake/index.htm#senmonsodan)
+  * [酒税の申告・納付や届出等](/taxes/sake/index.htm#shinkoku)
+  * [電話相談センター・税務署の案内](/taxes/sake/index.htm#denwa)
+  * [審議会等](/taxes/sake/index.htm#shingikai)
+  * [統計情報・各種資料](/taxes/sake/index.htm#tokei)
+  * [お酒に関するQ＆A(よくある質問)](/taxes/sake/index.htm#qa)
+
+
+### [税の学習コーナー](/taxes/kids/index.htm)
+
+## サイトマップ（コンテンツ一覧）
+
+  1. [ホーム](/)
+  2. [税の情報・手続・用紙](/taxes/index.htm)
+  3. [税について調べる](/taxes/shiraberu/index.htm)
+  4. [タックスアンサー（よくある税の質問）](/taxes/shiraberu/taxanswer/index2.htm)
+  5. No.2260 所得税の税率
+
+
