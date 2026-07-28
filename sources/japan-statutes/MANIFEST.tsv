@@ -1,2 +1,4 @@
 file	url	retrieved_utc	http	bytes	sha256	description
 income-tax-act.xml	https://laws.e-gov.go.jp/api/1/lawdata/340AC0000000033	2026-07-28T04:49:55Z	200	18272500	17d8e118b7b1ba9f4559aaff3be23bcb52461f74bf5552e50641528d918204ca	Income Tax Act (所得税法), Act No.33 of 1965, full text from e-Gov API
+income-tax-enforcement-order.xml	https://laws.e-gov.go.jp/api/1/lawdata/340CO0000000096	2026-07-28T05:03:42Z	200	3874766	66d52b9a32de7e3f0e8858c35e5f11421a7fc8393518b51fd3fb2d0f6bcfad25	Order for Enforcement of the Income Tax Act (所得税法施行令), Cabinet Order No.96 of 1965
+income-tax-enforcement-regulation.xml	https://laws.e-gov.go.jp/api/1/lawdata/340M50000040011	2026-07-28T05:03:45Z	200	2492607	a55babe3bf1d17c2ed950d459e9873adca1a07b5d3b2b2afcb10f521b9113fea	Regulation for Enforcement of the Income Tax Act (所得税法施行規則), MOF Ordinance No.11 of 1965
