@@ -1,0 +1,154 @@
+[
+  {
+    "id": "remittance-basis",
+    "en": "Remittance basis",
+    "ja": "送金課税",
+    "romaji": "sōkin kazei",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "A non-permanent resident is taxed on foreign-source income only to the extent it is paid within Japan or remitted from abroad.",
+    "definition": "The core concession available during the non-permanent resident phase. Income splits three ways: income that is not foreign-source is always taxed; foreign-source income paid within Japan is always taxed; and foreign-source income paid abroad is taxed only to the extent deemed remitted. The third bucket is what planning targets, but the second is the one people miss — income credited to a Japanese account is caught without any deliberate remittance.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 7(1)(ii)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["non-permanent-resident", "foreign-source-income", "remittance-ordering-rule", "specified-securities"],
+    "falseFriend": "Not a tracing rule. You cannot designate which funds you sent — the ordering rule deems any remittance to carry that year's foreign-source income regardless of the actual money's history."
+  },
+  {
+    "id": "foreign-source-income",
+    "en": "Foreign-source income",
+    "ja": "国外源泉所得",
+    "romaji": "kokugai gensen shotoku",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "The seventeen categories in Income Tax Act art. 95(4); only this income can be sheltered by non-remittance.",
+    "definition": "Defined by cross-reference from the remittance rule to the foreign tax credit article. The list covers foreign business establishment income, income from holding foreign assets, foreign employment income, foreign rents, interest, dividends, royalties and others. Critically, item (iii) covers gains on transferring foreign assets only 'as specified by Cabinet Order', and that Cabinet Order list excludes ordinary listed shares — which is why art. 7(1)(ii) needed its own separate securities parenthetical.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 95(4)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      },
+      {
+        "label": "Enforcement Order art. 225-4",
+        "source": "sources/japan-statutes/income-tax-enforcement-order.xml",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["remittance-basis", "specified-securities"],
+    "falseFriend": "Not simply 'income from abroad'. Salary for work performed in Japan is Japan-source however and wherever it is paid, so it can never be sheltered."
+  },
+  {
+    "id": "specified-securities",
+    "en": "Specified securities",
+    "ja": "特定有価証券",
+    "romaji": "tokutei yūkashōken",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "Securities acquired outside the non-permanent resident period; only their gains get remittance-basis protection.",
+    "definition": "Enforcement Order art. 17(1) treats securities as 'specified' when their acquisition date falls outside the window running from ten years before the transfer to the transfer date, limited to periods during which the person was a non-permanent resident, and when they are traded on a foreign market, sold through a foreign broker, or held in a foreign account. Only gains on specified securities count as foreign-source income and so qualify for the remittance basis. The practical effect is that a pre-arrival portfolio is shielded while anything bought after arrival is taxed on an arising basis.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 17(1)",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["remittance-basis", "foreign-source-income", "fifo-rule"],
+    "falseFriend": "The test is the acquisition date, not where the money or the account sits. Selling a post-arrival holding through a foreign broker and leaving the proceeds abroad does not shelter it."
+  },
+  {
+    "id": "remittance-ordering-rule",
+    "en": "Remittance ordering rule",
+    "ja": "送金があつたものとみなす規定",
+    "romaji": "sōkin ga atta mono to minasu kitei",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "A remittance is deemed made first against non-foreign-source income paid abroad, and only the remainder against foreign-source income.",
+    "definition": "Enforcement Order art. 17(4)(i) is the machinery that decides how much of a remittance is taxed. It is formulaic rather than a tracing rule: any remittance in a year is deemed to carry that year's income, capped by the income amount, with non-foreign-source income absorbed first. Two consequences follow. Remitting pure capital in a year with no foreign-source income costs nothing. And the shelter holds intact so long as annual remittances stay at or below the year's Japan-source income paid abroad.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 17(4)(i)",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["remittance-basis", "gross-vs-net-measurement", "mid-year-status-change"]
+  },
+  {
+    "id": "gross-vs-net-measurement",
+    "en": "Measurement of income for remittance purposes",
+    "ja": "送金課税における所得金額の計算",
+    "romaji": "sōkin kazei ni okeru shotoku kingaku no keisan",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "Employment income is measured gross for the ordering rule, but capital gains are measured net of cost and expenses.",
+    "definition": "Enforcement Order art. 17(4)(ii) computes the income being deemed remitted under the ordinary rules, with two overrides. Employment and retirement income are measured by gross receipts, with no employment income deduction applied. Timber, capital gains and occasional income are measured after deducting acquisition cost and transfer expenses. So selling a large position with a small embedded gain exposes only the gain, while salary bites at its full gross amount.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 17(4)(ii)",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["remittance-ordering-rule", "employment-income"]
+  },
+  {
+    "id": "fifo-rule",
+    "en": "First-in first-out identification of securities",
+    "ja": "先に取得をしたものから順次譲渡",
+    "romaji": "saki ni shutoku o shita mono kara junji jōto",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "Where securities of the same issue were acquired at different times, the earliest-acquired are deemed sold first.",
+    "definition": "Enforcement Order art. 17(2) forces FIFO for deciding whether a sold lot is a specified security. The taxpayer cannot choose to sell post-arrival lots first and preserve the sheltered pre-arrival ones. Art. 17(3) then preserves acquisition dates through share exchanges, splits, mergers, spin-offs and option exercises, so ordinary corporate actions do not silently convert a sheltered lot into an unsheltered one.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 17(2) and (3)",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["specified-securities", "remittance-basis"]
+  },
+  {
+    "id": "mid-year-status-change",
+    "en": "Mid-year change of residency status",
+    "ja": "年の中途において非永住者となった場合",
+    "romaji": "toshi no chūto ni oite hi-eijūsha to natta baai",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "Only income arising and remittances received during the non-permanent resident portion of a year are counted.",
+    "definition": "Enforcement Order art. 17(4)(vi) expressly contemplates status changing mid-year and confines the remittance rules to income arising within, and remittances received within, the non-permanent resident period. This is what makes arrival timing a genuine lever: a transfer made in the same calendar year but before residency begins falls outside the regime entirely. It also confirms that residency status is tested continuously rather than assigned for a whole tax year.",
+    "citations": [
+      {
+        "label": "Enforcement Order art. 17(4)(vi)",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["remittance-ordering-rule", "non-permanent-resident", "domicile-jp"]
+  },
+  {
+    "id": "overseas-remittance-report",
+    "en": "Report on overseas remittances",
+    "ja": "国外送金等調書",
+    "romaji": "kokugai sōkin-tō chōsho",
+    "jurisdiction": "JP",
+    "category": "japan-remittance",
+    "short": "A report filed by Japanese financial institutions on cross-border transfers above a threshold.",
+    "definition": "Japanese financial institutions report cross-border transfers above a threshold directly to the tax authority, so remittances are visible independently of the taxpayer's return. The threshold and the related foreign asset reporting statements are not yet verified from a primary source in this repository. Treat the reporting as certain and the specific figures as unconfirmed.",
+    "citations": [
+      {
+        "label": "Discussed at doc 02 section 6",
+        "source": "docs/02-japan-remittance-basis.md",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2012.htm"
+      }
+    ],
+    "seeAlso": ["remittance-basis"]
+  }
+]

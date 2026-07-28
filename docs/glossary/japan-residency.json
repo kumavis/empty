@@ -1,0 +1,149 @@
+[
+  {
+    "id": "resident",
+    "en": "Resident",
+    "ja": "居住者",
+    "romaji": "kyojūsha",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "An individual with a domicile in Japan, or who has had a residence in Japan continuously for one year or more.",
+    "definition": "Residency is the gateway to Japanese income tax. It attaches on either of two independent triggers: having a domicile (住所) in Japan, which takes effect immediately, or having had a residence (居所) in Japan continuously for one year. In a genuine relocation the domicile limb almost always fires on arrival, so residency begins on day one rather than after any waiting period. Residents divide into non-permanent residents and everyone else.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 2(1)(iii)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["non-permanent-resident", "non-resident", "domicile-jp", "residence-jp"]
+  },
+  {
+    "id": "non-permanent-resident",
+    "en": "Non-permanent resident",
+    "ja": "非永住者",
+    "romaji": "hi-eijūsha",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "A resident without Japanese nationality whose aggregate domicile or residence in Japan within the past 10 years is 5 years or less.",
+    "definition": "The status that makes the remittance basis available, and the phase most planning is built around. Two elements must both hold: the person must not hold Japanese nationality, and the aggregate (合計) period of domicile or residence in Japan within the preceding ten years must be five years or less. The count is cumulative, not consecutive, so earlier stints in Japan add together. At exactly five years the status still holds; it ends when the aggregate exceeds five years, which can happen mid-year.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 2(1)(iv)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["resident", "permanent-resident-tax", "remittance-basis", "specified-securities"],
+    "falseFriend": "Not the immigration status 'Permanent Resident' (永住者). The tax test counts days of presence and ignores visa category entirely. A person can be a tax permanent resident on a work visa, or a non-permanent resident while holding immigration Permanent Residence."
+  },
+  {
+    "id": "permanent-resident-tax",
+    "en": "Resident other than a non-permanent resident",
+    "ja": "非永住者以外の居住者",
+    "romaji": "hi-eijūsha igai no kyojūsha",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "A resident who fails the non-permanent resident test, and is therefore taxed on worldwide income with no remittance basis.",
+    "definition": "Defined only by negation in the statute, and commonly called a permanent resident for tax purposes (永住者). Reached either by exceeding five years of aggregate presence in the preceding ten, or by holding Japanese nationality from the outset. Taxed on 全ての所得 — all income, worldwide — so both the remittance basis and the specified-securities shelter disappear. The transition is a hard, knowable deadline for realising embedded gains.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 7(1)(i)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["non-permanent-resident", "resident"],
+    "falseFriend": "Unrelated to immigration Permanent Residence (永住権). Confusingly, taking immigration Permanent Residence has no effect on this status, but does start the separate exit tax clock."
+  },
+  {
+    "id": "non-resident",
+    "en": "Non-resident",
+    "ja": "非居住者",
+    "romaji": "hi-kyojūsha",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "An individual who is not a resident; taxed only on Japan-source income.",
+    "definition": "The phase before arrival and after departure. A non-resident is taxed only on the Japan-source income enumerated in art. 164. Foreign income and gains are outside Japanese tax entirely, and remittances to Japan are irrelevant because the remittance rule applies only to non-permanent residents. This is why moving funds to Japan before residency begins sits wholly outside the regime.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 2(1)(v), art. 7(1)(iii)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["resident", "non-permanent-resident"]
+  },
+  {
+    "id": "domicile-jp",
+    "en": "Domicile",
+    "ja": "住所",
+    "romaji": "jūsho",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "The centre of a person's life; having one in Japan makes them a resident immediately.",
+    "definition": "Not defined in the Income Tax Act, which borrows the Civil Code concept of 生活の本拠, the base of one's livelihood. Because domicile makes someone a resident with no waiting period, the date it attaches is the single most important input to any plan. Enforcement Order art. 14 presumes a domicile in Japan where the person has an occupation there ordinarily requiring residence of one year or more.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 2(1)(iii); Enforcement Order art. 14",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["residence-jp", "resident", "tax-home"],
+    "falseFriend": "Distinct from US state domicile and from the federal tax home. All three can point at different countries at once, and each governs a different consequence."
+  },
+  {
+    "id": "residence-jp",
+    "en": "Residence",
+    "ja": "居所",
+    "romaji": "kyosho",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "A place a person actually lives without it being the centre of their life; makes them a resident only after one continuous year.",
+    "definition": "The weaker of the two residency triggers. Unlike domicile, residence confers resident status only once it has been maintained continuously for one year or more. It matters mainly at the margins — for someone whose centre of life has not clearly moved, and on departure, where a retained Japanese dwelling may leave a residence in place.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 2(1)(iii)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["domicile-jp", "resident"]
+  },
+  {
+    "id": "presumption-of-domicile",
+    "en": "Presumption of domicile in Japan",
+    "ja": "国内に住所を有する者と推定する場合",
+    "romaji": "kokunai ni jūsho o yūsuru mono to suitei suru baai",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "An occupation in Japan ordinarily requiring a year or more of residence presumes a Japanese domicile from arrival.",
+    "definition": "Enforcement Order art. 14(1)(i) presumes a domicile in Japan where the person has an occupation there that ordinarily requires continuous residence of one year or more. The presumption turns on the nature of the occupation rather than the visa or contract label, and it extends to a spouse and dependent relatives sharing a livelihood. Art. 14(1)(ii)'s family-based limb applies only to Japanese nationals. Art. 15 is the mirror image, presuming no Japanese domicile for someone taking up such an occupation abroad.",
+    "citations": [
+      {
+        "label": "Enforcement Order arts. 14 and 15",
+        "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      }
+    ],
+    "seeAlso": ["domicile-jp", "resident"]
+  },
+  {
+    "id": "departure-jp",
+    "en": "Departure from Japan",
+    "ja": "国外転出",
+    "romaji": "kokugai tenshutsu",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "Ceasing to have both a domicile and a residence in Japan; the trigger for the exit tax.",
+    "definition": "Defined in the exit tax provision itself as 国内に住所及び居所を有しないこととなること — ceasing to have both a domicile and a residence in Japan. Both must go: retaining a Japanese dwelling that still counts as a residence may mean departure has not occurred for this purpose, which cuts both ways depending on whether the exit tax is a threat or the goal is to end residency.",
+    "citations": [
+      {
+        "label": "Income Tax Act art. 60-2(1)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": ["exit-tax", "domicile-jp", "residence-jp", "tax-agent"]
+  }
+]

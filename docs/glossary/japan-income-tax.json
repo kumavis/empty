@@ -1,0 +1,165 @@
+[
+  {
+    "id": "employment-income",
+    "en": "Employment income",
+    "ja": "給与所得",
+    "romaji": "kyūyo shotoku",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "Salary and wages, taxed under aggregate taxation at progressive rates reaching about 55% combined.",
+    "definition": "Gross salary less the employment income deduction, pooled with other aggregate income and taxed at national rates to 45%, plus the 2.1% reconstruction surtax and roughly 10% inhabitant tax. Sourcing follows where the services are performed, so salary for work done in Japan is Japan-source however it is paid and can never be sheltered by the remittance basis.",
+    "citations": [
+      {
+        "label": "NTA, employment income deduction",
+        "source": "sources/japan-nta/taxanswer-shotoku-1410.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm"
+      }
+    ],
+    "seeAlso": ["aggregate-taxation", "employment-income-deduction", "inhabitant-tax", "reconstruction-surtax"]
+  },
+  {
+    "id": "employment-income-deduction",
+    "en": "Employment income deduction",
+    "ja": "給与所得控除",
+    "romaji": "kyūyo shotoku kōjo",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "A statutory schedule standing in for employment expenses, capped so that high salaries are taxed close to gross.",
+    "definition": "Reduces gross salary to taxable employment income on a sliding schedule. The schedule flattens above about 6,600,000 yen of gross salary, so for a high earner the deduction is effectively a fixed and fairly small amount. Note that the deduction is disregarded when measuring employment income for the remittance ordering rule, which uses gross receipts.",
+    "citations": [
+      {
+        "label": "NTA, employment income deduction",
+        "source": "sources/japan-nta/taxanswer-shotoku-1410.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm"
+      }
+    ],
+    "seeAlso": ["employment-income", "basic-deduction", "gross-vs-net-measurement"]
+  },
+  {
+    "id": "basic-deduction",
+    "en": "Basic deduction",
+    "ja": "基礎控除",
+    "romaji": "kiso kōjo",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "A personal allowance, restructured by the 2025 reform to a base of 580,000 yen with higher tiers at lower incomes.",
+    "definition": "Raised from 480,000 yen to a 580,000 yen base for tax year 2025 (令和7年) onward, with higher tiered amounts for lower income bands and a taper to zero above 25,000,000 yen of total income. For a high-earning relocating professional it is close to immaterial against the overall liability.",
+    "citations": [
+      {
+        "label": "NTA, basic deduction",
+        "source": "sources/japan-nta/taxanswer-shotoku-1195.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm"
+      }
+    ],
+    "seeAlso": ["employment-income-deduction", "aggregate-taxation"]
+  },
+  {
+    "id": "aggregate-taxation",
+    "en": "Aggregate taxation",
+    "ja": "総合課税",
+    "romaji": "sōgō kazei",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "Income pooled with other aggregate income and taxed at progressive rates up to 45% plus local tax.",
+    "definition": "The default mode. Employment income, business income, most miscellaneous income including crypto-assets, and some capital gains fall here. Contrast separate self-assessment taxation, where listed securities gains are taxed on their own at a flat 20.315%. Which mode applies is a bigger driver of the effective rate than any deduction.",
+    "citations": [
+      {
+        "label": "NTA, income tax rates",
+        "source": "sources/japan-nta/taxanswer-shotoku-2260.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
+      }
+    ],
+    "seeAlso": ["separate-self-assessment", "employment-income", "listed-securities-gain"]
+  },
+  {
+    "id": "separate-self-assessment",
+    "en": "Separate self-assessment taxation",
+    "ja": "申告分離課税",
+    "romaji": "shinkoku bunri kazei",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "Income taxed on its own at a flat rate and declared on the return, outside the progressive pool.",
+    "definition": "Applies to listed and unlisted securities gains at 20.315% and to real property gains. Because it sits outside the progressive pool, a large securities gain does not push salary into a higher bracket and vice versa. This separation is the single most valuable structural feature of the Japanese system for someone with a large portfolio and a large salary.",
+    "citations": [
+      {
+        "label": "NTA, listed share transfer income",
+        "source": "sources/japan-nta/taxanswer-shotoku-1463.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1463.htm"
+      }
+    ],
+    "seeAlso": ["aggregate-taxation", "listed-securities-gain", "real-property-gain"]
+  },
+  {
+    "id": "listed-securities-gain",
+    "en": "Capital gain on listed securities",
+    "ja": "上場株式等に係る譲渡所得等",
+    "romaji": "jōjō kabushiki-tō ni kakaru jōto shotoku-tō",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "Taxed under separate self-assessment at a combined 20.315%.",
+    "definition": "Made up of 15% national income tax, 0.315% reconstruction surtax on that national tax, and 5% local inhabitant tax. Unlisted shares carry the same rate but sit in a separate basket, so losses on unlisted shares cannot offset listed-share gains. Listed securities losses may be carried forward three years against listed gains, subject to filing conditions. Japan applies no holding-period distinction to securities.",
+    "citations": [
+      {
+        "label": "NTA, listed share transfer income",
+        "source": "sources/japan-nta/taxanswer-shotoku-1463.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1463.htm"
+      }
+    ],
+    "seeAlso": ["separate-self-assessment", "specified-securities", "reconstruction-surtax", "inhabitant-tax"],
+    "falseFriend": "Unlike the US, there is no long-term versus short-term split for securities. A gain realised a week after purchase bears the same 20.315%."
+  },
+  {
+    "id": "real-property-gain",
+    "en": "Capital gain on real property",
+    "ja": "土地建物等の譲渡所得",
+    "romaji": "tochi tatemono-tō no jōto shotoku",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "Split into long-term and short-term by a five-year test measured to 1 January of the year of sale.",
+    "definition": "Long-term gains, on property held over five years measured to 1 January of the sale year, are taxed at 20.315%. Short-term gains are taxed at a substantially higher combined rate. The measurement date is the trap: a property sold in December of its fifth calendar year is still short-term, because the clock is read at the preceding 1 January rather than at the sale date.",
+    "citations": [
+      {
+        "label": "NTA, long-term and short-term real property gains",
+        "source": "sources/japan-nta/taxanswer-joto-3202.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/joto/3202.htm"
+      }
+    ],
+    "seeAlso": ["separate-self-assessment", "listed-securities-gain"]
+  },
+  {
+    "id": "reconstruction-surtax",
+    "en": "Special reconstruction income tax",
+    "ja": "復興特別所得税",
+    "romaji": "fukkō tokubetsu shotokuzei",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "A surtax of 2.1% of the base national income tax amount, levied through tax year 2037.",
+    "definition": "Introduced to fund reconstruction after the 2011 earthquake and running through 令和19年 (2037). Because it is charged on the tax rather than on income, it scales whatever the national tax is. Applied to the 15% national rate on listed securities gains it produces the familiar 0.315% component of the 20.315% headline rate.",
+    "citations": [
+      {
+        "label": "NTA, income tax rates",
+        "source": "sources/japan-nta/taxanswer-shotoku-2260.html",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
+      }
+    ],
+    "seeAlso": ["listed-securities-gain", "aggregate-taxation"]
+  },
+  {
+    "id": "inhabitant-tax",
+    "en": "Local inhabitant tax",
+    "ja": "住民税",
+    "romaji": "jūminzei",
+    "jurisdiction": "JP",
+    "category": "japan-income-tax",
+    "short": "A roughly 10% local tax on the prior year's income, assessed on whoever is resident on 1 January.",
+    "definition": "Charged at about 10%, split between prefecture and municipality, plus a small per-capita levy. Two features matter more than the rate: it runs a year behind, and liability is keyed to residence on 1 January of the following year. Someone leaving Japan in December avoids the bill on that year's income, while someone leaving in February pays it in full. Note the figures here are not yet verified against the Local Tax Act.",
+    "citations": [
+      {
+        "label": "Discussed at doc 03 section 3",
+        "source": "docs/03-japan-income-categories-and-rates.md",
+        "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
+      }
+    ],
+    "seeAlso": ["reconstruction-surtax", "listed-securities-gain", "tax-agent"]
+  }
+]

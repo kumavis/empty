@@ -1,0 +1,208 @@
+[
+  {
+    "id": "citizenship-based-taxation",
+    "en": "Citizenship-based taxation",
+    "jurisdiction": "US",
+    "category": "us-sourcing",
+    "short": "The US taxes its citizens on worldwide income regardless of where they live.",
+    "definition": "The baseline that makes double taxation possible and that no amount of Japanese planning removes. Moving to Japan does not end US filing; it creates a second filing alongside it. The treaty's saving clause expressly preserves this, so relief comes through the foreign tax credit rather than through any reduction in US taxing rights.",
+    "citations": [
+      {
+        "label": "IRC section 61; Convention art. 1(4)",
+        "source": "sources/treaty/us-japan-treaty-2003.pdf",
+        "url": "https://home.treasury.gov/system/files/131/Treaty-Japan-11-6-2003.pdf"
+      }
+    ],
+    "seeAlso": ["saving-clause", "foreign-tax-credit", "feie"]
+  },
+  {
+    "id": "tax-home",
+    "en": "Tax home",
+    "jurisdiction": "US",
+    "category": "us-sourcing",
+    "short": "The location of a taxpayer's principal place of business; it governs both the section 911 exclusion and the sourcing of capital gains.",
+    "definition": "Defined at IRC section 911(d)(3) and defeated if the taxpayer's abode remains in the United States. It does double duty: it is a precondition of the foreign earned income exclusion, and section 865(g) routes the sourcing of personal property gains through it. A tax home that fails to move to Japan therefore keeps capital gains US-source, which removes the foreign tax credit limitation room needed to relieve Japanese tax on them.",
+    "citations": [
+      {
+        "label": "IRC section 911(d)(3), applied by section 865(g)(1)(A)(i)(I)",
+        "source": "sources/us-code/irc-865.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/865"
+      }
+    ],
+    "seeAlso": ["section-865-sourcing", "feie", "domicile-jp", "state-domicile"],
+    "falseFriend": "Distinct from US state domicile and from Japanese domicile (住所). All three can point at different places simultaneously, and each governs different consequences."
+  },
+  {
+    "id": "section-865-sourcing",
+    "en": "Residence-of-seller sourcing rule",
+    "jurisdiction": "US",
+    "category": "us-sourcing",
+    "short": "Gains on personal property are sourced by the seller's residence, but a citizen abroad qualifies only if 10% foreign tax is paid.",
+    "definition": "IRC section 865(a) sources personal property gains in the US for a United States resident and outside the US for a nonresident. Section 865(g) then defines a US citizen with a foreign tax home as a nonresident, which would make their gains foreign-source. But section 865(g)(2) gates this: a citizen is not treated as a nonresident unless income tax of at least 10% of the gain is actually paid to a foreign country. This interlocks directly with the Japanese remittance basis, since a gain sheltered from Japanese tax pays nothing and so stays US-source.",
+    "citations": [
+      {
+        "label": "IRC section 865(a), (g)(1), (g)(2)",
+        "source": "sources/us-code/irc-865.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/865"
+      }
+    ],
+    "seeAlso": ["tax-home", "remittance-basis", "foreign-tax-credit", "treaty-resourcing"],
+    "falseFriend": "The definitions are inverted relative to ordinary usage: a US citizen living abroad is a 'nonresident' for this section, and a 'United States resident' is someone whose tax home is not abroad."
+  },
+  {
+    "id": "feie",
+    "en": "Foreign earned income exclusion",
+    "jurisdiction": "US",
+    "category": "us-sourcing",
+    "short": "An exclusion of foreign earned income up to an annual cap; it applies to compensation only, never to capital gains.",
+    "definition": "Under IRC section 911 a qualifying taxpayer may exclude foreign earned income up to an inflation-adjusted maximum, $130,000 for 2025 and $132,900 for 2026, plus a housing amount. Qualification needs a foreign tax home plus either bona fide residence or 330 days of physical presence in 12 months. Two traps: excluded income still sets the marginal rate under section 911(f), and foreign taxes allocable to excluded income are not creditable under section 911(d)(6). For a high earner facing Japanese rates near 55%, electing it is often worse than taking the credit alone.",
+    "citations": [
+      {
+        "label": "IRC section 911",
+        "source": "sources/us-code/irc-911.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/911"
+      },
+      {
+        "label": "Form 2555 instructions",
+        "source": "sources/us-irs/i2555.pdf",
+        "url": "https://www.irs.gov/pub/irs-pdf/i2555.pdf"
+      }
+    ],
+    "seeAlso": ["tax-home", "foreign-tax-credit", "citizenship-based-taxation"],
+    "falseFriend": "Has no application whatever to capital gains, dividends or interest. It excludes compensation for services only."
+  },
+  {
+    "id": "foreign-tax-credit",
+    "en": "Foreign tax credit",
+    "jurisdiction": "US",
+    "category": "us-ftc",
+    "short": "A credit for foreign income taxes, capped by a per-basket limitation based on the share of income that is foreign-source.",
+    "definition": "IRC section 901 allows a credit for foreign income taxes, and section 903 extends it to taxes paid in lieu of an income tax. The credit is capped by the section 904(a) limitation: US tax before credit multiplied by foreign-source taxable income in the basket over total taxable income. Because the limitation is computed separately per basket and credits cannot cross baskets, a taxpayer can hold large unused credits from salary and still owe US tax on capital gains.",
+    "citations": [
+      {
+        "label": "IRC sections 901, 903, 904(a)",
+        "source": "sources/us-code/irc-904.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/904"
+      },
+      {
+        "label": "IRS Pub 514",
+        "source": "sources/us-irs/p514.pdf",
+        "url": "https://www.irs.gov/pub/irs-pdf/p514.pdf"
+      }
+    ],
+    "seeAlso": ["ftc-baskets", "capital-gain-rate-differential", "treaty-resourcing", "niit"]
+  },
+  {
+    "id": "ftc-baskets",
+    "en": "Foreign tax credit baskets",
+    "jurisdiction": "US",
+    "category": "us-ftc",
+    "short": "Separate limitation categories under section 904(d); credits in one cannot relieve tax in another.",
+    "definition": "The main categories are general, passive, foreign branch, section 951A, and treaty-resourced items. Foreign salary lands in the general basket while capital gains, dividends and interest land in the passive basket. This separation is why excess credits generated by heavily taxed Japanese salary are worthless for sheltering US tax on capital gains. Excess credits carry back one year and forward ten, per basket, under section 904(c).",
+    "citations": [
+      {
+        "label": "IRC section 904(c) and (d)",
+        "source": "sources/us-code/irc-904.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/904"
+      }
+    ],
+    "seeAlso": ["foreign-tax-credit", "treaty-resourcing", "capital-gain-rate-differential"]
+  },
+  {
+    "id": "capital-gain-rate-differential",
+    "en": "Capital gain rate differential adjustment",
+    "jurisdiction": "US",
+    "category": "us-ftc",
+    "short": "Foreign-source capital gains taxed at preferential US rates are scaled down in the credit limitation numerator.",
+    "definition": "Under IRC section 904(b)(2)(B), foreign capital gains benefiting from preferential US rates are reduced before entering the limitation fraction, on the logic that the US should not surrender credit as though it had taxed the gain at ordinary rates. The effect is to cut the credit available on capital gains substantially, often by half or more, and it is the provision most often omitted from simplified models.",
+    "citations": [
+      {
+        "label": "IRC section 904(b)(2)(B); Form 1116 instructions",
+        "source": "sources/us-irs/i1116.pdf",
+        "url": "https://www.irs.gov/pub/irs-pdf/i1116.pdf"
+      }
+    ],
+    "seeAlso": ["foreign-tax-credit", "ftc-baskets", "niit"]
+  },
+  {
+    "id": "niit",
+    "en": "Net investment income tax",
+    "jurisdiction": "US",
+    "category": "us-ftc",
+    "short": "An additional 3.8% on net investment income, against which no foreign tax credit is allowed on the mainstream reading.",
+    "definition": "IRC section 1411 imposes 3.8% on net investment income above a threshold. Because section 901 credits run against chapter 1 tax and section 1411 sits in chapter 2A, foreign tax credits do not offset it, so it is paid on top of any Japanese tax. Whether a treaty relief article overrides this has been litigated with some taxpayer successes; the position is contested rather than settled, and a model should default to treating it as uncreditable.",
+    "citations": [
+      {
+        "label": "IRC section 1411",
+        "source": "sources/us-code/irc-1411.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/1411"
+      }
+    ],
+    "seeAlso": ["foreign-tax-credit", "capital-gain-rate-differential"]
+  },
+  {
+    "id": "paid-vs-accrued",
+    "en": "Paid versus accrued election",
+    "jurisdiction": "US",
+    "category": "us-ftc",
+    "short": "An election to credit foreign taxes when paid or when accrued; it matters because Japanese inhabitant tax lags a year.",
+    "definition": "Under IRC section 905(a) a taxpayer elects to claim the credit on a paid or an accrued basis, and the election binds future years. Japanese inhabitant tax on one year's income is billed and paid in the next, so on a paid basis income and tax are permanently mismatched by a year and the first year in Japan has no inhabitant tax credit at all. The accrued basis matches them, and is generally the better election for someone moving to Japan. The choice should be made in the first year.",
+    "citations": [
+      {
+        "label": "IRC section 905(a); section 986(a) on translation",
+        "source": "sources/us-code/irc-905.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/905"
+      }
+    ],
+    "seeAlso": ["foreign-tax-credit", "inhabitant-tax"]
+  },
+  {
+    "id": "pfic",
+    "en": "Passive foreign investment company",
+    "jurisdiction": "US",
+    "category": "us-sourcing",
+    "short": "A punitive US regime that catches most Japanese mutual funds and investment trusts.",
+    "definition": "Non-US pooled investment vehicles generally meet the PFIC definition, and the resulting regime can produce effective rates above 50% together with heavy reporting on Form 8621. Japanese mutual funds and investment trusts are almost always PFICs, so a US citizen in Japan should generally hold securities through non-Japanese vehicles. This is one of the most commonly and expensively missed points for Americans in Japan.",
+    "citations": [
+      {
+        "label": "Flagged at doc 05 section 4",
+        "source": "docs/05-us-taxation-and-sourcing.md",
+        "url": "https://www.irs.gov/pub/irs-pdf/p519.pdf"
+      }
+    ],
+    "seeAlso": ["citizenship-based-taxation", "foreign-tax-credit"]
+  },
+  {
+    "id": "state-domicile",
+    "en": "State domicile",
+    "jurisdiction": "US-STATE",
+    "category": "us-state",
+    "short": "A US state's claim to tax worldwide income, persisting until a new domicile is genuinely established.",
+    "definition": "States tax residents on either of two independent bases: common-law domicile, and a mechanical statutory residence test. Domicile persists until replaced by both physical presence and intent elsewhere. States generally give no credit for foreign taxes and do not follow US tax treaties, so an unbroken state link means paying state tax on Japanese income with no relief. California treats a resident as continuing to be one while absent for a temporary or transitory purpose, with a safe harbor for absences of at least 546 consecutive days under an employment-related contract.",
+    "citations": [
+      {
+        "label": "California FTB Publication 1031",
+        "source": "sources/us-state/ca-ftb-pub1031.pdf",
+        "url": "https://www.ftb.ca.gov/forms/2024/2024-1031-publication.pdf"
+      }
+    ],
+    "seeAlso": ["tax-home", "domicile-jp", "expatriation-tax"],
+    "falseFriend": "Not the same as the federal tax home, and not the same as Japanese domicile (住所). Severing state domicile is a separate exercise from becoming Japanese-resident, and neither one accomplishes the other."
+  },
+  {
+    "id": "expatriation-tax",
+    "en": "Expatriation tax",
+    "jurisdiction": "US",
+    "category": "us-state",
+    "short": "A mark-to-market charge under IRC section 877A that applies only on renouncing US citizenship.",
+    "definition": "Applies to covered expatriates who renounce citizenship or abandon long-term permanent residence, and is out of scope for anyone who remains a US citizen. Noted only to mark the boundary, since nothing in an ordinary relocation to Japan triggers it, and it is frequently confused with Japan's exit tax, which is a wholly separate charge.",
+    "citations": [
+      {
+        "label": "IRC section 877A",
+        "source": "sources/us-code/irc-877A.html",
+        "url": "https://www.law.cornell.edu/uscode/text/26/877A"
+      }
+    ],
+    "seeAlso": ["exit-tax", "state-domicile"]
+  }
+]
