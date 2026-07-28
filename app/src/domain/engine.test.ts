@@ -1,0 +1,236 @@
+/**
+ * Tests anchor the engine to the worked examples in the research documents.
+ * When a test fails, the doc is the authority, not the code.
+ */
+import { describe, expect, it } from 'vitest';
+import { applyRemittanceOrdering, computeJapanYear, isSpecifiedSecurity } from './japan';
+import { gainIsForeignSource } from './us';
+import { exitTaxExposure, nonPermanentResidentEnd, phaseOn } from './phases';
+import { japanNationalTax, listedSecuritiesRate, JAPAN_RATES } from './rates';
+import type { Lot, Scenario } from './types';
+
+const baseScenario: Scenario = {
+  name: 'test',
+  residencyStart: '2026-04-01',
+  holdsJapaneseNationality: false,
+  priorPresence: [],
+  visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
+  lots: [],
+  disposals: [],
+  income: [],
+  prePositionedFunds: 0,
+  elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
+  filingStatus: 'single',
+  fxJpyPerUsd: 150,
+};
+
+describe('Japanese national income tax table', () => {
+  it("reproduces the NTA's own worked example", () => {
+    // NTA taxanswer shotoku/2260: 7,000,000 x 0.23 - 636,000 = 974,000
+    expect(japanNationalTax(7_000_000, JAPAN_RATES[2025])).toBe(974_000);
+  });
+
+  it('produces the 20.315% headline rate on listed securities', () => {
+    // 15% national + 0.315% reconstruction surtax on it + 5% local
+    expect(listedSecuritiesRate(JAPAN_RATES[2025], 2027)).toBeCloseTo(0.20315, 6);
+  });
+
+  it('drops the reconstruction surtax after 2037', () => {
+    expect(listedSecuritiesRate(JAPAN_RATES[2025], 2038)).toBeCloseTo(0.2, 6);
+  });
+});
+
+describe('remittance ordering rule (Enforcement Order art. 17(4)(i))', () => {
+  it('deems the remittance against non-foreign-source income first', () => {
+    const r = applyRemittanceOrdering({
+      remittance: 15_000_000,
+      nonForeignSourceAbroad: 12_000_000,
+      foreignSourceAbroad: 8_000_000,
+    });
+    // Doc 02 section 5: salary absorbs 12m, leaving 3m to reach the gains.
+    expect(r.absorbedByNonForeignSource).toBe(12_000_000);
+    expect(r.deemedRemitted).toBe(3_000_000);
+  });
+
+  it('shelters everything when the remittance stays within Japan-source income', () => {
+    const r = applyRemittanceOrdering({
+      remittance: 12_000_000,
+      nonForeignSourceAbroad: 12_000_000,
+      foreignSourceAbroad: 8_000_000,
+    });
+    // The operating rule from doc 09: keep remittances at or below Japan-source
+    // income paid abroad and the shelter holds intact.
+    expect(r.deemedRemitted).toBe(0);
+  });
+
+  it('caps exposure at the year’s foreign-source income, not the remittance', () => {
+    const r = applyRemittanceOrdering({
+      remittance: 50_000_000,
+      nonForeignSourceAbroad: 0,
+      foreignSourceAbroad: 3_000_000,
+    });
+    expect(r.deemedRemitted).toBe(3_000_000);
+  });
+
+  it('costs nothing to remit capital in a year with no foreign-source income', () => {
+    const r = applyRemittanceOrdering({
+      remittance: 50_000_000,
+      nonForeignSourceAbroad: 0,
+      foreignSourceAbroad: 0,
+    });
+    expect(r.deemedRemitted).toBe(0);
+  });
+});
+
+describe('specified securities (Enforcement Order art. 17(1))', () => {
+  const preArrival: Lot = {
+    id: 'a', label: 'pre', acquired: '2019-06-01', basis: 1, units: 1, heldAbroad: true,
+  };
+  const postArrival: Lot = {
+    id: 'b', label: 'post', acquired: '2027-06-01', basis: 1, units: 1, heldAbroad: true,
+  };
+
+  it('shelters a lot acquired before residency began', () => {
+    expect(isSpecifiedSecurity(preArrival, '2029-01-01', baseScenario)).toBe(true);
+  });
+
+  it('does NOT shelter a lot acquired after arrival', () => {
+    // The finding most commentary omits: post-arrival purchases are taxed on an
+    // arising basis whether or not they are remitted.
+    expect(isSpecifiedSecurity(postArrival, '2029-01-01', baseScenario)).toBe(false);
+  });
+
+  it('requires the security to be held abroad', () => {
+    expect(
+      isSpecifiedSecurity({ ...preArrival, heldAbroad: false }, '2029-01-01', baseScenario),
+    ).toBe(false);
+  });
+});
+
+describe('residency phases (ITA art. 2(1)(iv))', () => {
+  it('makes residency start on arrival, not after 183 days', () => {
+    expect(phaseOn('2026-03-31', baseScenario)).toBe('nonResident');
+    expect(phaseOn('2026-04-01', baseScenario)).toBe('nonPermanentResident');
+  });
+
+  it('ends non-permanent residence five years after arrival', () => {
+    expect(nonPermanentResidentEnd('2026-04-01', [])).toBe('2031-04-01');
+    expect(phaseOn('2031-03-31', baseScenario)).toBe('nonPermanentResident');
+    expect(phaseOn('2031-04-01', baseScenario)).toBe('permanentResident');
+  });
+
+  it('brings the boundary forward for prior presence, cumulatively', () => {
+    // The statute says 合計 — aggregate, not consecutive.
+    const end = nonPermanentResidentEnd('2026-04-01', [
+      { from: '2020-01-01', to: '2021-01-01' },
+    ]);
+    expect(end < '2031-04-01').toBe(true);
+  });
+
+  it('denies the phase entirely to a Japanese national', () => {
+    const dual = { ...baseScenario, holdsJapaneseNationality: true };
+    expect(phaseOn('2026-04-02', dual)).toBe('permanentResident');
+  });
+});
+
+describe('exit tax (ITA art. 60-2(5), Enforcement Order art. 170(3)(i))', () => {
+  it('never exposes a work-visa holder, however large the portfolio', () => {
+    const s: Scenario = {
+      ...baseScenario,
+      departure: '2040-06-01',
+      visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
+    };
+    const r = exitTaxExposure(s, 1_000_000_000);
+    expect(r.exposed).toBe(false);
+    expect(r.qualifyingDays).toBe(0);
+  });
+
+  it('exposes a long-held Table 2 status holder above the threshold', () => {
+    const s: Scenario = {
+      ...baseScenario,
+      departure: '2040-06-01',
+      visaPeriods: [
+        { from: '2026-04-01', to: '2030-01-01', table: 'table1' },
+        { from: '2030-01-01', table: 'table2' },
+      ],
+    };
+    expect(exitTaxExposure(s, 1_000_000_000).exposed).toBe(true);
+  });
+
+  it('does not expose below the ¥100m threshold', () => {
+    const s: Scenario = {
+      ...baseScenario,
+      departure: '2040-06-01',
+      visaPeriods: [{ from: '2026-04-01', table: 'table2' }],
+    };
+    expect(exitTaxExposure(s, 50_000_000).exposed).toBe(false);
+  });
+});
+
+describe('IRC 865(g)(2) interlock', () => {
+  it('sources a gain abroad only when 10% foreign tax was actually paid', () => {
+    expect(gainIsForeignSource(100_000, 20_315)).toBe(true);
+    expect(gainIsForeignSource(100_000, 0)).toBe(false);
+    expect(gainIsForeignSource(100_000, 9_999)).toBe(false);
+  });
+
+  it('leaves an unremitted, Japan-sheltered gain US-source', () => {
+    // The core correction: the Japanese shelter saves Japanese tax, not US tax.
+    expect(gainIsForeignSource(500_000, 0)).toBe(false);
+  });
+});
+
+describe('doc 02 section 5 worked example, end to end', () => {
+  it('taxes 3,000,000 yen of the pre-arrival gain and shelters the rest', () => {
+    const out = computeJapanYear({
+      year: 2027,
+      phase: 'nonPermanentResident',
+      salaryForJapanWork: 12_000_000,
+      salaryForForeignWork: 0,
+      salaryPaidInJapan: 0,
+      foreignInvestmentIncomeAbroad: 0,
+      foreignInvestmentIncomePaidInJapan: 0,
+      remittance: 15_000_000,
+      shelterableGains: 8_000_000,
+      arisingBasisGains: 2_000_000,
+    });
+
+    expect(out.deemedRemitted).toBe(3_000_000);
+    // Taxable gains = 3,000,000 deemed remitted + 2,000,000 arising basis.
+    expect(out.capitalGainsTax).toBeCloseTo(5_000_000 * 0.20315, 0);
+  });
+
+  it('shelters the whole gain if the remittance stays at or below salary', () => {
+    const out = computeJapanYear({
+      year: 2027,
+      phase: 'nonPermanentResident',
+      salaryForJapanWork: 12_000_000,
+      salaryForForeignWork: 0,
+      salaryPaidInJapan: 0,
+      foreignInvestmentIncomeAbroad: 0,
+      foreignInvestmentIncomePaidInJapan: 0,
+      remittance: 12_000_000,
+      shelterableGains: 8_000_000,
+      arisingBasisGains: 0,
+    });
+    expect(out.deemedRemitted).toBe(0);
+    expect(out.capitalGainsTax).toBe(0);
+  });
+
+  it('taxes everything once worldwide taxation begins', () => {
+    const out = computeJapanYear({
+      year: 2032,
+      phase: 'permanentResident',
+      salaryForJapanWork: 12_000_000,
+      salaryForForeignWork: 0,
+      salaryPaidInJapan: 0,
+      foreignInvestmentIncomeAbroad: 0,
+      foreignInvestmentIncomePaidInJapan: 0,
+      remittance: 0,
+      shelterableGains: 8_000_000,
+      arisingBasisGains: 0,
+    });
+    // No remittance at all, yet the gain is fully taxed — the shelter is gone.
+    expect(out.capitalGainsTax).toBeCloseTo(8_000_000 * 0.20315, 0);
+  });
+});
