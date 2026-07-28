@@ -15,7 +15,12 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["non-permanent-resident", "foreign-source-income", "remittance-ordering-rule", "specified-securities"],
+    "seeAlso": [
+      "non-permanent-resident",
+      "foreign-source-income",
+      "remittance-ordering-rule",
+      "specified-securities"
+    ],
     "falseFriend": "Not a tracing rule. You cannot designate which funds you sent — the ordering rule deems any remittance to carry that year's foreign-source income regardless of the actual money's history."
   },
   {
@@ -39,7 +44,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["remittance-basis", "specified-securities"],
+    "seeAlso": [
+      "remittance-basis",
+      "specified-securities"
+    ],
     "falseFriend": "Not simply 'income from abroad'. Salary for work performed in Japan is Japan-source however and wherever it is paid, so it can never be sheltered."
   },
   {
@@ -58,7 +66,11 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["remittance-basis", "foreign-source-income", "fifo-rule"],
+    "seeAlso": [
+      "remittance-basis",
+      "foreign-source-income",
+      "fifo-rule"
+    ],
     "falseFriend": "The test is the acquisition date, not where the money or the account sits. Selling a post-arrival holding through a foreign broker and leaving the proceeds abroad does not shelter it."
   },
   {
@@ -77,7 +89,11 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["remittance-basis", "gross-vs-net-measurement", "mid-year-status-change"]
+    "seeAlso": [
+      "remittance-basis",
+      "gross-vs-net-measurement",
+      "mid-year-status-change"
+    ]
   },
   {
     "id": "gross-vs-net-measurement",
@@ -95,7 +111,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["remittance-ordering-rule", "employment-income"]
+    "seeAlso": [
+      "remittance-ordering-rule",
+      "employment-income"
+    ]
   },
   {
     "id": "fifo-rule",
@@ -113,7 +132,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["specified-securities", "remittance-basis"]
+    "seeAlso": [
+      "specified-securities",
+      "remittance-basis"
+    ]
   },
   {
     "id": "mid-year-status-change",
@@ -131,7 +153,11 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["remittance-ordering-rule", "non-permanent-resident", "domicile-jp"]
+    "seeAlso": [
+      "remittance-ordering-rule",
+      "non-permanent-resident",
+      "domicile-jp"
+    ]
   },
   {
     "id": "overseas-remittance-report",
@@ -144,11 +170,13 @@
     "definition": "Japanese financial institutions report cross-border transfers above a threshold directly to the tax authority, so remittances are visible independently of the taxpayer's return. The threshold and the related foreign asset reporting statements are not yet verified from a primary source in this repository. Treat the reporting as certain and the specific figures as unconfirmed.",
     "citations": [
       {
-        "label": "Discussed at doc 02 section 6",
-        "source": "docs/02-japan-remittance-basis.md",
+        "label": "NTA No.2012, overseas remittance reporting",
+        "source": "sources/japan-nta/taxanswer-shotoku-2012.html",
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2012.htm"
       }
     ],
-    "seeAlso": ["remittance-basis"]
+    "seeAlso": [
+      "remittance-basis"
+    ]
   }
 ]

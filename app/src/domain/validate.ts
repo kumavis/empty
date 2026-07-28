@@ -52,8 +52,12 @@ export function checkMoney(raw: string, label: string, opts: { max?: number } = 
   const trimmed = raw.trim();
   if (trimmed === '') return BAD(`${label} is required.`);
 
-  // Accept what people actually paste: $180,000 / 180000 / 1.8e5.
+  // Accept what people actually paste: $180,000 / 180000 / 1.8e5. Reject hex
+  // and other Number() curiosities — "0x10" is a typo, not sixteen dollars.
   const cleaned = trimmed.replace(/[$,\s]/g, '');
+  if (!/^\d*\.?\d+(?:[eE][+-]?\d+)?$/.test(cleaned)) {
+    return BAD(`${label} must be a number.`);
+  }
   const n = Number(cleaned);
 
   if (!Number.isFinite(n)) return BAD(`${label} must be a number.`);
@@ -68,12 +72,14 @@ export function checkRate(raw: string, label: string): Check {
   const n = Number(raw.trim());
   if (!Number.isFinite(n)) return BAD(`${label} must be a number.`);
   if (n <= 0) return BAD(`${label} must be above zero.`);
-  if (n < 10 || n > 1000) return BAD('Exchange rate looks wrong — expected roughly 100–200.');
+  if (n < 10 || n > 1000) return BAD(`${label} must be between 10 and 1000 yen per dollar.`);
   return OK(n);
 }
 
 export function checkYears(raw: string): Check {
-  const n = Number(raw.trim());
+  const trimmed = raw.trim();
+  if (!/^\d+$/.test(trimmed)) return BAD('Enter a whole number of years.');
+  const n = Number(trimmed);
   if (!Number.isInteger(n)) return BAD('Enter a whole number of years.');
   if (n < 1) return BAD('Project at least one year.');
   if (n > 30) return BAD('Projections beyond 30 years are not meaningful here.');

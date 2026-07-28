@@ -179,9 +179,12 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
             width={W}
             height={H}
             role="img"
-            aria-label={`Annual tax and living costs by year, with cash held in Japan and in the US. Cash in Japan runs out in ${
-              result.savingsExhaustedIn ?? 'no year within the projection'
-            }.`}
+            aria-label={
+              'Annual tax and living costs by year, with cash held in Japan and in the US. ' +
+              (result.savingsExhaustedIn
+                ? `Cash in Japan runs out in ${result.savingsExhaustedIn}.`
+                : 'Cash in Japan lasts the whole projection.')
+            }
             onMouseLeave={() => setHover(null)}
           >
             <defs>

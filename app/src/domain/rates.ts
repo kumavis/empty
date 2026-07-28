@@ -23,7 +23,10 @@ export interface JapanRates {
   reconstructionSurtax: number;
   /** Last year the reconstruction surtax applies. */
   reconstructionSurtaxEndsAfter: number;
-  /** Local inhabitant tax (住民税) flat rate. UNVERIFIED — doc 03 section 3. */
+  /**
+   * Local inhabitant tax (住民税) flat rate. UNVERIFIED — no Local Tax Act text
+   * is archived here, and doc 03 section 3 records it as an open question.
+   */
   inhabitantTaxRate: number;
   /** Per-capita inhabitant levy (均等割). UNVERIFIED. */
   inhabitantPerCapita: number;
@@ -136,7 +139,7 @@ export interface UsRates {
 /**
  * 2025 and 2026 figures.
  *
- * UNVERIFIED, and flagged as such in the UI: the bracket thresholds are
+ * UNVERIFIED, and listed in the CSV's KNOWN APPROXIMATIONS: the thresholds are
  * asserted from general knowledge, not transcribed from a Revenue Procedure
  * (doc 05 section 5). The married-joint thresholds are the conventional
  * doubling of the single ones, EXCEPT the NIIT threshold, which IRC 1411(b)

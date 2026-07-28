@@ -13,7 +13,11 @@
         "url": "https://home.treasury.gov/system/files/131/Treaty-Japan-11-6-2003.pdf"
       }
     ],
-    "seeAlso": ["treaty-resourcing", "relief-article", "citizenship-based-taxation"]
+    "seeAlso": [
+      "treaty-resourcing",
+      "relief-article",
+      "citizenship-based-taxation"
+    ]
   },
   {
     "id": "relief-article",
@@ -29,7 +33,12 @@
         "url": "https://home.treasury.gov/system/files/131/Treaty-Japan-11-6-2003.pdf"
       }
     ],
-    "seeAlso": ["saving-clause", "treaty-resourcing", "gains-article", "foreign-tax-credit"]
+    "seeAlso": [
+      "saving-clause",
+      "treaty-resourcing",
+      "gains-article",
+      "foreign-tax-credit"
+    ]
   },
   {
     "id": "treaty-resourcing",
@@ -50,7 +59,12 @@
         "url": "https://www.law.cornell.edu/uscode/text/26/904"
       }
     ],
-    "seeAlso": ["relief-article", "ftc-baskets", "section-865-sourcing", "form-8833"]
+    "seeAlso": [
+      "relief-article",
+      "ftc-baskets",
+      "section-865-sourcing",
+      "form-8833"
+    ]
   },
   {
     "id": "gains-article",
@@ -66,7 +80,11 @@
         "url": "https://home.treasury.gov/system/files/131/Treaty-Japan-11-6-2003.pdf"
       }
     ],
-    "seeAlso": ["relief-article", "saving-clause", "treaty-residence"]
+    "seeAlso": [
+      "relief-article",
+      "saving-clause",
+      "treaty-residence"
+    ]
   },
   {
     "id": "treaty-residence",
@@ -82,7 +100,11 @@
         "url": "https://home.treasury.gov/system/files/131/Treaty-Japan-11-6-2003.pdf"
       }
     ],
-    "seeAlso": ["saving-clause", "gains-article", "domicile-jp"]
+    "seeAlso": [
+      "saving-clause",
+      "gains-article",
+      "domicile-jp"
+    ]
   },
   {
     "id": "form-8833",
@@ -93,12 +115,15 @@
     "definition": "IRC section 6114 requires disclosure of treaty-based return positions, made on Form 8833, with a penalty for non-compliance. Whether re-sourcing under Convention art. 23(3) requires disclosure, and in what circumstances, is not established in this repository and should be confirmed before relying on the position.",
     "citations": [
       {
-        "label": "Discussed at doc 07 section 4",
+        "label": "No archived source yet — Discussed at doc 07 section 4",
         "source": "docs/07-us-japan-tax-treaty.md",
         "url": "https://www.irs.gov/businesses/international-businesses/japan-tax-treaty-documents"
       }
     ],
-    "seeAlso": ["treaty-resourcing", "relief-article"]
+    "seeAlso": [
+      "treaty-resourcing",
+      "relief-article"
+    ]
   },
   {
     "id": "totalization-agreement",
@@ -109,11 +134,14 @@
     "definition": "Distinct from the income tax convention. It prevents dual social security coverage and determines which system a worker contributes to, evidenced by a certificate of coverage. Japanese social insurance premiums are not income taxes and so are not creditable under IRC section 901; whether they are deductible is not established here. The agreement itself is not yet archived in this repository.",
     "citations": [
       {
-        "label": "Flagged at doc 07 section 5",
+        "label": "No archived source yet — Flagged at doc 07 section 5",
         "source": "docs/07-us-japan-tax-treaty.md",
         "url": "https://www.irs.gov/businesses/international-businesses/japan-tax-treaty-documents"
       }
     ],
-    "seeAlso": ["relief-article", "foreign-tax-credit"]
+    "seeAlso": [
+      "relief-article",
+      "foreign-tax-credit"
+    ]
   }
 ]

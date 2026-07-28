@@ -532,3 +532,5 @@ code { font-family: var(--mono); font-size: 0.88em; }
   color: var(--ink-faint); font-variant-numeric: tabular-nums;
 }
 .header__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.banner--scope { background: var(--sunken); border-color: var(--line-strong); }
+.banner--scope .banner__mark { color: var(--ink-faint); }

@@ -126,11 +126,16 @@ export function toCsv(scenario: Scenario, result: ScenarioResult, generatedAt: s
 
   lines.push(row(['KNOWN APPROXIMATIONS']));
   for (const a of [
-    'A transition year is not apportioned; Enforcement Order art. 17(4)(vi) requires splitting it.',
-    'The IRC 904(b)(2)(B) rate differential factor is estimated, not taken from the Form 1116 instructions.',
-    'Japanese inhabitant tax rules and their creditability are an open question in the research.',
-    'A single exchange rate is applied across all years.',
-    'Rate tables are 2025 figures, reused for later years.',
+    'Whether Japan gives any basis step-up on becoming resident is asserted from the absence of a provision, not a positive citation. It is the highest-value item to verify.',
+    'IRC 865(g)(2) says "any sale", implying a per-sale test. Where the ordering rule taxes only part of a year gains, this model sources the taxed portion and no more; a pro-rata reading would source the whole bucket or none of it.',
+    'Japanese inhabitant tax rates and their creditability are not verified from a primary source. The 1 January trigger and one-year lag are modelled but unverified.',
+    'A transition year is apportioned by days resident. The statute counts income actually arising in each phase, which is not the same thing.',
+    'US bracket thresholds are asserted from general knowledge, not transcribed from a Revenue Procedure. The IRC 1411 threshold is statutory and archived.',
+    'The IRC 904(d)(2)(F) high-tax kickout is not modelled.',
+    'Treaty re-sourcing under Convention art. 23 is not modelled; IRC 904(d)(6)(A) needs a separate limitation per re-sourced item.',
+    'A single exchange rate is applied across all years; IRC 986(a) requires average-rate translation.',
+    'Below 6,600,000 yen of salary the NTA directs use of 別表第五, which is not archived here.',
+    'Not modelled at all: US state tax, Japanese inheritance tax, social insurance premiums, PFIC treatment, and currency gain on conversion.',
   ]) lines.push(row([a]));
 
   return lines.join('\n');

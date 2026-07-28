@@ -29,15 +29,57 @@ in this document.
 
 Aggregate taxation. Taxable employment income is gross salary less the
 **employment income deduction** (給与所得控除, *kyūyo shotoku kōjo*), a statutory
-schedule standing in for expenses. The deduction is **capped**: above ¥6,600,000
-of gross salary [`taxanswer-shotoku-1410`] the schedule flattens, so a high earner
-is effectively taxed on close to gross.
+schedule standing in for expenses. The deduction is **capped at ¥1,950,000**
+above ¥8,500,000 of gross salary, so a high earner is effectively taxed on close
+to gross. The 令和7年分以降 schedule is:
+
+| Gross salary | Deduction |
+|---|---|
+| up to ¥1,900,000 | ¥650,000 |
+| ¥1,900,001–¥3,600,000 | ×30% + ¥80,000 |
+| ¥3,600,001–¥6,600,000 | ×20% + ¥440,000 |
+| ¥6,600,001–¥8,500,000 | ×10% + ¥1,100,000 |
+| ¥8,500,001 and above | ¥1,950,000 (cap) |
+
+[NTA No.1410] — `sources/japan-nta/taxanswer-shotoku-1410-v2.htm`
+
+**Correction, 2026-07-28.** This section previously said the schedule flattens
+above **¥6,600,000**. It flattens above **¥8,500,000**; ¥6,600,000 is where the
+20% band ends. The engine also implemented the superseded 令和2年–令和6年
+schedule, which had a ¥1,625,000 breakpoint and a ×40%−¥100,000 band that no
+longer exist. Below ¥6,600,000 the NTA directs use of 別表第五 rather than this
+table; that table is not archived here, so figures at those incomes are
+approximate.
 
 The **basic deduction** (基礎控除, *kiso kōjo*) was restructured by the 2025 reform
-(令和7年度税制改正). For 令和7年 (2025) onward the base amount is **¥580,000**,
-raised from the previous ¥480,000, with higher tiered amounts (¥950,000, ¥880,000,
-and others) for lower income bands and a taper to zero above ¥25,000,000 of total
-income [`taxanswer-shotoku-1195`].
+(令和7年度税制改正). It is **not a flat amount** — it tapers by the taxpayer's
+合計所得金額, reaching **zero above ¥25,000,000**:
+
+| 合計所得金額 | 令和7年分 | 令和8年分以降 |
+|---|---|---|
+| up to ¥1,320,000 | ¥950,000 | ¥950,000 |
+| ¥1,320,001–¥3,360,000 | ¥880,000 | ¥580,000 |
+| ¥3,360,001–¥4,890,000 | ¥680,000 | ¥580,000 |
+| ¥4,890,001–¥6,550,000 | ¥630,000 | ¥580,000 |
+| ¥6,550,001–¥23,500,000 | ¥580,000 | ¥580,000 |
+| ¥23,500,001–¥24,000,000 | ¥480,000 | ¥480,000 |
+| ¥24,000,001–¥24,500,000 | ¥320,000 | ¥320,000 |
+| ¥24,500,001–¥25,000,000 | ¥160,000 | ¥160,000 |
+| above ¥25,000,000 | ¥0 | ¥0 |
+
+[NTA No.1199, 根拠法令 所法86・措法41の16の2] —
+`sources/japan-nta/taxanswer-shotoku-1199.htm`
+
+**Correction, 2026-07-28.** This section previously cited
+`taxanswer-shotoku-1195` for the basic deduction and listed the figure as
+settled. **That page is No.1195 配偶者特別控除 — the spouse special deduction.**
+It states no basic deduction rule, and the ¥580,000 appearing on it is the
+*spouse's* income threshold, not a deduction amount. The substance above was
+broadly right — ¥580,000 is correct for the ¥6.55m–¥23.5m band and the
+¥25,000,000 taper is real — but it rested on a page that does not support it,
+which is exactly what CONVENTIONS rule 1 exists to prevent. The correct source
+is now archived and cited. `MANIFEST.tsv` also mis-described page 1195 and has
+been corrected.
 
 > For a high-earning relocating professional these deductions are close to
 > irrelevant — they are rounding error against a seven-figure yen salary. Model
@@ -180,8 +222,12 @@ whole strategy in doc 09.
 - The reconstruction surtax at 2.1% of base income tax, through 令和19年 (2037).
 - Listed and unlisted securities at 20% national+local before the surtax → 20.315%.
 - The real-property long/short split measured to 1 January of the sale year.
-- The 2025 basic deduction restructuring to a ¥580,000 base.
-- The employment income deduction schedule flattening above ¥6,600,000.
+- The 2025 basic deduction band table, and its taper to zero above ¥25,000,000
+  [`taxanswer-shotoku-1199`]. Corrected 2026-07-28: previously cited the wrong
+  NTA page (see § 2).
+- The employment income deduction schedule, capped at ¥1,950,000 above
+  ¥8,500,000 [`taxanswer-shotoku-1410`]. Corrected 2026-07-28: previously said
+  ¥6,600,000.
 
 **Likely but unverified:**
 
@@ -212,7 +258,8 @@ whole strategy in doc 09.
 | NTA, listed share transfer income | `sources/japan-nta/taxanswer-shotoku-1463.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1463.htm |
 | NTA, capital gains generally | `sources/japan-nta/taxanswer-shotoku-1440.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1440.htm |
 | NTA, real property long/short term | `sources/japan-nta/taxanswer-joto-3202.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/joto/3202.htm |
-| NTA, basic deduction | `sources/japan-nta/taxanswer-shotoku-1195.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm |
+| NTA, basic deduction (No.1199) | `sources/japan-nta/taxanswer-shotoku-1199.htm` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm |
+| NTA, spouse special deduction (No.1195) | `sources/japan-nta/taxanswer-shotoku-1195.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm |
 | NTA, employment income deduction | `sources/japan-nta/taxanswer-shotoku-1410.html` | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm |
 | ITA art. 95(4); Order art. 225-4 | `sources/japan-statutes/income-tax-enforcement-order.xml` | https://laws.e-gov.go.jp/api/1/lawdata/340CO0000000096 |
 

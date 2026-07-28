@@ -15,7 +15,12 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm"
       }
     ],
-    "seeAlso": ["aggregate-taxation", "employment-income-deduction", "inhabitant-tax", "reconstruction-surtax"]
+    "seeAlso": [
+      "aggregate-taxation",
+      "employment-income-deduction",
+      "inhabitant-tax",
+      "reconstruction-surtax"
+    ]
   },
   {
     "id": "employment-income-deduction",
@@ -33,7 +38,11 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm"
       }
     ],
-    "seeAlso": ["employment-income", "basic-deduction", "gross-vs-net-measurement"]
+    "seeAlso": [
+      "employment-income",
+      "basic-deduction",
+      "gross-vs-net-measurement"
+    ]
   },
   {
     "id": "basic-deduction",
@@ -51,7 +60,10 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm"
       }
     ],
-    "seeAlso": ["employment-income-deduction", "aggregate-taxation"]
+    "seeAlso": [
+      "employment-income-deduction",
+      "aggregate-taxation"
+    ]
   },
   {
     "id": "aggregate-taxation",
@@ -69,7 +81,11 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
       }
     ],
-    "seeAlso": ["separate-self-assessment", "employment-income", "listed-securities-gain"]
+    "seeAlso": [
+      "separate-self-assessment",
+      "employment-income",
+      "listed-securities-gain"
+    ]
   },
   {
     "id": "separate-self-assessment",
@@ -87,7 +103,11 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1463.htm"
       }
     ],
-    "seeAlso": ["aggregate-taxation", "listed-securities-gain", "real-property-gain"]
+    "seeAlso": [
+      "aggregate-taxation",
+      "listed-securities-gain",
+      "real-property-gain"
+    ]
   },
   {
     "id": "listed-securities-gain",
@@ -105,7 +125,12 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1463.htm"
       }
     ],
-    "seeAlso": ["separate-self-assessment", "specified-securities", "reconstruction-surtax", "inhabitant-tax"],
+    "seeAlso": [
+      "separate-self-assessment",
+      "specified-securities",
+      "reconstruction-surtax",
+      "inhabitant-tax"
+    ],
     "falseFriend": "Unlike the US, there is no long-term versus short-term split for securities. A gain realised a week after purchase bears the same 20.315%."
   },
   {
@@ -124,7 +149,10 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/joto/3202.htm"
       }
     ],
-    "seeAlso": ["separate-self-assessment", "listed-securities-gain"]
+    "seeAlso": [
+      "separate-self-assessment",
+      "listed-securities-gain"
+    ]
   },
   {
     "id": "reconstruction-surtax",
@@ -142,7 +170,10 @@
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
       }
     ],
-    "seeAlso": ["listed-securities-gain", "aggregate-taxation"]
+    "seeAlso": [
+      "listed-securities-gain",
+      "aggregate-taxation"
+    ]
   },
   {
     "id": "inhabitant-tax",
@@ -155,11 +186,15 @@
     "definition": "Charged at about 10%, split between prefecture and municipality, plus a small per-capita levy. Two features matter more than the rate: it runs a year behind, and liability is keyed to residence on 1 January of the following year. Someone leaving Japan in December avoids the bill on that year's income, while someone leaving in February pays it in full. Note the figures here are not yet verified against the Local Tax Act.",
     "citations": [
       {
-        "label": "Discussed at doc 03 section 3",
-        "source": "docs/03-japan-income-categories-and-rates.md",
+        "label": "NTA No.2260, income tax rates",
+        "source": "sources/japan-nta/taxanswer-shotoku-2260.html",
         "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm"
       }
     ],
-    "seeAlso": ["reconstruction-surtax", "listed-securities-gain", "tax-agent"]
+    "seeAlso": [
+      "reconstruction-surtax",
+      "listed-securities-gain",
+      "tax-agent"
+    ]
   }
 ]

@@ -147,11 +147,23 @@ export default function App() {
       <div className="banner">
         <span className="banner__mark" aria-hidden="true">※</span>
         <span>
-          <strong>Research, not tax advice.</strong> Figures rest on open questions recorded
-          alongside the model — principally Japanese <T id="inhabitant-tax" /> rules and the
-          capital gain rate differential adjustment. A transition year is not apportioned, and a
-          single exchange rate is assumed throughout. Treat the output as directional, and the
-          reasoning as the deliverable.
+          <strong>Research, not tax advice.</strong> The largest open question is whether Japan
+          gives any <strong>basis step-up on becoming resident</strong> — asserted here from the
+          absence of a provision, not a positive citation, and the highest-value thing to verify.
+          Next is how <T id="section-865-sourcing" /> applies when the ordering rule taxes only
+          part of a year's gains. Japanese <T id="inhabitant-tax" /> rules are also unverified.
+          Treat the output as directional, and the reasoning as the deliverable.
+        </span>
+      </div>
+
+      <div className="banner banner--scope">
+        <span className="banner__mark" aria-hidden="true">◇</span>
+        <span>
+          <strong>Not modelled.</strong> US state tax, which doc 08 notes can exceed every
+          Japanese lever combined if domicile is not severed. Japanese inheritance tax, which
+          can reach worldwide assets. Social insurance premiums. <T id="pfic" /> treatment of
+          non-US funds. Currency gain on converting yen back. “Combined tax” below is therefore
+          not the whole burden.
         </span>
       </div>
 
@@ -198,7 +210,7 @@ export default function App() {
             label={<>Date <T id="domicile-jp" /> attaches</>}
             type="date"
             value={scenario.residencyStart}
-            check={(raw) => checkDate(raw, 'Residency start')}
+            check={(raw) => checkDate(raw, 'The date domicile attaches')}
             onCommit={(v) => set({ residencyStart: String(v) })}
             hint="A question of fact, not of immigration status — usually arrival day, but never the date on a visa or residence card."
           />
@@ -209,7 +221,7 @@ export default function App() {
             value={scenario.departure ?? ''}
             check={(raw) => checkDeparture(raw, scenario.residencyStart)}
             onCommit={(v) => set({ departure: String(v) || undefined })}
-            hint="Optional. Leaving in December rather than January avoids a year of inhabitant tax."
+            hint="Optional. Leaving in December rather than January may avoid a year of inhabitant tax — the 1 January rule is modelled but not verified from a primary source."
           />
 
           <h3>Annual figures</h3>
@@ -229,9 +241,9 @@ export default function App() {
             type="text"
             prefix="$"
             value={String(scenario.annualCapitalGainsUs)}
-            check={(raw) => checkMoney(raw, 'Foreign capital gains', { max: 100_000_000 })}
+            check={(raw) => checkMoney(raw, 'Capital gains in a US or foreign account', { max: 100_000_000 })}
             onCommit={(v) => set({ annualCapitalGainsUs: Number(v) })}
-            secondary={`${both(scenario.annualCapitalGainsUs)} · shelterable from Japan, but then US-source with no credit`}
+            secondary={`${both(scenario.annualCapitalGainsUs)} · ${scenario.gainsOnPreArrivalHoldings ? 'shelterable from Japan, but then US-source with no credit' : 'not shelterable — bought after arrival, so taxed as it arises'}`}
           />
 
           <label className="field--check">
@@ -243,8 +255,8 @@ export default function App() {
             <span>
               Foreign holdings bought before arrival
               <small>
-                Only these are specified securities under Enforcement Order art. 17(1), and only
-                these are shelterable.
+                Enforcement Order art. 17(1) also requires a foreign market, foreign broker or
+                foreign account. Only securities meeting both limbs are shelterable.
               </small>
             </span>
           </label>
@@ -254,7 +266,7 @@ export default function App() {
             type="text"
             prefix="$"
             value={String(scenario.annualCapitalGainsJapan)}
-            check={(raw) => checkMoney(raw, 'Japanese capital gains', { max: 100_000_000 })}
+            check={(raw) => checkMoney(raw, 'Capital gains in a Japanese account', { max: 100_000_000 })}
             onCommit={(v) => set({ annualCapitalGainsJapan: Number(v) })}
             secondary={`${both(scenario.annualCapitalGainsJapan)} · never shelterable, but keeps its US foreign tax credit`}
           />
@@ -276,7 +288,7 @@ export default function App() {
             type="text"
             prefix="$"
             value={String(scenario.prePositionedSavings)}
-            check={(raw) => checkMoney(raw, 'Pre-positioned savings', { max: 100_000_000 })}
+            check={(raw) => checkMoney(raw, 'Savings pre-positioned in Japan', { max: 100_000_000 })}
             onCommit={(v) => set({ prePositionedSavings: Number(v) })}
             secondary={`${both(scenario.prePositionedSavings)} · moved before domicile attached, so outside the regime`}
           />
@@ -288,7 +300,7 @@ export default function App() {
             value={String(scenario.usSavings)}
             check={(raw) => checkMoney(raw, 'Savings held abroad', { max: 1_000_000_000 })}
             onCommit={(v) => set({ usSavings: Number(v) })}
-            secondary={`${both(scenario.usSavings)} · sending any of it to Japan is a remittance; the reverse is untaxed`}
+            secondary={`${both(scenario.usSavings)} · sending it to Japan is a remittance; the reverse is not, though converting back may realise a currency gain`}
           />
 
           <Field
@@ -435,9 +447,10 @@ export default function App() {
 
       <footer className="foot">
         <span>
-          Built on 38 archived primary sources — Japanese statutes from the e-Gov API, National
-          Tax Agency guidance and circulars, the Internal Revenue Code, IRS publications, and the
-          US–Japan Convention. Every term in the dictionary cites the text it comes from.
+          Built on 39 archived primary documents — Japanese statutes from the e-Gov API,
+          National Tax Agency guidance and circulars, the Internal Revenue Code, IRS
+          publications, and the US–Japan Convention. Almost every dictionary term cites the
+          archived text it comes from; the three that have no archived source yet say so.
         </span>
         <span>
           Rate tables are 2025 figures. Projecting later years reuses them, since inventing

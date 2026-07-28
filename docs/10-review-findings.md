@@ -4,8 +4,16 @@ Four independent reviews of the calculator against the archived sources and the
 briefs: the Japanese engine, the US engine, the user-visible copy and glossary,
 and adversarial testing of the projection loop.
 
-**Nothing here is fixed yet.** This document is the triage list. Items are
-ranked within each section by how badly they mislead a reader of the output.
+**Status: all items below were fixed on 2026-07-28**, in commits following this
+document. It is kept as the audit record — what was wrong, what the source
+actually said, and how far the output moved — not as an outstanding list. Items
+are ranked within each section by how badly they misled a reader of the output.
+
+Two items were resolved as documentation rather than code, because the code was
+right and the brief was wrong (A1, A2). One (B14) was a modelling choice with
+two defensible readings; both are now recorded and the continuous one is
+implemented. One (B6) changed the boundary date by a day, and both readings of
+the circular are now stated in doc 01.
 
 Authority order used throughout, per `CONVENTIONS.md`: archived primary source
 beats brief, brief beats code. Where a brief contradicts the archive, that is

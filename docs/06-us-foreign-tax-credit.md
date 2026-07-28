@@ -95,7 +95,11 @@ For each tax year:
 5. **For each basket separately:**
    a. numerator = foreign-source taxable income in that basket, after step 3;
    b. apply the **capital gain rate differential adjustment** (§5 below);
-   c. `limitation = US_tax_before_credit × numerator / total_taxable_income`;
+   c. `limitation = US_tax_before_credit × numerator / adjusted_total_taxable_income`,
+      where the denominator takes the SAME rate differential reduction as the
+      numerator (§904(b)(2)(B)(ii)), and the numerator is capped at the
+      denominator — §904(a) says "but not in excess of the taxpayer's entire
+      taxable income", so the ratio can never exceed 1;
    d. `credit = min(creditable foreign taxes in basket, limitation)`;
    e. `excess = creditable foreign taxes − limitation` → carry under §904(c).
 6. **Repeat step 5 per re-sourced item** under §904(d)(6).
@@ -112,14 +116,36 @@ year and in any of the first 10 succeeding taxable years**, in that order"
 
 ## 5. The capital gain rate differential adjustment — §904(b)(2)(B)
 
-Foreign-source capital gains taxed at **preferential** US rates are **scaled down**
-in the limitation numerator. The logic: if the US taxes a gain at 15% rather than
-37%, it should not surrender credit as though it had taxed it at 37%.
+The provision has **two clauses, and both bite.** Quoting the archived statute:
 
-Mechanically, foreign-source capital gain is multiplied by a factor of roughly
-`preferential rate / highest ordinary rate` before entering the numerator. The
-effect is to **cut the credit available on capital gains substantially** — often by
-half or more.
+> **(i)** … the taxable income from sources outside the United States shall
+> include gain … only in an amount equal to foreign source capital gain net
+> income **reduced by the rate differential portion of foreign source net
+> capital gain**,
+> **(ii)** **the entire taxable income shall include gain from the sale or
+> exchange of capital assets only in an amount equal to capital gain net income
+> reduced by the rate differential portion of net capital gain** …
+
+[IRC §904(b)(2)(B)] — `sources/us-code/irc-904.html.txt`
+
+Clause (i) scales the **numerator**. Clause (ii) scales the **denominator** the
+same way. The logic: if the US taxes a gain at 15% rather than 37%, it should
+neither surrender credit as though it had taxed it at 37%, nor count the full
+gain as taxable income when sizing the fraction.
+
+The factor is not an estimate. The Form 1116 instructions direct multiplying
+foreign-source capital gain by **0.4054** where it is taxed at 15% and
+**0.5405** where taxed at 20% — that is `rate / 37` — and excluding 0%-rate gain
+entirely. The Line 18 worksheet makes the denominator adjustment **mandatory**
+unless foreign net capital gain is under $20,000.
+
+**Correction, 2026-07-28.** § 4 step 5c of this document previously stated the
+limitation as `numerator / total_taxable_income` with **no denominator
+adjustment**, and this section described only the numerator scaling. Clause (ii)
+was omitted. The calculator faithfully implemented the incomplete rule and
+returned $11,950 of US tax on this document's own worked example (§ 9), against
+the ~$3,800 the example itself predicts — a 3.1× overstatement. Both the
+document and the engine now apply both clauses.
 
 > This is the provision that turns the passive-basket problem from awkward into
 > painful, and it is the one most often omitted from simplified models. The

@@ -15,7 +15,12 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["departure-jp", "table-1-status", "tax-agent", "hundred-million-threshold"],
+    "seeAlso": [
+      "departure-jp",
+      "table-1-status",
+      "tax-agent",
+      "hundred-million-threshold"
+    ],
     "falseFriend": "Nothing to do with the US expatriation tax under IRC section 877A, which applies only on renouncing US citizenship. The two share a nickname and nothing else."
   },
   {
@@ -34,7 +39,10 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["exit-tax", "table-1-status"]
+    "seeAlso": [
+      "exit-tax",
+      "table-1-status"
+    ]
   },
   {
     "id": "table-1-status",
@@ -52,7 +60,11 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["exit-tax", "table-2-status", "non-permanent-resident"],
+    "seeAlso": [
+      "exit-tax",
+      "table-2-status",
+      "non-permanent-resident"
+    ],
     "falseFriend": "This visa-based test governs only the exit tax. Income tax residency and the non-permanent resident phases ignore visa category entirely and count days of presence instead."
   },
   {
@@ -71,7 +83,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["table-1-status", "exit-tax"]
+    "seeAlso": [
+      "table-1-status",
+      "exit-tax"
+    ]
   },
   {
     "id": "tax-agent",
@@ -89,7 +104,11 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["exit-tax", "departure-jp", "tax-deferral-election"]
+    "seeAlso": [
+      "exit-tax",
+      "departure-jp",
+      "tax-deferral-election"
+    ]
   },
   {
     "id": "tax-deferral-election",
@@ -107,7 +126,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["exit-tax", "tax-agent"]
+    "seeAlso": [
+      "exit-tax",
+      "tax-agent"
+    ]
   },
   {
     "id": "inheritance-tax-jp",
@@ -120,11 +142,15 @@
     "definition": "Scope turns on the same Appended Table 1 and Table 2 distinction as the exit tax, together with a test based on years of residence within a look-back period, as modified by reforms in 2017 and 2021 aimed at not deterring foreign workers. A work-visa holder is generally limited to Japan-situs assets, while Table 2 status and long residence can expose worldwide assets. None of this is yet verified here, and the exposure can exceed every income tax consideration in this repository combined.",
     "citations": [
       {
-        "label": "Flagged at doc 04 section 4",
+        "label": "No archived source yet — Flagged at doc 04 section 4",
         "source": "docs/04-japan-exit-tax-and-leaving.md",
         "url": "https://laws.e-gov.go.jp/law/325AC0000000073"
       }
     ],
-    "seeAlso": ["table-1-status", "table-2-status", "exit-tax"]
+    "seeAlso": [
+      "table-1-status",
+      "table-2-status",
+      "exit-tax"
+    ]
   }
 ]
