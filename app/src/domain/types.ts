@@ -190,11 +190,15 @@ export interface YearResult {
     /** Salary net of Japanese tax, available in Japan without remitting. */
     netSalaryInJapan: number;
     livingCost: number;
-    /** Living cost met by drawing down pre-positioned savings. */
+    /** Living cost met by drawing down cash already in Japan. */
     fundedFromSavings: number;
     /** Living cost that had to be remitted, triggering the ordering rule. */
     fundedFromRemittance: number;
-    /** Pre-positioned savings remaining at year end. */
+    /**
+     * Cash available in Japan at year end: pre-positioned savings plus any
+     * accumulated salary surplus. Both can be spent without remitting, so the
+     * model treats them as one pot.
+     */
     savingsRemaining: number;
   };
 
@@ -212,8 +216,8 @@ export interface ScenarioResult {
   nprEndsOn: IsoDate;
   exitTaxExposed: boolean;
   /**
-   * The year pre-positioned savings run out — the year remittances become
-   * unavoidable and the shelter starts to leak. null if they last the projection.
+   * The year cash in Japan runs out — the year remittances become unavoidable
+   * and the shelter starts to leak. null if it lasts the whole projection.
    */
   savingsExhaustedIn: number | null;
 }

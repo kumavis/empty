@@ -97,8 +97,9 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
         <div>
           <h2>Where the money goes, and how long the savings last</h2>
           <p className="muted small">
-            Living costs are funded from salary already in Japan, then from pre-positioned
-            savings, and only then by remitting — which is when the ordering rule starts to bite.
+            Living costs come first from salary already in Japan, then from cash already there
+            — pre-positioned savings plus any accumulated surplus — and only then by remitting,
+            which is when the ordering rule starts to bite.
           </p>
         </div>
         <button className="btn btn--ghost" onClick={() => setShowTable((v) => !v)}>
@@ -115,7 +116,7 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
         ))}
         <span className="legend__item">
           <span className="swatch swatch--savings" />
-          Pre-positioned savings remaining
+          Cash in Japan
         </span>
       </div>
 
@@ -129,7 +130,7 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
                 <th scope="col">US tax</th>
                 <th scope="col">Living cost</th>
                 <th scope="col">Remitted</th>
-                <th scope="col">Savings left</th>
+                <th scope="col">Cash in Japan</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +153,7 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
             width={W}
             height={H}
             role="img"
-            aria-label={`Annual tax and living costs by year, with pre-positioned savings remaining. Savings run out in ${
+            aria-label={`Annual tax and living costs by year, with cash available in Japan. That cash runs out in ${
               result.savingsExhaustedIn ?? 'no year within the projection'
             }.`}
             onMouseLeave={() => setHover(null)}
@@ -240,7 +241,7 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
                 <g>
                   <circle cx={xOf(i)} cy={stockY(rows[i].savings)} r={4.5} className="endpoint" />
                   <text x={xOf(i) + 8} y={stockY(rows[i].savings) - 6} className="endpoint-label">
-                    savings spent
+                    cash spent
                   </text>
                 </g>
               );
@@ -289,7 +290,7 @@ export function Chart({ result, fx, nprEndsOn }: Props) {
               <span><i style={{ background: 'var(--series-us)' }} />US tax {usd(rows[hover].us)}</span>
               <span><i style={{ background: 'var(--series-live)' }} />Living {usd(rows[hover].living)}</span>
               <span className="tip__rule" />
-              <span>Savings left {usd(rows[hover].savings)}</span>
+              <span>Cash in Japan {usd(rows[hover].savings)}</span>
               {rows[hover].remitted > 0 && <span>Remitted {usd(rows[hover].remitted)}</span>}
             </div>
           )}

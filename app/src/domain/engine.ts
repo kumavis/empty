@@ -154,7 +154,7 @@ export function runScenario(scenario: Scenario): ScenarioResult {
         : []),
       ...(fundedFromRemittance > 0 && phase === 'nonPermanentResident'
         ? [
-            'Pre-positioned savings are spent, so living costs now have to be remitted. ' +
+            'Cash in Japan is spent, so living costs now have to be remitted. ' +
               'Every remitted dollar beyond Japan-source income paid abroad reaches foreign ' +
               'income under the ordering rule.',
           ]
@@ -228,7 +228,7 @@ export function runScenario(scenario: Scenario): ScenarioResult {
     const nprEnd = nonPermanentResidentEnd(scenario.residencyStart, scenario.priorPresence);
     const stillSheltered = `${savingsExhaustedIn}-12-31` < nprEnd;
     warnings.push(
-      `Pre-positioned savings run out in ${savingsExhaustedIn}` +
+      `Cash in Japan runs out in ${savingsExhaustedIn}` +
         (stillSheltered
           ? ', while the shelter is still running. From that year living costs have to be ' +
             'remitted, and the ordering rule starts reaching foreign income. Pre-positioning ' +

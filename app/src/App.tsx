@@ -140,7 +140,7 @@ export default function App() {
         </div>
         <div className="tile">
           <span className="tile__label">
-            {result.savingsExhaustedIn ? 'Savings run out' : 'Worldwide tax from'}
+            {result.savingsExhaustedIn ? 'Cash in Japan runs out' : 'Worldwide tax from'}
           </span>
           <span className="tile__value">
             {result.savingsExhaustedIn ?? result.nprEndsOn.slice(0, 4)}
@@ -327,7 +327,7 @@ export default function App() {
                     <th scope="col">Japan</th>
                     <th scope="col">US</th>
                     <th scope="col">Combined</th>
-                    <th scope="col">Savings left</th>
+                    <th scope="col">Cash in Japan</th>
                   </tr>
                 </thead>
                 <tbody>
