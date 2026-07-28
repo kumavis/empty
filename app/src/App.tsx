@@ -1,21 +1,20 @@
 import { useMemo, useState } from 'react';
+import { Chart } from './components/Chart';
+import { Field } from './components/Field';
 import { Glossary } from './components/Glossary';
 import { T } from './components/Term';
 import { runScenario } from './domain/engine';
+import { jpy, toJpy, usd, usdCompact } from './domain/money';
+import { checkDate, checkDeparture, checkMoney, checkRate, checkYears } from './domain/validate';
 import type { Scenario } from './domain/types';
 
-const YEN = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-const yen = (n: number) => `¥${YEN.format(Math.round(n))}`;
-const compact = (n: number) => {
-  const m = Math.round(n / 100_000) / 10;
-  return `¥${m}m`;
-};
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 
 /**
- * A worked default: a high earner arriving in April 2026 with a pre-arrival
- * portfolio, realising a gain in the middle of the non-permanent resident phase
- * and again after it ends. Chosen so the phase boundary is visible in the output.
+ * A worked default: a high earner arriving April 2026 on a work visa, with a
+ * pre-arrival portfolio and two years of living costs pre-positioned. Chosen so
+ * both boundaries are visible — the year savings run out, and the year the
+ * shelter ends.
  */
 const DEFAULT: Scenario = {
   name: 'Base case',
@@ -23,28 +22,49 @@ const DEFAULT: Scenario = {
   holdsJapaneseNationality: false,
   priorPresence: [],
   visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
-  prePositionedFunds: 20_000_000,
-  lots: [
-    { id: 'pre', label: 'Pre-arrival portfolio', acquired: '2019-01-01', basis: 60_000_000, units: 1000, heldAbroad: true },
-    { id: 'post', label: 'Bought after arrival', acquired: '2027-06-01', basis: 10_000_000, units: 200, heldAbroad: true },
-  ],
-  disposals: [
-    { id: 'd1', lotId: 'pre', date: '2028-05-01', units: 200, proceeds: 20_000_000 },
-    { id: 'd2', lotId: 'pre', date: '2032-05-01', units: 200, proceeds: 22_000_000 },
-  ],
-  income: [2026, 2027, 2028, 2029, 2030, 2031, 2032].map((year) => ({
-    year,
-    salaryForJapanWork: 18_000_000,
-    salaryForForeignWork: 0,
-    salaryPaidInJapan: 18_000_000,
-    foreignInvestmentIncomeAbroad: 1_000_000,
-    foreignInvestmentIncomePaidInJapan: 0,
-    remittanceToJapan: 0,
-  })),
+  annualSalary: 180_000,
+  annualCapitalGains: 120_000,
+  gainsOnPreArrivalHoldings: true,
+  annualLivingCost: 130_000,
+  prePositionedSavings: 60_000,
+  projectionYears: 8,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
   fxJpyPerUsd: 150,
 };
+
+/**
+ * Collapse the per-year notes into one entry per distinct finding.
+ *
+ * Most notes are structural — the NIIT is uncreditable, the gain stays
+ * US-source — and repeat identically every year. Listing them once against the
+ * years they cover turns forty lines of repetition into the handful of distinct
+ * things the model actually did.
+ */
+function groupNotes(years: { year: number; notes: string[] }[]) {
+  const map = new Map<string, number[]>();
+  for (const y of years) {
+    for (const note of y.notes) {
+      if (!map.has(note)) map.set(note, []);
+      map.get(note)!.push(y.year);
+    }
+  }
+  return [...map.entries()].map(([note, ys]) => ({ note, years: ys }));
+}
+
+/** "2026", "2026–2030", or "2026, 2028–2030" — contiguous runs collapse. */
+function summariseYears(years: number[]): string {
+  const runs: string[] = [];
+  let start = years[0];
+  let prev = years[0];
+  for (const y of years.slice(1)) {
+    if (y === prev + 1) { prev = y; continue; }
+    runs.push(start === prev ? `${start}` : `${start}–${prev}`);
+    start = prev = y;
+  }
+  runs.push(start === prev ? `${start}` : `${start}–${prev}`);
+  return runs.join(', ');
+}
 
 const PHASE_LABEL: Record<string, string> = {
   nonResident: 'Non-resident',
@@ -58,28 +78,20 @@ export default function App() {
 
   const result = useMemo(() => runScenario(scenario), [scenario]);
 
-  /** The counterfactual that isolates the value of remittance discipline. */
-  const remitting = useMemo(
-    () =>
-      runScenario({
-        ...scenario,
-        income: scenario.income.map((y) => ({ ...y, remittanceToJapan: 30_000_000 })),
-      }),
-    [scenario],
-  );
-
   const set = (patch: Partial<Scenario>) => setScenario((s) => ({ ...s, ...patch }));
-  const setIncome = (year: number, patch: Partial<Scenario['income'][number]>) =>
-    setScenario((s) => ({
-      ...s,
-      income: s.income.map((y) => (y.year === year ? { ...y, ...patch } : y)),
-    }));
-
   const fx = scenario.fxJpyPerUsd;
+
+  /** Every dollar figure carries its yen equivalent, since the statute is in yen. */
+  const both = (dollars: number) => jpy(toJpy(dollars, fx));
+
   const avgRate =
     result.years.length > 0
       ? result.years.reduce((s, y) => s + y.effectiveRate, 0) / result.years.length
       : 0;
+
+  const totalUsd = result.totals.combined / fx;
+  const jpUsd = result.totals.japan / fx;
+  const usUsd = result.totals.us / fx;
 
   return (
     <div className="app">
@@ -88,9 +100,10 @@ export default function App() {
           <p className="eyebrow">Interactive model · research, not advice</p>
           <h1>Moving from the US to Japan: what the tax actually costs</h1>
           <p className="header__sub">
-            Models the three <T id="resident" /> phases, the{' '}
-            <T id="remittance-basis" /> that shelters foreign income during the second, and the
-            US <T id="foreign-tax-credit" /> that decides how much of the shelter survives.
+            Models the three <T id="resident" /> phases, the <T id="remittance-basis" /> that
+            shelters foreign income during the second, and the US{' '}
+            <T id="foreign-tax-credit" /> that decides how much of the shelter survives. Figures
+            are in US dollars, with the yen the statute is written in alongside.
           </p>
         </div>
         <button className="btn btn--primary" onClick={() => setShowGlossary(true)}>
@@ -103,115 +116,171 @@ export default function App() {
         <span>
           <strong>Research, not tax advice.</strong> Figures rest on open questions recorded
           alongside the model — principally Japanese <T id="inhabitant-tax" /> rules and the
-          capital gain rate differential adjustment. A transition year is not apportioned. Treat
-          the output as directional, and the reasoning as the deliverable.
+          capital gain rate differential adjustment. A transition year is not apportioned, and a
+          single exchange rate is assumed throughout. Treat the output as directional, and the
+          reasoning as the deliverable.
         </span>
       </div>
 
-      {/* Summary before detail: the answer, then how it was reached. */}
       <div className="tiles">
         <div className="tile">
           <span className="tile__label">Combined tax</span>
-          <span className="tile__value">{compact(result.totals.combined)}</span>
-          <span className="tile__note">over {result.years.length} years</span>
+          <span className="tile__value">{usdCompact(totalUsd)}</span>
+          <span className="tile__note">{both(totalUsd)} over {result.years.length} years</span>
         </div>
         <div className="tile tile--jp">
           <span className="tile__label">Japan</span>
-          <span className="tile__value">{compact(result.totals.japan)}</span>
-          <span className="tile__note">{pct(result.totals.japan / result.totals.combined)} of total</span>
+          <span className="tile__value">{usdCompact(jpUsd)}</span>
+          <span className="tile__note">{both(jpUsd)}</span>
         </div>
         <div className="tile tile--us">
           <span className="tile__label">United States</span>
-          <span className="tile__value">{compact(result.totals.us)}</span>
+          <span className="tile__value">{usdCompact(usUsd)}</span>
           <span className="tile__note">after foreign tax credit</span>
         </div>
         <div className="tile">
-          <span className="tile__label">Worldwide tax from</span>
-          <span className="tile__value">{result.nprEndsOn}</span>
-          <span className="tile__note">shelter ends · avg rate {pct(avgRate)}</span>
+          <span className="tile__label">
+            {result.savingsExhaustedIn ? 'Savings run out' : 'Worldwide tax from'}
+          </span>
+          <span className="tile__value">
+            {result.savingsExhaustedIn ?? result.nprEndsOn.slice(0, 4)}
+          </span>
+          <span className="tile__note">
+            {result.savingsExhaustedIn
+              ? `shelter ends ${result.nprEndsOn} · avg rate ${pct(avgRate)}`
+              : `avg rate ${pct(avgRate)}`}
+          </span>
         </div>
       </div>
 
       <section className="card">
-        <h2>The boundary</h2>
-        <div className="tlwrap">
-        <div className="tl">
-          {result.years.map((y) => (
-            <div
-              key={y.year}
-              className={`tl__seg tl__seg--${y.phase} ${y.phaseChangedOn ? 'tl__seg--boundary' : ''}`}
-            >
-              <span className="tl__yr">{y.year}</span>
-              {y.phaseChangedOn && <span className="tl__mark">{y.phaseChangedOn}</span>}
-              <span className="tl__amt">{compact(y.combined)}</span>
-            </div>
-          ))}
-        </div>
-        </div>
-        <div className="legend">
-          <span className="legend__item">
-            <span className="swatch swatch--nonPermanentResident" />
-            <T id="non-permanent-resident" /> — foreign income shelterable
-          </span>
-          <span className="legend__item">
-            <span className="swatch swatch--permanentResident" />
-            <T id="permanent-resident-tax" /> — worldwide
-          </span>
-        </div>
+        <Chart result={result} fx={fx} nprEndsOn={result.nprEndsOn} />
       </section>
 
       <div className="body">
         <aside className="panel">
           <h2>Scenario</h2>
 
-          <label className="field">
+          <Field
+            label={<>Date <T id="domicile-jp" /> attaches</>}
+            type="date"
+            value={scenario.residencyStart}
+            check={(raw) => checkDate(raw, 'Residency start')}
+            onCommit={(v) => set({ residencyStart: String(v) })}
+            hint="A question of fact, not of immigration status — usually arrival day, but never the date on a visa or residence card."
+          />
+
+          <Field
+            label="Planned departure"
+            type="date"
+            value={scenario.departure ?? ''}
+            check={(raw) => checkDeparture(raw, scenario.residencyStart)}
+            onCommit={(v) => set({ departure: String(v) || undefined })}
+            hint="Optional. Leaving in December rather than January avoids a year of inhabitant tax."
+          />
+
+          <h3>Annual figures</h3>
+
+          <Field
+            label="Salary"
+            type="text"
+            prefix="$"
+            value={String(scenario.annualSalary)}
+            check={(raw) => checkMoney(raw, 'Salary', { max: 100_000_000 })}
+            onCommit={(v) => set({ annualSalary: Number(v) })}
+            secondary={`${both(scenario.annualSalary)} · for work performed in Japan, so Japan-source however it is paid`}
+          />
+
+          <Field
+            label="Capital gains realised"
+            type="text"
+            prefix="$"
+            value={String(scenario.annualCapitalGains)}
+            check={(raw) => checkMoney(raw, 'Capital gains', { max: 100_000_000 })}
+            onCommit={(v) => set({ annualCapitalGains: Number(v) })}
+            secondary={both(scenario.annualCapitalGains)}
+          />
+
+          <label className="field--check">
+            <input
+              type="checkbox"
+              checked={scenario.gainsOnPreArrivalHoldings}
+              onChange={(e) => set({ gainsOnPreArrivalHoldings: e.target.checked })}
+            />
             <span>
-              Date <T id="domicile-jp" /> attaches
+              On holdings bought before arrival
+              <small>
+                Only these are specified securities under Enforcement Order art. 17(1), and only
+                these are shelterable.
+              </small>
             </span>
-            <input
-              type="date"
-              value={scenario.residencyStart}
-              onChange={(e) => set({ residencyStart: e.target.value })}
-            />
-            <small>
-              A question of fact, not of immigration status — usually arrival day, but never the
-              date on a visa or residence card.
-            </small>
           </label>
 
-          <label className="field">
-            <span>Planned departure</span>
-            <input
-              type="date"
-              value={scenario.departure ?? ''}
-              onChange={(e) => set({ departure: e.target.value || undefined })}
-            />
-            <small>
-              Leaving in December rather than January avoids a year of <T id="inhabitant-tax" />.
-            </small>
-          </label>
+          <Field
+            label="Cost of living in Japan"
+            type="text"
+            prefix="$"
+            value={String(scenario.annualLivingCost)}
+            check={(raw) => checkMoney(raw, 'Living cost', { max: 10_000_000 })}
+            onCommit={(v) => set({ annualLivingCost: Number(v) })}
+            secondary={`${both(scenario.annualLivingCost)} · what has to be funded each year`}
+          />
 
-          <label className="field">
-            <span>Immigration status</span>
-            <select
-              value={scenario.visaPeriods[0]?.table ?? 'table1'}
-              onChange={(e) =>
-                set({
-                  visaPeriods: [
-                    { from: scenario.residencyStart, table: e.target.value as 'table1' | 'table2' },
-                  ],
-                })
-              }
-            >
-              <option value="table1">Work visa — Appended Table 1</option>
-              <option value="table2">Permanent Resident / Spouse — Table 2</option>
-            </select>
-            <small>
+          <h3>Position and horizon</h3>
+
+          <Field
+            label="Savings pre-positioned in Japan"
+            type="text"
+            prefix="$"
+            value={String(scenario.prePositionedSavings)}
+            check={(raw) => checkMoney(raw, 'Pre-positioned savings', { max: 100_000_000 })}
+            onCommit={(v) => set({ prePositionedSavings: Number(v) })}
+            secondary={`${both(scenario.prePositionedSavings)} · moved before domicile attached, so outside the regime`}
+          />
+
+          <Field
+            label="Years to project"
+            type="number"
+            value={String(scenario.projectionYears)}
+            check={checkYears}
+            onCommit={(v) => set({ projectionYears: Number(v) })}
+          />
+
+          <Field
+            label="Exchange rate"
+            type="text"
+            value={String(scenario.fxJpyPerUsd)}
+            check={(raw) => checkRate(raw, 'Exchange rate')}
+            onCommit={(v) => set({ fxJpyPerUsd: Number(v) })}
+            hint="Yen per dollar. Held constant across the projection — a real plan would not be."
+          />
+
+          <h3>Status and elections</h3>
+
+          <div className="field">
+            <label htmlFor="visa">Immigration status</label>
+            <div className="field__control">
+              <select
+                id="visa"
+                value={scenario.visaPeriods[0]?.table ?? 'table1'}
+                onChange={(e) =>
+                  set({
+                    visaPeriods: [
+                      { from: scenario.residencyStart, table: e.target.value as 'table1' | 'table2' },
+                    ],
+                  })
+                }
+              >
+                <option value="table1">Work visa — Appended Table 1</option>
+                <option value="table2">Permanent Resident / Spouse — Table 2</option>
+              </select>
+            </div>
+            <span className="field__hint">
               <T id="table-1-status" /> time never counts toward the <T id="exit-tax" />.
-            </small>
-          </label>
+            </span>
+          </div>
 
-          <label className="field field--check">
+          <label className="field--check">
             <input
               type="checkbox"
               checked={scenario.holdsJapaneseNationality}
@@ -220,7 +289,7 @@ export default function App() {
             <span>Holds Japanese nationality</span>
           </label>
 
-          <label className="field field--check">
+          <label className="field--check">
             <input
               type="checkbox"
               checked={scenario.elections.claimFeie}
@@ -232,43 +301,6 @@ export default function App() {
               Elect the <T id="feie" />
             </span>
           </label>
-
-          <label className="field">
-            <span>Pre-positioned funds</span>
-            <input
-              type="number"
-              step={1_000_000}
-              value={scenario.prePositionedFunds}
-              onChange={(e) => set({ prePositionedFunds: Number(e.target.value) })}
-            />
-            <small>Moved before residency, so outside the remittance regime entirely.</small>
-          </label>
-
-          <label className="field">
-            <span>JPY per USD</span>
-            <input
-              type="number"
-              value={fx}
-              onChange={(e) => set({ fxJpyPerUsd: Number(e.target.value) || 1 })}
-            />
-          </label>
-
-          <h3>Remittance by year</h3>
-          <p className="muted small" style={{ marginBottom: 10 }}>
-            The lever. Exposure is the remittance less Japan-source income, capped at the year's
-            foreign income.
-          </p>
-          {scenario.income.map((y) => (
-            <label key={y.year} className="field--inline">
-              <span>{y.year}</span>
-              <input
-                type="number"
-                step={1_000_000}
-                value={y.remittanceToJapan}
-                onChange={(e) => setIncome(y.year, { remittanceToJapan: Number(e.target.value) })}
-              />
-            </label>
-          ))}
         </aside>
 
         <div className="stack">
@@ -284,32 +316,6 @@ export default function App() {
           )}
 
           <section className="card">
-            <h2>What remittance discipline is worth</h2>
-            <div className="compare">
-              <div>
-                <span className="compare__k">This scenario</span>
-                <span className="compare__v">{yen(result.totals.combined)}</span>
-              </div>
-              <div>
-                <span className="compare__k">Remitting ¥30m yearly</span>
-                <span className="compare__v">{yen(remitting.totals.combined)}</span>
-              </div>
-              <div className="compare__delta">
-                <span className="compare__k">Difference</span>
-                <span className="compare__v">
-                  {yen(remitting.totals.combined - result.totals.combined)}
-                </span>
-              </div>
-            </div>
-            <p className="muted small">
-              Smaller than the Japanese tax avoided, because <T id="section-865-sourcing" />{' '}
-              leaves an unremitted gain US-source and fully US-taxable. The shelter saves Japanese
-              tax, not US tax — the correction that most English-language writing on this misses,
-              because it is written for non-Americans.
-            </p>
-          </section>
-
-          <section className="card">
             <h2>Year by year</h2>
             <div className="tablewrap">
               <table>
@@ -321,7 +327,7 @@ export default function App() {
                     <th scope="col">Japan</th>
                     <th scope="col">US</th>
                     <th scope="col">Combined</th>
-                    <th scope="col">Effective</th>
+                    <th scope="col">Savings left</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -331,43 +337,43 @@ export default function App() {
                       <td>
                         <span className={`pill pill--${y.phase}`}>{PHASE_LABEL[y.phase]}</span>
                       </td>
-                      <td>{y.japan.deemedRemitted ? yen(y.japan.deemedRemitted) : '—'}</td>
-                      <td className="num--jp">{yen(y.japan.total)}</td>
-                      <td className="num--us">{yen(y.us.total * fx)}</td>
-                      <td>
-                        <strong>{yen(y.combined)}</strong>
-                      </td>
-                      <td>{pct(y.effectiveRate)}</td>
+                      <td>{y.japan.deemedRemitted ? usd(y.japan.deemedRemitted / fx) : '—'}</td>
+                      <td className="num--jp">{usd(y.japan.total / fx)}</td>
+                      <td className="num--us">{usd(y.us.total)}</td>
+                      <td><strong>{usd(y.combined / fx)}</strong></td>
+                      <td>{usd(y.cash.savingsRemaining / fx)}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
                     <td colSpan={3}>Total</td>
-                    <td className="num--jp">{yen(result.totals.japan)}</td>
-                    <td className="num--us">{yen(result.totals.us)}</td>
-                    <td>{yen(result.totals.combined)}</td>
+                    <td className="num--jp">{usd(jpUsd)}</td>
+                    <td className="num--us">{usd(usUsd)}</td>
+                    <td>{usd(totalUsd)}</td>
                     <td />
                   </tr>
                 </tfoot>
               </table>
             </div>
+            <p className="muted small" style={{ marginTop: 10 }}>
+              Combined total {both(totalUsd)}.
+            </p>
           </section>
 
           <section className="card">
             <h2>What the model did</h2>
-            {result.years
-              .filter((y) => y.notes.length > 0)
-              .map((y) => (
-                <div key={y.year} className="notes">
-                  <h4>{y.year}</h4>
-                  <ul>
-                    {y.notes.map((n) => (
-                      <li key={n}>{n}</li>
-                    ))}
-                  </ul>
-                </div>
+            <p className="muted small" style={{ marginBottom: 12 }}>
+              Each finding is listed once, with the years it applies to.
+            </p>
+            <ul className="notes__list">
+              {groupNotes(result.years).map(({ note, years }) => (
+                <li key={note}>
+                  <span className="notes__years">{summariseYears(years)}</span>
+                  {note}
+                </li>
               ))}
+            </ul>
           </section>
         </div>
       </div>

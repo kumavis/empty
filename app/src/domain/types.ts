@@ -126,11 +126,26 @@ export interface Scenario {
   holdsJapaneseNationality: boolean;
   priorPresence: PriorPresence[];
   visaPeriods: VisaPeriod[];
-  lots: Lot[];
-  disposals: Disposal[];
-  income: YearIncome[];
-  /** Funds moved to Japan BEFORE residency begins — outside the regime entirely. */
-  prePositionedFunds: number;
+  /** Annual salary in USD for services performed in Japan. Japan-source however paid. */
+  annualSalary: number;
+  /** Annual realised capital gains in USD. */
+  annualCapitalGains: number;
+  /**
+   * Whether the gains arise on holdings acquired BEFORE arrival. Only those are
+   * specified securities under Enforcement Order art. 17(1) and so shelterable;
+   * anything bought after arrival is taxed on an arising basis.
+   */
+  gainsOnPreArrivalHoldings: boolean;
+  /** Annual cost of living in Japan, in USD. Drives the remittance requirement. */
+  annualLivingCost: number;
+  /**
+   * Savings moved to Japan BEFORE domicile attached, in USD. Outside the
+   * remittance regime entirely, so spending them funds life in Japan without
+   * triggering the ordering rule — until they run out.
+   */
+  prePositionedSavings: number;
+  /** Number of years to project from the year residency begins. */
+  projectionYears: number;
   elections: Elections;
   filingStatus: 'single' | 'marriedJoint';
   /** JPY per USD. A single rate is a simplification; see the caveat in the UI. */
@@ -170,6 +185,19 @@ export interface YearResult {
     total: number;
   };
 
+  /** Where the money to live on came from, and what is left. */
+  cash: {
+    /** Salary net of Japanese tax, available in Japan without remitting. */
+    netSalaryInJapan: number;
+    livingCost: number;
+    /** Living cost met by drawing down pre-positioned savings. */
+    fundedFromSavings: number;
+    /** Living cost that had to be remitted, triggering the ordering rule. */
+    fundedFromRemittance: number;
+    /** Pre-positioned savings remaining at year end. */
+    savingsRemaining: number;
+  };
+
   combined: number;
   /** Effective rate on total economic income. */
   effectiveRate: number;
@@ -183,4 +211,9 @@ export interface ScenarioResult {
   warnings: string[];
   nprEndsOn: IsoDate;
   exitTaxExposed: boolean;
+  /**
+   * The year pre-positioned savings run out — the year remittances become
+   * unavoidable and the shelter starts to leak. null if they last the projection.
+   */
+  savingsExhaustedIn: number | null;
 }

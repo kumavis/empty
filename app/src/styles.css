@@ -426,3 +426,96 @@ code { font-family: var(--mono); font-size: 0.88em; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* --- Chart -------------------------------------------------------------- */
+/* Validated steps: scripts/validate_palette.js passes all six checks in both
+   modes. These are chart-fill hues, deliberately more saturated than the UI
+   accents — the page's indigo has chroma 0.076 and reads gray as a large fill. */
+:root {
+  --series-jp: #c2402f;
+  --series-us: #2a6fc4;
+  --series-live: #1a8f5e;
+  --series-savings: #6b7a8a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --series-jp: #dd6a52;
+    --series-us: #5896dd;
+    --series-live: #35a877;
+    --series-savings: #8b9bab;
+  }
+}
+:root[data-theme='dark'] {
+  --series-jp: #dd6a52;
+  --series-us: #5896dd;
+  --series-live: #35a877;
+  --series-savings: #8b9bab;
+}
+:root[data-theme='light'] {
+  --series-jp: #c2402f;
+  --series-us: #2a6fc4;
+  --series-live: #1a8f5e;
+  --series-savings: #6b7a8a;
+}
+
+.chart { display: grid; gap: 12px; }
+.chart__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.chart__head h2 { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; margin: 0 0 3px; }
+.chart__head p { max-width: 68ch; }
+.btn--ghost { padding: 5px 11px; font-size: 0.8rem; }
+
+.chartwrap { position: relative; overflow-x: auto; }
+.chartwrap svg { display: block; }
+
+.grid { stroke: var(--line); stroke-width: 1; }
+.grid--base { stroke: var(--line-strong); }
+.axis {
+  font-family: var(--mono); font-size: 10px; fill: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+.boundary { stroke: var(--shu); stroke-width: 2; stroke-dasharray: 3 3; }
+.boundary-label { font-family: var(--mono); font-size: 9px; fill: var(--shu); }
+
+.savings-area { fill: var(--series-savings); opacity: 0.18; }
+.savings-line { fill: none; stroke: var(--series-savings); stroke-width: 2; stroke-linejoin: round; }
+.endpoint { fill: var(--shu); stroke: var(--surface); stroke-width: 2; }
+.endpoint-label { font-family: var(--mono); font-size: 9px; fill: var(--shu); }
+
+.chartwrap g.dim { opacity: 0.42; transition: opacity 0.12s; }
+.swatch--savings { background: var(--series-savings); opacity: 0.55; }
+
+.tip {
+  position: absolute; top: 10px; z-index: 5; pointer-events: none;
+  background: var(--surface); border: 1px solid var(--line-strong);
+  border-radius: var(--r); padding: 9px 11px; display: grid; gap: 3px;
+  font-size: 0.78rem; box-shadow: 0 8px 22px rgb(10 20 30 / 0.16); white-space: nowrap;
+}
+.tip strong { font-family: var(--serif); font-size: 0.9rem; }
+.tip span { display: flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+.tip i { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+.tip__rule { border-top: 1px solid var(--line); margin: 3px 0; height: 0; }
+
+/* --- Validated fields --------------------------------------------------- */
+.field label { font-size: 0.82rem; font-weight: 600; display: block; }
+.field__control { position: relative; display: flex; }
+.field__control select { width: 100%; padding: 7px 9px; border: 1px solid var(--line-strong);
+  border-radius: var(--r); background: var(--surface); color: var(--ink);
+  font-family: var(--sans); font-size: 0.9rem; }
+.field__prefix {
+  position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 0.85rem; color: var(--ink-faint); pointer-events: none;
+}
+.field input.has-prefix { padding-left: 22px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.field__secondary, .field__hint {
+  font-size: 0.74rem; color: var(--ink-soft); line-height: 1.45;
+}
+.field__secondary { font-variant-numeric: tabular-nums; }
+.field__error { font-size: 0.75rem; color: var(--shu); font-weight: 500; }
+.field--invalid input { border-color: var(--shu); background: var(--shu-soft); }
+.field--check > span small { display: block; font-size: 0.74rem; color: var(--ink-soft); font-weight: 400; margin-top: 2px; }
+.notes__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 11px; }
+.notes__list li { font-size: 0.86rem; color: var(--ink-soft); display: grid; gap: 3px; }
+.notes__years {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  color: var(--ink-faint); font-variant-numeric: tabular-nums;
+}

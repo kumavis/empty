@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyRemittanceOrdering, computeJapanYear, isSpecifiedSecurity } from './japan';
 import { gainIsForeignSource } from './us';
+import { runScenario } from './engine';
 import { exitTaxExposure, nonPermanentResidentEnd, phaseOn } from './phases';
 import { japanNationalTax, listedSecuritiesRate, JAPAN_RATES } from './rates';
 import type { Lot, Scenario } from './types';
@@ -15,10 +16,12 @@ const baseScenario: Scenario = {
   holdsJapaneseNationality: false,
   priorPresence: [],
   visaPeriods: [{ from: '2026-04-01', table: 'table1' }],
-  lots: [],
-  disposals: [],
-  income: [],
-  prePositionedFunds: 0,
+  annualSalary: 0,
+  annualCapitalGains: 0,
+  gainsOnPreArrivalHoldings: true,
+  annualLivingCost: 0,
+  prePositionedSavings: 0,
+  projectionYears: 1,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
   fxJpyPerUsd: 150,
@@ -247,5 +250,59 @@ describe('doc 02 section 5 worked example, end to end', () => {
     });
     // No remittance at all, yet the gain is fully taxed — the shelter is gone.
     expect(out.capitalGainsTax).toBeCloseTo(8_000_000 * 0.20315, 0);
+  });
+});
+
+describe('funding living costs — the burn model', () => {
+  const base: Scenario = {
+    ...baseScenario,
+    residencyStart: '2026-01-01',
+    annualSalary: 0,          // no salary, so living costs must come from somewhere else
+    annualLivingCost: 50_000,
+    prePositionedSavings: 120_000,
+    projectionYears: 5,
+    fxJpyPerUsd: 150,
+  };
+
+  it('spends pre-positioned savings before remitting anything', () => {
+    const r = runScenario(base);
+    // 120k of savings against 50k/year: years one and two are fully funded.
+    expect(r.years[0].cash.fundedFromRemittance).toBe(0);
+    expect(r.years[1].cash.fundedFromRemittance).toBe(0);
+    expect(r.years[0].cash.savingsRemaining / 150).toBeCloseTo(70_000, 0);
+  });
+
+  it('reports the year the savings run out', () => {
+    // Year three needs 50k against 20k left, so that is the year they go.
+    expect(runScenario(base).savingsExhaustedIn).toBe(2028);
+  });
+
+  it('forces a remittance once savings are gone', () => {
+    const r = runScenario(base);
+    const after = r.years.find((y) => y.year === 2029)!;
+    expect(after.cash.fundedFromSavings).toBe(0);
+    expect(after.cash.fundedFromRemittance / 150).toBeCloseTo(50_000, 0);
+  });
+
+  it('taxes nothing on the forced remittance when there is no foreign income to reach', () => {
+    // The ordering rule is capped by the YEAR's foreign-source income. Remitting
+    // capital costs nothing when no foreign income arose that year.
+    const r = runScenario(base);
+    expect(r.years.find((y) => y.year === 2029)!.japan.deemedRemitted).toBe(0);
+  });
+
+  it('exposes foreign income once a remittance is forced in a year with gains', () => {
+    const r = runScenario({ ...base, annualCapitalGains: 80_000 });
+    const exposed = r.years.find((y) => y.year === 2029)!;
+    // Savings are gone, so living costs are remitted and reach the sheltered gain.
+    expect(exposed.japan.deemedRemitted).toBeGreaterThan(0);
+  });
+
+  it('buys sheltered years directly by pre-positioning more', () => {
+    const lean = runScenario({ ...base, annualCapitalGains: 80_000 });
+    const fat = runScenario({
+      ...base, annualCapitalGains: 80_000, prePositionedSavings: 260_000,
+    });
+    expect(fat.totals.combined).toBeLessThan(lean.totals.combined);
   });
 });
