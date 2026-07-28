@@ -23,6 +23,7 @@ const baseScenario: Scenario = {
   annualLivingCost: 0,
   prePositionedSavings: 0,
   usSavings: 0,
+  coveredAssetValue: 0,
   projectionYears: 1,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
@@ -122,29 +123,56 @@ describe('residency phases (ITA art. 2(1)(iv))', () => {
     // The five-year period runs from 2 April 2026 and is reached on 1 April
     // 2031; circular 2-3(3) puts the status change on the FOLLOWING day. A
     // naive fifth-anniversary calculation is a day early.
-    expect(nonPermanentResidentEnd('2026-04-01', [])).toBe('2031-04-02');
-    expect(phaseOn('2031-04-01', baseScenario)).toBe('nonPermanentResident');
-    expect(phaseOn('2031-04-02', baseScenario)).toBe('permanentResident');
+    // Counting runs 2 April 2026 to 1 April 2031 when judged on 2 April 2031 —
+    // circular 2-4の2 ends the counted period the day BEFORE the day judged —
+    // so that day is still exactly five years and still sheltered. The first
+    // non-NPR day is the one after.
+    expect(nonPermanentResidentEnd('2026-04-01', [])).toBe('2031-04-03');
+    expect(phaseOn('2031-04-02', baseScenario)).toBe('nonPermanentResident');
+    expect(phaseOn('2031-04-03', baseScenario)).toBe('permanentResident');
   });
 
   it('brings the boundary forward for prior presence, cumulatively', () => {
     // The statute says 合計 — aggregate, not consecutive.
+    // Recent enough to still sit inside the sliding window at the boundary.
     const end = nonPermanentResidentEnd('2026-04-01', [
-      { from: '2020-01-01', to: '2021-01-01' },
+      { from: '2024-01-01', to: '2025-01-01' },
     ]);
-    expect(end < '2031-04-02').toBe(true);
+    expect(end).toBe('2030-04-03');
   });
 
-  it('carries 30 days to a month and 12 months to a year when aggregating', () => {
-    // Circular 2-4の3 sums years, months and days separately and normalises
-    // with a 30-day month — the NTA's own convention, not a rounding of ours.
-    // Two 15-day stays (counted from the day after entry) make one month, so
-    // the boundary moves back by a month rather than by 30 days.
+  it('carries 30 days to a month when aggregating (circular 2-4の3)', () => {
+    // Two 15-day stays make one month, so the boundary moves back by a month.
     const end = nonPermanentResidentEnd('2026-04-01', [
-      { from: '2020-01-01', to: '2020-01-16' },
-      { from: '2021-01-01', to: '2021-01-16' },
+      { from: '2025-01-01', to: '2025-01-16' },
+      { from: '2025-06-01', to: '2025-06-16' },
     ]);
-    expect(end).toBe('2031-03-02');
+    expect(end).toBe('2031-03-03');
+  });
+
+  it('lets prior presence age out of the sliding ten-year window', () => {
+    // Circular 2-4の2 measures the window from the day being JUDGED, so a stay
+    // that ended long ago stops counting once it falls out. Anchoring the
+    // window to arrival charged it forever and cut the shelter short.
+    const old = nonPermanentResidentEnd('2026-04-01', [
+      { from: '2018-01-01', to: '2020-12-31' },
+    ]);
+    const none = nonPermanentResidentEnd('2026-04-01', []);
+    // By the time it would bind, the 2018-2020 stay has aged out entirely.
+    expect(old).toBe(none);
+  });
+
+  it('never returns a boundary before residency began', () => {
+    const end = nonPermanentResidentEnd('2026-04-01', [
+      { from: '2018-01-01', to: '2024-06-15' },
+    ]);
+    expect(end >= '2026-04-01').toBe(true);
+  });
+
+  it('counts the departure day itself as a day of residence', () => {
+    const s: Scenario = { ...baseScenario, departure: '2028-06-15' };
+    expect(phaseOn('2028-06-15', s)).toBe('nonPermanentResident');
+    expect(phaseOn('2028-06-16', s)).toBe('nonResident');
   });
 
   it('denies the phase entirely to a Japanese national', () => {
@@ -274,8 +302,8 @@ describe('funding living costs — the burn model', () => {
     // 120k of savings against 50k/year: years one and two are fully funded.
     expect(r.years[0].cash.fundedFromRemittance).toBe(0);
     expect(r.years[1].cash.fundedFromRemittance).toBe(0);
-    // ¥5,000 per-capita inhabitant levy is due even at zero income.
-    expect(r.years[0].cash.cashJapan / 150).toBeCloseTo(70_000 - 33.33, 0);
+    // No prior-year income, so no inhabitant tax is due (doc 03 section 3).
+    expect(r.years[0].cash.cashJapan / 150).toBeCloseTo(70_000, 0);
   });
 
   it('reports the year the savings run out', () => {
@@ -447,5 +475,140 @@ describe('two cash pools', () => {
     });
     expect(r.years[0].cash.fundedFromRemittance).toBeGreaterThan(0);
     expect(r.years[0].japan.deemedRemitted).toBe(0);
+  });
+});
+
+describe('corrections from the 2026-07-28 review', () => {
+  const S = (p: Partial<Scenario>): Scenario => ({ ...baseScenario, residencyStart: '2026-01-01',
+    visaPeriods: [{ from: '2026-01-01', table: 'table1' }], ...p });
+
+  it('taxes a departure year in proportion to the resident part of it', () => {
+    // Previously the year-end phase governed the whole year, so a departure
+    // zeroed all Japanese tax for it.
+    const full = runScenario(S({ annualSalary: 300_000, projectionYears: 1 }));
+    const half = runScenario(S({
+      annualSalary: 300_000, projectionYears: 1, departure: '2026-06-30',
+    }));
+    expect(half.years[0].japan.total).toBeGreaterThan(0);
+    expect(half.years[0].japan.total).toBeLessThan(full.years[0].japan.total);
+    // Roughly half a year of residence, so roughly half the income arises.
+    expect(half.years[0].japan.alwaysTaxable / full.years[0].japan.alwaysTaxable)
+      .toBeCloseTo(0.5, 1);
+  });
+
+  it('discloses a split year even when arrival and departure cancel out', () => {
+    const r = runScenario(S({
+      residencyStart: '2026-03-01', departure: '2026-09-01',
+      annualSalary: 300_000, projectionYears: 1,
+    }));
+    expect(r.years[0].japan.total).toBeGreaterThan(0);
+    expect(r.years[0].notes.some((n) => n.includes('Status changed'))).toBe(true);
+  });
+
+  it('charges no inhabitant tax in the arrival year', () => {
+    // Keyed to residence on 1 January and assessed on the prior year's income.
+    const r = runScenario(S({ annualSalary: 200_000, projectionYears: 2 }));
+    expect(r.years[0].japan.inhabitantTax).toBe(0);
+    expect(r.years[1].japan.inhabitantTax).toBeGreaterThan(0);
+  });
+
+  it('gives no basic deduction to a high earner', () => {
+    // No.1199: the deduction tapers to zero above 25,000,000 yen of total income.
+    const low = runScenario(S({ annualSalary: 40_000, projectionYears: 1 }));
+    const high = runScenario(S({ annualSalary: 300_000, projectionYears: 1 }));
+    expect(low.years[0].japan.employmentTax).toBeGreaterThanOrEqual(0);
+    expect(high.years[0].japan.total).toBeGreaterThan(0);
+  });
+
+  it('honours filing status', () => {
+    // Income chosen so the NIIT threshold actually binds: gross $220k sits
+    // above the $200k single threshold but below the $250k joint one, which
+    // IRC 1411(b) fixes rather than doubling.
+    const args = { annualSalary: 20_000, annualCapitalGainsUs: 200_000,
+      gainsOnPreArrivalHoldings: false, projectionYears: 1,
+      prePositionedSavings: 500_000 } as const;
+    const single = runScenario(S({ ...args, filingStatus: 'single' }));
+    const joint = runScenario(S({ ...args, filingStatus: 'marriedJoint' }));
+    expect(single.years[0].us.niit).toBeGreaterThan(0);
+    expect(joint.years[0].us.niit).toBe(0);
+    expect(joint.years[0].us.total).toBeLessThan(single.years[0].us.total);
+  });
+
+  it('walks the capital gain brackets instead of applying one rate', () => {
+    // A gain with no salary sits partly in the 0% band; a single 15% rate on
+    // the whole gain overstated it roughly threefold.
+    const r = runScenario(S({
+      annualSalary: 0, annualCapitalGainsUs: 100_000, gainsOnPreArrivalHoldings: false,
+      projectionYears: 1, prePositionedSavings: 500_000,
+    }));
+    expect(r.years[0].us.taxBeforeCredit).toBeLessThan(9_000);
+    expect(r.years[0].us.taxBeforeCredit).toBeGreaterThan(3_000);
+  });
+
+  it('never reports a negative pool, and says the plan is underfunded instead', () => {
+    const r = runScenario(S({
+      annualCapitalGainsJapan: 400_000, annualLivingCost: 380_000,
+      prePositionedSavings: 100_000, usSavings: 0, projectionYears: 2,
+    }));
+    for (const y of r.years) {
+      expect(y.cash.cashJapan).toBeGreaterThanOrEqual(0);
+      expect(y.cash.cashUs).toBeGreaterThanOrEqual(0);
+    }
+    expect(r.underfundedIn).not.toBeNull();
+  });
+
+  it('reports exhaustion even when repatriation is what drained the pool', () => {
+    const r = runScenario(S({
+      annualCapitalGainsJapan: 200_000, annualLivingCost: 200_000,
+      prePositionedSavings: 100_000, projectionYears: 6,
+    }));
+    expect(r.savingsExhaustedIn).not.toBeNull();
+  });
+
+  it('sources only the gain that actually bore Japanese tax', () => {
+    // Partial remittance means a partial credit, not an all-or-nothing cliff.
+    const r = runScenario(S({
+      annualSalary: 0, annualCapitalGainsUs: 100_000, gainsOnPreArrivalHoldings: true,
+      annualLivingCost: 40_000, prePositionedSavings: 0, usSavings: 300_000,
+      projectionYears: 1,
+    }));
+    const y = r.years[0];
+    expect(y.japan.deemedRemitted).toBeGreaterThan(0);
+    // Some credit, but not the whole bucket's worth.
+    expect(y.us.creditPassive).toBeGreaterThan(0);
+    expect(y.us.creditPassive).toBeLessThan(y.japan.capitalGainsTaxOnForeign / 150 + 1);
+  });
+
+  it('tests the exit tax against a covered-asset value, not the horizon', () => {
+    const short = runScenario(S({ departure: '2045-06-01', coveredAssetValue: 400_000,
+      visaPeriods: [{ from: '2026-01-01', table: 'table2' }], projectionYears: 5 }));
+    const long = runScenario(S({ departure: '2045-06-01', coveredAssetValue: 400_000,
+      visaPeriods: [{ from: '2026-01-01', table: 'table2' }], projectionYears: 10 }));
+    // Same person, same portfolio: the chart width must not change the law.
+    expect(short.exitTaxExposed).toBe(long.exitTaxExposed);
+  });
+
+  it('survives hostile numeric input without producing NaN', () => {
+    const r = runScenario(S({
+      annualSalary: -100, annualCapitalGainsJapan: -50_000, fxJpyPerUsd: 0,
+      projectionYears: 2,
+    }));
+    for (const y of r.years) {
+      expect(Number.isFinite(y.combined)).toBe(true);
+      expect(y.japan.total).toBeGreaterThanOrEqual(0);
+      expect(y.us.total).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('converges rather than exiting the loop by exhaustion', () => {
+    // Slope 0.20315 needs ~15 passes for a 1-yen tolerance; the old 4-pass cap
+    // always understated. Check the year is internally consistent.
+    const r = runScenario(S({
+      annualLivingCost: 60_000, usSavings: 2_000_000, annualCapitalGainsUs: 500_000,
+      projectionYears: 1,
+    }));
+    const y = r.years[0];
+    const flow = -y.cash.livingCost - y.japan.total + y.cash.fundedFromRemittance;
+    expect(Math.abs(flow - (y.cash.cashJapan - 0))).toBeLessThan(2);
   });
 });

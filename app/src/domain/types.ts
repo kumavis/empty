@@ -158,6 +158,12 @@ export interface Scenario {
    * other way is not, because ITA art. 7 reaches inbound transfers only.
    */
   usSavings: number;
+  /**
+   * Market value of securities held at departure, USD. ITA art. 60-2(1) tests
+   * 当該有価証券等の価額 — the VALUE, not accumulated gains — against the ¥100m
+   * threshold in art. 60-2(5). Zero means untested.
+   */
+  coveredAssetValue: number;
   /** Number of years to project from the year residency begins. */
   projectionYears: number;
   elections: Elections;
@@ -231,8 +237,12 @@ export interface YearResult {
   };
 
   combined: number;
-  /** Effective rate on total economic income. */
-  effectiveRate: number;
+  /**
+   * Effective rate on the income that actually arose. null where no income
+   * arose — a residual US bill in a non-resident year has no meaningful rate,
+   * and reporting 0 dragged the headline average down.
+   */
+  effectiveRate: number | null;
   notes: string[];
 }
 
@@ -243,6 +253,8 @@ export interface ScenarioResult {
   warnings: string[];
   nprEndsOn: IsoDate;
   exitTaxExposed: boolean;
+  /** First year the plan cannot fund itself from either pool. */
+  underfundedIn: number | null;
   /**
    * The year cash in Japan runs out — the year remittances become unavoidable
    * and the shelter starts to leak. null if it lasts the whole projection.

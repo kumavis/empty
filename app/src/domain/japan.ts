@@ -7,6 +7,7 @@
  */
 import {
   JAPAN_RATES,
+  basicDeductionFor,
   employmentIncomeDeduction,
   forYear,
   japanNationalTax,
@@ -70,8 +71,11 @@ export function isSpecifiedSecurity(
   // Art. 17(1) also requires a foreign market, broker or account.
   if (!lot.heldAbroad) return false;
 
+  // Art. 17(1): 「…の日の十年前の日の翌日から当該譲渡の日までの期間」 — the day
+  // AFTER the day ten years before, not that day itself.
   const tenYearsBefore = new Date(parseDate(transferDate));
   tenYearsBefore.setUTCFullYear(tenYearsBefore.getUTCFullYear() - 10);
+  tenYearsBefore.setUTCDate(tenYearsBefore.getUTCDate() + 1);
   const windowStart = tenYearsBefore.toISOString().slice(0, 10);
 
   const nprStart = scenario.residencyStart;
@@ -80,8 +84,10 @@ export function isSpecifiedSecurity(
   // The window is [10y before transfer, transfer] intersected with the
   // non-permanent resident period. Acquisition INSIDE it means NOT specified.
   const from = windowStart > nprStart ? windowStart : nprStart;
-  const to = transferDate < nprEnd ? transferDate : nprEnd;
-  const acquiredInsideWindow = lot.acquired >= from && lot.acquired <= to;
+  // `nprEnd` is the FIRST day of non-NPR status, so the period is half-open:
+  // an acquisition on that day itself is outside it.
+  const acquiredInsideWindow =
+    lot.acquired >= from && lot.acquired <= transferDate && lot.acquired < nprEnd;
 
   return !acquiredInsideWindow;
 }
@@ -96,14 +102,42 @@ export function realiseGains(
   lots: Lot[],
   scenario: Scenario,
 ): Array<{ disposal: Disposal; gain: number; specified: boolean; lot: Lot }> {
-  const byAcquisition = [...lots].sort((a, b) => a.acquired.localeCompare(b.acquired));
-  return disposals.map((d) => {
-    const lot = byAcquisition.find((l) => l.id === d.lotId) ?? byAcquisition[0];
-    const unitBasis = lot.units > 0 ? lot.basis / lot.units : 0;
-    // Art. 17(4)(ii): capital gains are measured NET of acquisition cost and
-    // transfer expenses, unlike employment income which is measured gross.
-    const gain = d.proceeds - unitBasis * d.units;
-    return { disposal: d, gain, specified: isSpecifiedSecurity(lot, d.date, scenario), lot };
+  // Remaining units per lot, consumed oldest-first. The disposal's own lotId is
+  // used only to identify the ISSUE (art. 17(2) applies FIFO within the same
+  // issue); which lot is actually deemed sold is not the taxpayer's to choose.
+  const remaining = new Map(lots.map((l) => [l.id, l.units]));
+  const label = (id: string) => lots.find((l) => l.id === id)?.label ?? id;
+
+  return disposals.flatMap((d) => {
+    const issue = label(d.lotId);
+    const queue = lots
+      .filter((l) => label(l.id) === issue)
+      .sort((a, b) => a.acquired.localeCompare(b.acquired));
+
+    let toSell = d.units;
+    const proceedsPerUnit = d.units > 0 ? d.proceeds / d.units : 0;
+    const out: Array<{ disposal: Disposal; gain: number; specified: boolean; lot: Lot }> = [];
+
+    for (const lot of queue) {
+      if (toSell <= 0) break;
+      const avail = remaining.get(lot.id) ?? 0;
+      if (avail <= 0) continue;
+      const take = Math.min(avail, toSell);
+      remaining.set(lot.id, avail - take);
+      toSell -= take;
+
+      const unitBasis = lot.units > 0 ? lot.basis / lot.units : 0;
+      // Art. 17(4)(ii): capital gains are measured NET of acquisition cost and
+      // transfer expenses, unlike employment income which is measured gross.
+      const gain = proceedsPerUnit * take - unitBasis * take;
+      out.push({
+        disposal: { ...d, units: take, proceeds: proceedsPerUnit * take },
+        gain,
+        specified: isSpecifiedSecurity(lot, d.date, scenario),
+        lot,
+      });
+    }
+    return out;
   });
 }
 
@@ -131,6 +165,28 @@ export interface JapanYearInput {
   shelterableGains: number;
   /** Gains on securities held abroad but acquired after arrival — arising basis. */
   arisingBasisGains: number;
+  /**
+   * Of `arisingBasisGains`, the portion whose proceeds are paid ABROAD. Art.
+   * 17(4)(i)'s proviso makes non-foreign-source income paid abroad absorb the
+   * remittance first, and these gains qualify — omitting them sends remittances
+   * straight into the shelterable pool and over-taxes.
+   */
+  arisingBasisGainsPaidAbroad?: number;
+  /**
+   * Fraction of the year the person was a non-permanent resident, 0..1.
+   * Enforcement Order art. 17(4)(vi) confines the remittance rules to that
+   * portion; income and tax are apportioned by it rather than the whole year
+   * taking the year-end phase.
+   */
+  residentFraction?: number;
+  /**
+   * Whether inhabitant tax is due for this year. It is keyed to residence on
+   * 1 January and assessed on the PRIOR year's income (doc 03 section 3), so
+   * the caller decides — this function only computes the amount.
+   */
+  inhabitantTaxDue?: boolean;
+  /** Prior-year aggregate taxable income, which inhabitant tax is charged on. */
+  inhabitantTaxBase?: number;
 }
 
 export interface JapanYearOutput {
@@ -168,6 +224,19 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
 
   const worldwide = input.phase === 'permanentResident';
 
+  /**
+   * Art. 17(4)(iii): where income of one category is paid partly inside and
+   * partly outside Japan, the split is made PRO RATA within that category —
+   * 「その各種所得に係る収入金額のうちに国内で支払われた金額…の占める割合を
+   * 乗じて」. The paid-in-Japan total is therefore apportioned across the two
+   * salary categories by their size, not subtracted from each in full.
+   */
+  const salaryAll = input.salaryForJapanWork + input.salaryForForeignWork;
+  const paidInJapanCapped = Math.min(input.salaryPaidInJapan, salaryAll);
+  const japanWorkShare = salaryAll > 0 ? input.salaryForJapanWork / salaryAll : 0;
+  const paidInJapanDomestic = paidInJapanCapped * japanWorkShare;
+  const paidInJapanForeign = paidInJapanCapped - paidInJapanDomestic;
+
   // --- Aggregate-taxed income (総合課税) -----------------------------------
   // Salary for work performed in Japan is Japan-source however it is paid, so
   // it is taxable in every resident phase (doc 03 section 6).
@@ -178,9 +247,8 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
   } else {
     // Non-permanent resident. Foreign salary is foreign-source: taxable if paid
     // in Japan (bucket B), otherwise only to the extent deemed remitted.
-    const paidInJapanShare = Math.min(input.salaryPaidInJapan, input.salaryForForeignWork);
-    aggregateGross += paidInJapanShare;
-    if (paidInJapanShare > 0) {
+    aggregateGross += paidInJapanForeign;
+    if (paidInJapanForeign > 0) {
       notes.push(
         'Foreign salary paid into a Japanese account is taxable regardless of remittance ' +
           '— the "paid within Japan" limb of ITA art. 7(1)(ii).',
@@ -191,12 +259,16 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
   // --- The remittance ordering rule ---------------------------------------
   // Art. 17(4)(ii) measures employment income GROSS for this purpose (no
   // employment income deduction), and capital gains NET.
+  // Non-foreign-source income PAID ABROAD absorbs the remittance first. That is
+  // salary for Japanese work paid outside Japan, plus gains on non-specified
+  // securities whose proceeds stayed abroad — both are 非国外源泉所得.
   const nonForeignSourceAbroad = worldwide
     ? 0
-    : Math.max(0, input.salaryForJapanWork - input.salaryPaidInJapan);
+    : Math.max(0, input.salaryForJapanWork - paidInJapanDomestic) +
+      (input.arisingBasisGainsPaidAbroad ?? 0);
   const foreignSourceAbroad = worldwide
     ? 0
-    : Math.max(0, input.salaryForForeignWork - input.salaryPaidInJapan) +
+    : Math.max(0, input.salaryForForeignWork - paidInJapanForeign) +
       input.foreignInvestmentIncomeAbroad +
       input.shelterableGains;
 
@@ -238,8 +310,12 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
   // --- Tax on aggregate income --------------------------------------------
   const salaryTotal = worldwide
     ? input.salaryForJapanWork + input.salaryForForeignWork
-    : input.salaryForJapanWork + Math.min(input.salaryPaidInJapan, input.salaryForForeignWork);
-  const deduction = employmentIncomeDeduction(salaryTotal) + rates.basicDeduction;
+    : input.salaryForJapanWork + paidInJapanForeign;
+  const employmentDeduction = employmentIncomeDeduction(salaryTotal);
+  // 合計所得金額 after the employment deduction is what the basic deduction
+  // tapers against — above ¥25m it is zero (No.1199).
+  const totalIncomeForBasic = Math.max(0, aggregateGross - employmentDeduction);
+  const deduction = employmentDeduction + basicDeductionFor(totalIncomeForBasic, rates);
   const aggregateTaxable = Math.max(0, aggregateGross - deduction);
 
   const national = japanNationalTax(aggregateTaxable, rates);
@@ -279,7 +355,14 @@ export function computeJapanYear(input: JapanYearInput): JapanYearOutput {
     );
   }
 
-  const inhabitantTax = aggregateTaxable * rates.inhabitantTaxRate + rates.inhabitantPerCapita;
+  // Inhabitant tax runs a year behind and is keyed to residence on 1 January
+  // (doc 03 section 3), so the caller supplies both the trigger and the base.
+  // Defaults preserve the same-year behaviour for direct callers and tests.
+  const inhabitantDue = input.inhabitantTaxDue ?? true;
+  const inhabitantBase = input.inhabitantTaxBase ?? aggregateTaxable;
+  const inhabitantTax = inhabitantDue
+    ? Math.max(0, inhabitantBase) * rates.inhabitantTaxRate + rates.inhabitantPerCapita
+    : 0;
 
   return {
     alwaysTaxable: aggregateGross,

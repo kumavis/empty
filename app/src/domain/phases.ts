@@ -117,30 +117,56 @@ export function nonPermanentResidentEnd(
   residencyStart: IsoDate,
   priorPresence: PriorPresence[] = [],
 ): IsoDate {
-  const lookbackStart = addYears(residencyStart, -10);
+  /**
+   * The look-back SLIDES. Circular 2-4の2: 「過去10年以内」とは、判定する日の
+   * 10年前の同日から、判定する日の前日までをいう — it is measured from the day
+   * being judged, not from arrival. Anchoring it to `residencyStart` (as this
+   * function previously did) charges prior presence against the budget forever,
+   * even after it has aged out of the window.
+   *
+   * Because the window moves with the candidate date, the boundary is found by
+   * search rather than arithmetic: walk forward and take the first day on which
+   * the aggregate, measured over that day's own window, exceeds five years.
+   */
+  const aggregateOn = (judgeDay: IsoDate): Ymd => {
+    const windowStart = addYears(judgeDay, -10);
+    // 2-4の2: the counted period ends the day BEFORE the day being judged.
+    const windowEnd = judgeDay;
 
-  // Each prior stay is counted from the day after entry to the day of departure
-  // (2-4の3), clipped to the ten-year look-back window.
-  const priorParts = priorPresence.map((p) => {
-    const from = p.from < lookbackStart ? lookbackStart : addDays(p.from, 1);
-    // The period ends ON the departure day, so the exclusive bound is the next day.
-    const toExclusive = addDays(p.to, 1);
-    return decompose(from, toExclusive < from ? from : toExclusive);
-  });
+    const parts = priorPresence.map((p) => {
+      // Each stay runs from the day after entry to the day of departure (2-4の3).
+      const from = maxDate(addDays(p.from, 1), windowStart);
+      const toExclusive = minDate(addDays(p.to, 1), windowEnd);
+      return decompose(from, toExclusive < from ? from : toExclusive);
+    });
 
-  const prior = normalise(priorParts);
+    const currentFrom = maxDate(addDays(residencyStart, 1), windowStart);
+    parts.push(decompose(currentFrom, windowEnd < currentFrom ? currentFrom : windowEnd));
 
-  // Five years less whatever prior presence already consumed.
-  let remainingMonths = (5 - prior.years) * 12 - prior.months;
-  let remainingDays = -prior.days;
-  if (remainingMonths < 0) remainingMonths = 0;
+    return normalise(parts);
+  };
 
-  // The current stay is counted from the day after residency begins (2-4の3).
-  // Advancing the budget from there lands on the exclusive end of the five-year
-  // period — which, by 2-3(3), is exactly the first day of worldwide taxation.
-  const countFrom = addDays(residencyStart, 1);
-  return addDays(addMonths(countFrom, remainingMonths), remainingDays);
+  const exceedsFive = (p: Ymd) =>
+    p.years > 5 || (p.years === 5 && (p.months > 0 || p.days > 0));
+
+  // Bracket the answer, then bisect. The aggregate is monotone in the judge
+  // day for a fixed history, so bisection is exact.
+  let lo = addDays(residencyStart, 1);
+  let hi = addYears(residencyStart, 11);
+  if (!exceedsFive(aggregateOn(hi))) return hi;
+
+  while (daysBetween(lo, hi) > 1) {
+    const mid = addDays(lo, Math.floor(daysBetween(lo, hi) / 2));
+    if (exceedsFive(aggregateOn(mid))) hi = mid;
+    else lo = mid;
+  }
+  // 2-3(3): status runs to and including the last day at five years or less, so
+  // the first non-NPR day is the one after it — which is `hi`.
+  return hi;
 }
+
+const maxDate = (a: IsoDate, b: IsoDate) => (a > b ? a : b);
+const minDate = (a: IsoDate, b: IsoDate) => (a < b ? a : b);
 
 function addDays(d: IsoDate, n: number): IsoDate {
   const date = parseDate(d);
@@ -152,7 +178,9 @@ function addDays(d: IsoDate, n: number): IsoDate {
 export function phaseOn(date: IsoDate, scenario: Scenario): ResidencyPhase {
   const { residencyStart, departure, holdsJapaneseNationality, priorPresence } = scenario;
   if (date < residencyStart) return 'nonResident';
-  if (departure && date >= departure) return 'nonResident';
+  // 2-4の3 counts 「入国の日の翌日から出国の日まで」, so the departure day
+  // itself is still a day of residence.
+  if (departure && date > departure) return 'nonResident';
 
   // ITA art. 2(1)(iv) requires the absence of Japanese nationality. A dual
   // national is a full resident from day one, with no remittance basis at all.

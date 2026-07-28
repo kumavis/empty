@@ -30,6 +30,7 @@ const DEFAULT: Scenario = {
   annualLivingCost: 130_000,
   prePositionedSavings: 60_000,
   usSavings: 400_000,
+  coveredAssetValue: 900_000,
   projectionYears: 8,
   elections: { claimFeie: false, ftcBasis: 'accrued', claimTreatyResourcing: true },
   filingStatus: 'single',
@@ -69,10 +70,11 @@ function summariseYears(years: number[]): string {
   return runs.join(', ');
 }
 
+/** The statutory terms, matching the CSV export and doc 01 section 1. */
 const PHASE_LABEL: Record<string, string> = {
   nonResident: 'Non-resident',
-  nonPermanentResident: 'Non-permanent',
-  permanentResident: 'Worldwide',
+  nonPermanentResident: 'Non-permanent resident',
+  permanentResident: 'Resident (worldwide)',
 };
 
 export default function App() {
@@ -87,10 +89,11 @@ export default function App() {
   /** Every dollar figure carries its yen equivalent, since the statute is in yen. */
   const both = (dollars: number) => jpy(toJpy(dollars, fx));
 
+  // Years with no income have no meaningful rate; averaging their zeros in
+  // dragged the headline down. Weight by income instead.
+  const rated = result.years.filter((y) => y.effectiveRate !== null);
   const avgRate =
-    result.years.length > 0
-      ? result.years.reduce((s, y) => s + y.effectiveRate, 0) / result.years.length
-      : 0;
+    rated.length > 0 ? rated.reduce((s, y) => s + (y.effectiveRate ?? 0), 0) / rated.length : 0;
 
   /**
    * Hands the reviewer the whole projection: the inputs it was run with, both
@@ -125,7 +128,7 @@ export default function App() {
           <p className="eyebrow">Interactive model · research, not advice</p>
           <h1>Moving from the US to Japan: what the tax actually costs</h1>
           <p className="header__sub">
-            Models the three <T id="resident" /> phases, the <T id="remittance-basis" /> that
+            Models the three residency phases, the <T id="remittance-basis" /> that
             shelters foreign income during the second, and the US{' '}
             <T id="foreign-tax-credit" /> that decides how much of the shelter survives. Figures
             are in US dollars, with the yen the statute is written in alongside.
@@ -177,7 +180,7 @@ export default function App() {
           </span>
           <span className="tile__note">
             {result.savingsExhaustedIn
-              ? `shelter ends ${result.nprEndsOn} · avg rate ${pct(avgRate)}`
+              ? `worldwide tax from ${result.nprEndsOn} · avg rate ${pct(avgRate)}`
               : `avg rate ${pct(avgRate)}`}
           </span>
         </div>
