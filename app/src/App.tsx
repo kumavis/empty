@@ -104,8 +104,10 @@ export default function App() {
               onChange={(e) => set({ residencyStart: e.target.value })}
             />
             <small>
-              Normally arrival day — not after 183 days. <T id="non-permanent-resident" /> status
-              ends <strong>{nprEnd}</strong>.
+              A question of fact, not of immigration status — usually arrival day, but not the
+              date of any visa or residence card. Worldwide taxation begins{' '}
+              <strong>{nprEnd}</strong>, counting from the day after entry per NTA circular
+              2-4の3.
             </small>
           </label>
 

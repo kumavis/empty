@@ -22,6 +22,36 @@ def from_pdf(path: Path) -> str:
     return extract_text(str(path))
 
 
+def decode(path: Path) -> str:
+    """Decode a downloaded document, honouring its declared encoding.
+
+    NTA circular pages are served as Shift-JIS (cp932) with a meta charset and
+    no BOM. Decoding those as UTF-8 with errors="replace" does not fail -- it
+    silently yields mojibake, which then reads as an empty or garbled extraction
+    rather than an error. Since the whole archive is Japanese primary sources,
+    guessing UTF-8 is not safe; sniff the declared charset first.
+    """
+    raw = path.read_bytes()
+
+    declared = re.search(
+        rb'(?:charset=["\']?|encoding=["\'])([A-Za-z0-9_\-]+)', raw[:4096]
+    )
+    candidates = []
+    if declared:
+        candidates.append(declared.group(1).decode("ascii", "ignore"))
+    candidates += ["utf-8", "cp932", "euc_jp"]
+
+    for enc in candidates:
+        try:
+            return raw.decode(enc)
+        except (UnicodeDecodeError, LookupError):
+            continue
+    # Every candidate failed; fall back loudly rather than returning mojibake.
+    print(f"warning: no clean decoding for {path.name}; using utf-8 with replacement",
+          file=sys.stderr)
+    return raw.decode("utf-8", errors="replace")
+
+
 def from_html(path: Path) -> str:
     import html2text
     h = html2text.HTML2Text()
@@ -29,7 +59,7 @@ def from_html(path: Path) -> str:
     h.ignore_images = True
     h.ignore_emphasis = False
     h.unicode_snob = True     # keep Japanese text and typographic quotes as-is
-    return h.handle(path.read_text(encoding="utf-8", errors="replace"))
+    return h.handle(decode(path))
 
 
 def from_xml(path: Path) -> str:

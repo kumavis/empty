@@ -15,7 +15,12 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["non-permanent-resident", "non-resident", "domicile-jp", "residence-jp"]
+    "seeAlso": [
+      "non-permanent-resident",
+      "non-resident",
+      "domicile-jp",
+      "residence-jp"
+    ]
   },
   {
     "id": "non-permanent-resident",
@@ -33,7 +38,12 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["resident", "permanent-resident-tax", "remittance-basis", "specified-securities"],
+    "seeAlso": [
+      "resident",
+      "permanent-resident-tax",
+      "remittance-basis",
+      "specified-securities"
+    ],
     "falseFriend": "Not the immigration status 'Permanent Resident' (永住者). The tax test counts days of presence and ignores visa category entirely. A person can be a tax permanent resident on a work visa, or a non-permanent resident while holding immigration Permanent Residence."
   },
   {
@@ -52,7 +62,10 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["non-permanent-resident", "resident"],
+    "seeAlso": [
+      "non-permanent-resident",
+      "resident"
+    ],
     "falseFriend": "Unrelated to immigration Permanent Residence (永住権). Confusingly, taking immigration Permanent Residence has no effect on this status, but does start the separate exit tax clock."
   },
   {
@@ -71,7 +84,10 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["resident", "non-permanent-resident"]
+    "seeAlso": [
+      "resident",
+      "non-permanent-resident"
+    ]
   },
   {
     "id": "domicile-jp",
@@ -81,16 +97,31 @@
     "jurisdiction": "JP",
     "category": "japan-residency",
     "short": "The centre of a person's life; having one in Japan makes them a resident immediately.",
-    "definition": "Not defined in the Income Tax Act, which borrows the Civil Code concept of 生活の本拠, the base of one's livelihood. Because domicile makes someone a resident with no waiting period, the date it attaches is the single most important input to any plan. Enforcement Order art. 14 presumes a domicile in Japan where the person has an occupation there ordinarily requiring residence of one year or more.",
+    "definition": "Not defined in the Income Tax Act, which borrows the Civil Code art. 22 concept: 「各人の生活の本拠をその者の住所とする」, a person's domicile is the base of their life. NTA circular 2-1 adds that whether somewhere is the base of a life is decided by objective facts. It is therefore a factual test, NOT an immigration one — no visa, residence card or landing permission decides it. Enforcement Order art. 14(1)(i) presumes a domicile where the person has an occupation in Japan ordinarily requiring residence of a year or more, so someone arriving to start such a job normally holds domicile from arrival. Because domicile confers resident status with no waiting period, the date it attaches is the single most important input to any plan.",
     "citations": [
+      {
+        "label": "Civil Code art. 22",
+        "source": "sources/japan-statutes/civil-code.xml",
+        "url": "https://laws.e-gov.go.jp/law/129AC0000000089"
+      },
       {
         "label": "Income Tax Act art. 2(1)(iii); Enforcement Order art. 14",
         "source": "sources/japan-statutes/excerpt-order-key-articles.txt",
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
+      },
+      {
+        "label": "NTA circular 2-1",
+        "source": "sources/japan-nta/tsutatsu-shotoku-2-1.htm",
+        "url": "https://www.nta.go.jp/law/tsutatsu/kihon/shotoku/01/01.htm"
       }
     ],
-    "seeAlso": ["residence-jp", "resident", "tax-home"],
-    "falseFriend": "Distinct from US state domicile and from the federal tax home. All three can point at different countries at once, and each governs a different consequence."
+    "seeAlso": [
+      "seikatsu-no-honkyo",
+      "residence-jp",
+      "resident",
+      "tax-home"
+    ],
+    "falseFriend": "Not the date on a visa or residence card. Those are evidence of where the base of a life is, not the trigger — NTA circular 2-3(2) expressly covers domicile attaching after entry. Also distinct from US state domicile and the federal tax home."
   },
   {
     "id": "residence-jp",
@@ -108,7 +139,10 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["domicile-jp", "resident"]
+    "seeAlso": [
+      "domicile-jp",
+      "resident"
+    ]
   },
   {
     "id": "presumption-of-domicile",
@@ -126,7 +160,10 @@
         "url": "https://laws.e-gov.go.jp/law/340CO0000000096"
       }
     ],
-    "seeAlso": ["domicile-jp", "resident"]
+    "seeAlso": [
+      "domicile-jp",
+      "resident"
+    ]
   },
   {
     "id": "departure-jp",
@@ -144,6 +181,63 @@
         "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
       }
     ],
-    "seeAlso": ["exit-tax", "domicile-jp", "residence-jp", "tax-agent"]
+    "seeAlso": [
+      "exit-tax",
+      "domicile-jp",
+      "residence-jp",
+      "tax-agent"
+    ]
+  },
+  {
+    "id": "seikatsu-no-honkyo",
+    "en": "Base of one's life",
+    "ja": "生活の本拠",
+    "romaji": "seikatsu no honkyo",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "The Civil Code test for domicile, decided on objective facts rather than on paperwork.",
+    "definition": "Civil Code art. 22 defines domicile as the base of a person's life, and the Income Tax Act adopts that meaning without restating it. NTA circular 2-1 directs that whether somewhere is the base of a life is 客観的事実によって判定 — determined by objective facts: where the family lives, where the home is, where the work is, where the assets are. Because it is a facts test, arrival and the attachment of domicile can fall on different dates in either direction, and the immigration status held at the time does not settle it.",
+    "citations": [
+      {
+        "label": "Civil Code art. 22",
+        "source": "sources/japan-statutes/civil-code.xml",
+        "url": "https://laws.e-gov.go.jp/law/129AC0000000089"
+      },
+      {
+        "label": "NTA circular 2-1",
+        "source": "sources/japan-nta/tsutatsu-shotoku-2-1.htm",
+        "url": "https://www.nta.go.jp/law/tsutatsu/kihon/shotoku/01/01.htm"
+      }
+    ],
+    "seeAlso": [
+      "domicile-jp",
+      "resident"
+    ]
+  },
+  {
+    "id": "residence-period-count",
+    "en": "Counting the five years",
+    "ja": "居住期間の計算",
+    "romaji": "kyojū kikan no keisan",
+    "jurisdiction": "JP",
+    "category": "japan-residency",
+    "short": "Counted by the calendar from the day after entry, with 30 days taken as a month.",
+    "definition": "The statute says only 合計 (aggregate). NTA circulars supply the arithmetic: the count starts the day after entry (2-4); the ten-year look-back runs to the day before the date being judged (2-4-2); and each period runs from the day after entry to the day of departure, counted by the calendar, with several periods aggregated by summing years, months and days separately and carrying 30 days to a month and 12 months to a year (2-4-3). Two consequences: it is not a flat day count, and the status change falls one day after the fifth anniversary of arrival, not on it.",
+    "citations": [
+      {
+        "label": "NTA circulars 2-3, 2-4, 2-4-2, 2-4-3",
+        "source": "sources/japan-nta/tsutatsu-shotoku-2-1.htm",
+        "url": "https://www.nta.go.jp/law/tsutatsu/kihon/shotoku/01/01.htm"
+      },
+      {
+        "label": "Income Tax Act art. 2(1)(iv)",
+        "source": "sources/japan-statutes/excerpt-ita-key-articles.txt",
+        "url": "https://laws.e-gov.go.jp/law/340AC0000000033"
+      }
+    ],
+    "seeAlso": [
+      "non-permanent-resident",
+      "domicile-jp"
+    ]
   }
 ]

@@ -113,10 +113,13 @@ describe('residency phases (ITA art. 2(1)(iv))', () => {
     expect(phaseOn('2026-04-01', baseScenario)).toBe('nonPermanentResident');
   });
 
-  it('ends non-permanent residence five years after arrival', () => {
-    expect(nonPermanentResidentEnd('2026-04-01', [])).toBe('2031-04-01');
-    expect(phaseOn('2031-03-31', baseScenario)).toBe('nonPermanentResident');
-    expect(phaseOn('2031-04-01', baseScenario)).toBe('permanentResident');
+  it('counts from the day after entry, per NTA circular 2-4の3', () => {
+    // The five-year period runs from 2 April 2026 and is reached on 1 April
+    // 2031; circular 2-3(3) puts the status change on the FOLLOWING day. A
+    // naive fifth-anniversary calculation is a day early.
+    expect(nonPermanentResidentEnd('2026-04-01', [])).toBe('2031-04-02');
+    expect(phaseOn('2031-04-01', baseScenario)).toBe('nonPermanentResident');
+    expect(phaseOn('2031-04-02', baseScenario)).toBe('permanentResident');
   });
 
   it('brings the boundary forward for prior presence, cumulatively', () => {
@@ -124,7 +127,19 @@ describe('residency phases (ITA art. 2(1)(iv))', () => {
     const end = nonPermanentResidentEnd('2026-04-01', [
       { from: '2020-01-01', to: '2021-01-01' },
     ]);
-    expect(end < '2031-04-01').toBe(true);
+    expect(end < '2031-04-02').toBe(true);
+  });
+
+  it('carries 30 days to a month and 12 months to a year when aggregating', () => {
+    // Circular 2-4の3 sums years, months and days separately and normalises
+    // with a 30-day month — the NTA's own convention, not a rounding of ours.
+    // Two 15-day stays (counted from the day after entry) make one month, so
+    // the boundary moves back by a month rather than by 30 days.
+    const end = nonPermanentResidentEnd('2026-04-01', [
+      { from: '2020-01-01', to: '2020-01-16' },
+      { from: '2021-01-01', to: '2021-01-16' },
+    ]);
+    expect(end).toBe('2031-03-02');
   });
 
   it('denies the phase entirely to a Japanese national', () => {

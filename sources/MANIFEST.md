@@ -17,11 +17,13 @@ the bytes have not changed since retrieval.
 | `taxanswer-shotoku-2012.html` | NTA tax answer shotoku/2012: Scope of taxable income by taxpayer category | 2026-07-28 | 16876 | `2493b6c7d759` | [link](https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2012.htm) |
 | `taxanswer-shotoku-2260-fukko.html` | NTA: income tax rates | 2026-07-28 | 20221 | `b3c03d163fa7` | [link](https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm) |
 | `taxanswer-shotoku-2260.html` | NTA tax answer shotoku/2260: Income tax rates | 2026-07-28 | 20221 | `b3c03d163fa7` | [link](https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm) |
+| `tsutatsu-shotoku-2-1.htm` | 所得税基本通達 2-1 — 住所 judged by objective facts | 2026-07-28 | 6682 | `6d7d6ba43294` | [link](https://www.nta.go.jp/law/tsutatsu/kihon/shotoku/01/01.htm) |
 
 ## japan-statutes
 
 | document | description | retrieved | bytes | sha256 | source |
 |---|---|---|---|---|---|
+| `civil-code.xml` | Civil Code (民法) — art. 22 defines 住所 as 生活の本拠 | 2026-07-28 | 1634260 | `c103cedf918b` | [link](https://laws.e-gov.go.jp/api/2/law_data/129AC0000000089?response_format=xml) |
 | `income-tax-act.xml` | Income Tax Act (所得税法), Act No.33 of 1965, full text from e-Gov API | 2026-07-28 | 18272500 | `17d8e118b7b1` | [link](https://laws.e-gov.go.jp/api/1/lawdata/340AC0000000033) |
 | `income-tax-enforcement-order.xml` | Order for Enforcement of the Income Tax Act (所得税法施行令), Cabinet Order No.96 of 1965 | 2026-07-28 | 3874766 | `66d52b9a32de` | [link](https://laws.e-gov.go.jp/api/1/lawdata/340CO0000000096) |
 | `income-tax-enforcement-regulation.xml` | Regulation for Enforcement of the Income Tax Act (所得税法施行規則), MOF Ordinance No.11 of 1965 | 2026-07-28 | 2492607 | `a55babe3bf1d` | [link](https://laws.e-gov.go.jp/api/1/lawdata/340M50000040011) |
@@ -72,7 +74,7 @@ the bytes have not changed since retrieval.
 
 ---
 
-**36 documents archived.** Re-fetch any of them with:
+**38 documents archived.** Re-fetch any of them with:
 
 ```
 scripts/fetch.sh <area> <filename> <url> "<description>"

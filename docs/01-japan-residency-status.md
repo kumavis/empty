@@ -108,6 +108,109 @@ livelihood-sharing family in Japan.
 
 [Enforcement Order arts. 14–15] — `sources/japan-statutes/excerpt-order-key-articles.txt`
 
+### What 住所 actually means
+
+The Income Tax Act does not define 住所, so it takes the Civil Code meaning:
+
+> 第二十二条　各人の生活の本拠をその者の住所とする。
+
+> **Art. 22.** A person's domicile is the base of their life (生活の本拠).
+
+[Civil Code art. 22] — `sources/japan-statutes/civil-code.xml`
+
+The NTA's basic circular then says how that is decided:
+
+> 2－1　法に規定する住所とは各人の生活の本拠をいい、生活の本拠であるかどうかは
+> **客観的事実によって判定する**。
+
+> **2-1.** Domicile as used in the Act means the base of each person's life, and
+> whether somewhere is the base of a person's life is **determined by objective
+> facts**.
+
+[NTA circular 2-1] — `sources/japan-nta/tsutatsu-shotoku-2-1.htm`
+
+**This is a factual test, not an immigration test.** Nothing in it turns on a
+visa, a residence card, landing permission, or a residence registration. Those are
+evidence of where the base of one's life is; they are not the trigger.
+
+### Arrival and the attachment of domicile are different dates
+
+They coincide in the ordinary case, but the NTA expressly contemplates their
+coming apart:
+
+> 2－3　(1)　入国後1年を経過する日まで住所を有しない場合　入国後1年を経過する日
+> までの間は非居住者、1年を経過する日の翌日以後は居住者
+> (2)　**入国直後には国内に住所がなく、入国後1年を経過する日までの間に住所を有する
+> こととなった場合**　住所を有することとなった日の前日までの間は非居住者、
+> **住所を有することとなった日以後は居住者**
+
+> **2-3.** (1) Where no domicile is held up to the day one year after entry:
+> non-resident until that day, resident from the day after it.
+> (2) **Where there is no domicile in Japan immediately after entry, but a
+> domicile comes to be held during the period up to one year after entry:**
+> non-resident until the day before the domicile is acquired, **resident from the
+> day the domicile is acquired.**
+
+[NTA circular 2-3] — `sources/japan-nta/tsutatsu-shotoku-2-1.htm`
+
+So the operative date is **the day 住所 attaches**, which may fall after the day of
+physical arrival. Two common shapes:
+
+| Situation | Domicile attaches |
+|---|---|
+| Enters holding a work visa, to start a job requiring a year or more | Arrival day — the art. 14(1)(i) presumption fires at once |
+| Enters as a tourist, later changes status and takes up such a job | The later date the base of life moves, per circular 2-3(2) |
+
+The presumption is rebuttable either way. Someone who enters on a short-term
+status having already moved the base of their life — family and home relocated,
+job starting — may hold domicile from arrival regardless of the status on their
+passport. Conversely, entering ahead of a job with the base of life still abroad
+does not create domicile merely by being present.
+
+**For planning, this is a date to establish on the facts, not to assume.** Where
+pre-residency positioning is being timed against it [doc 09 §4], the conservative
+assumption is the earlier date — arrival — because the cost of being wrong is that
+transfers intended to be outside the regime fall inside it.
+
+### How the five years are counted
+
+The statute says only 合計 (aggregate). Three circulars supply the arithmetic:
+
+> 2－4　法第2条第1項第3号に規定する「1年以上」の期間の計算の起算日は、
+> **入国の日の翌日**となることに留意する。
+>
+> 2－4の2　「過去10年以内」とは、判定する日の10年前の同日から、**判定する日の前日**
+> までをいう。
+>
+> 2－4の3　「国内に住所又は居所を有していた期間」は、**暦に従って計算**し、1月に
+> 満たない期間は日をもって数える。また、当該期間が複数ある場合には、これらの年数、
+> 月数及び日数をそれぞれ合計し、**日数は30日をもって1月とし、月数は12月をもって
+> 1年とする**。なお、…当該期間は、**入国の日の翌日から出国の日まで**となる。
+
+> **2-4.** The count of the "one year or more" period starts on the **day after
+> entry**.
+> **2-4-2.** "Within the preceding ten years" runs from the same day ten years
+> before the date being judged to the **day before** that date.
+> **2-4-3.** The period of domicile or residence in Japan is **counted by the
+> calendar**, with any part-month counted in days. Where there are several such
+> periods, their years, months and days are summed separately, then **30 days is
+> taken as one month and 12 months as one year**. Each period runs **from the day
+> after entry to the day of departure**.
+
+[NTA circulars 2-4, 2-4の2, 2-4の3] — `sources/japan-nta/tsutatsu-shotoku-2-1.htm`
+
+Two consequences the calculator now implements:
+
+1. **It is not a flat day count.** Whole calendar years and months come off
+   first, and an aggregate is normalised with a **30-day month** — the NTA's own
+   convention, which makes short prior stays cost slightly more than their day
+   count suggests.
+2. **The boundary is one day later than the fifth anniversary.** Counting starts
+   the day after entry, and circular 2-3(3) puts the status change on the day
+   *after* the aggregate passes five years. A stay beginning 1 April 2026 is
+   non-permanent resident through **1 April 2031**, with worldwide taxation from
+   **2 April 2031**.
+
 **Practical effect:** a US citizen arriving on an employment contract of a year or
 more is presumed domiciled in Japan **from arrival**, by art. 14(1)(i). Note the
 presumption turns on the *nature of the occupation*, not the visa or the contract

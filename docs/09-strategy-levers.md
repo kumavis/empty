@@ -52,8 +52,20 @@ rule at all. It is outside the regime, not favourably treated within it.
 
 That also means the deadline is the **residency start date, not 1 January**. A
 transfer made in the same calendar year but before the day domicile attaches is
-still pre-residency. Since domicile normally attaches on arrival [doc 01 §3], the
-window closes on the day of the move.
+still pre-residency.
+
+The deadline is therefore **the day 住所 attaches** — which is a question of fact,
+decided on objective evidence, and *not* the date of any visa, residence card or
+landing permission [doc 01 §3]. It usually coincides with arrival, because someone
+entering to take up a job requiring a year or more falls straight into the
+Enforcement Order art. 14(1)(i) presumption. But arrival and attachment can come
+apart in both directions, and NTA circular 2-3(2) expressly handles the case where
+domicile is acquired *after* entry.
+
+**Plan against arrival day even so.** The asymmetry is what decides it: if you
+assume the later date and are wrong, transfers you intended to be outside the
+regime fall inside it and are exposed under the ordering rule. If you assume
+arrival and are wrong, you have merely moved money a few weeks early.
 
 **But now the US side.** Doc 05 §1 shows §865(g)(2) sources a citizen's gains
 abroad *only if at least 10% foreign tax is actually paid on that gain*. So:
@@ -105,7 +117,10 @@ covers costs without any remittance at all.
 - Yen cash earns little; the opportunity cost against invested dollars is real.
 - Japanese banks are hard to open accounts with **before** you have a residence
   card, which may force the transfer to a pre-existing account or delay it past the
-  deadline. **Sequence this carefully** — the lever expires on arrival day.
+  deadline. **Sequence this carefully** — and note the trap: the residence card
+  that makes a Japanese account easy to open normally arrives *after* the domicile
+  that closes this window. Use a pre-existing account, or move the money before
+  the flight.
 
 ### Lever 2 — Realise gains before residency, or hold them past it
 

@@ -35,38 +35,117 @@ export function daysBetween(from: IsoDate, to: IsoDate): number {
   return Math.max(0, Math.round((parseDate(to).getTime() - parseDate(from).getTime()) / DAY));
 }
 
+export function addMonths(d: IsoDate, months: number): IsoDate {
+  const date = parseDate(d);
+  const targetDay = date.getUTCDate();
+  date.setUTCDate(1);
+  date.setUTCMonth(date.getUTCMonth() + months);
+  // Clamp to the month's length, so 31 Jan + 1 month is 28/29 Feb rather than
+  // rolling into March.
+  const lastDay = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0),
+  ).getUTCDate();
+  date.setUTCDate(Math.min(targetDay, lastDay));
+  return toIso(date);
+}
+
+/** A period expressed the way the NTA counts one: years, months and days. */
+interface Ymd {
+  years: number;
+  months: number;
+  days: number;
+}
+
 /**
- * The date non-permanent resident status ends.
+ * Decompose a half-open period [from, toExclusive) into calendar years, months
+ * and days.
+ *
+ * NTA circular 2-4の3: "計算は暦に従って計算し、1月に満たない期間は日をもって
+ * 数える" — count by the calendar, and count any part-month in days. So a period
+ * is NOT a flat day count; whole calendar years and months are taken off first.
+ */
+function decompose(from: IsoDate, toExclusive: IsoDate): Ymd {
+  if (toExclusive <= from) return { years: 0, months: 0, days: 0 };
+  let years = 0;
+  while (addYears(from, years + 1) <= toExclusive) years++;
+  const afterYears = addYears(from, years);
+  let months = 0;
+  while (addMonths(afterYears, months + 1) <= toExclusive) months++;
+  const afterMonths = addMonths(afterYears, months);
+  return { years, months, days: daysBetween(afterMonths, toExclusive) };
+}
+
+/**
+ * Normalise an aggregate the way NTA circular 2-4の3 directs: sum the years,
+ * months and days of each period separately, then carry 30 days into one month
+ * and 12 months into one year.
+ *
+ * The 30-day month is the NTA's own convention, not an approximation of ours.
+ */
+function normalise(parts: Ymd[]): Ymd {
+  let days = parts.reduce((s, p) => s + p.days, 0);
+  let months = parts.reduce((s, p) => s + p.months, 0);
+  let years = parts.reduce((s, p) => s + p.years, 0);
+  months += Math.floor(days / 30);
+  days %= 30;
+  years += Math.floor(months / 12);
+  months %= 12;
+  return { years, months, days };
+}
+
+/**
+ * The first date on which the taxpayer is no longer a non-permanent resident.
  *
  * ITA art. 2(1)(iv): status holds while the AGGREGATE (合計) period of domicile
  * or residence in Japan within the preceding ten years is five years or less.
- * The count is cumulative, not consecutive, so prior stays inside the ten-year
- * look-back bring the boundary forward.
+ * Three NTA circulars fix the arithmetic that the statute leaves open:
  *
- * SIMPLIFICATION, flagged in doc 01 Confidence: whether the aggregate is counted
- * in days, and how part-days at each end are treated, is not established from the
- * archived sources. This models a straight day count and subtracts prior presence
- * that falls within the look-back window. For a single continuous stay it reduces
- * to the fifth anniversary of arrival, which is the natural reading.
+ *   2-4の3  Count by the calendar. Each stay runs from the day AFTER entry
+ *           (入国の日の翌日) to the day of departure. Aggregate by summing
+ *           years, months and days separately, carrying 30 days to a month and
+ *           12 months to a year.
+ *   2-4の2  "Within the preceding ten years" runs from the same day ten years
+ *           before the date being judged, to the day BEFORE that date.
+ *   2-3(3)  Status changes the day AFTER the aggregate passes five years
+ *           ("5年以内の日までの間は非永住者、その翌日以後は…").
+ *
+ * So a clean five-year stay from 1 April 2026 counts from 2 April 2026, reaches
+ * five years on 1 April 2031, and worldwide taxation begins on 2 April 2031 —
+ * a day later than a naive anniversary calculation gives.
  */
 export function nonPermanentResidentEnd(
   residencyStart: IsoDate,
   priorPresence: PriorPresence[] = [],
 ): IsoDate {
-  const FIVE_YEARS_DAYS = daysBetween(residencyStart, addYears(residencyStart, 5));
   const lookbackStart = addYears(residencyStart, -10);
 
-  // Only prior presence inside the ten-year look-back counts against the budget.
-  const priorDays = priorPresence.reduce((sum, p) => {
-    const from = p.from < lookbackStart ? lookbackStart : p.from;
-    if (p.to <= from) return sum;
-    return sum + daysBetween(from, p.to);
-  }, 0);
+  // Each prior stay is counted from the day after entry to the day of departure
+  // (2-4の3), clipped to the ten-year look-back window.
+  const priorParts = priorPresence.map((p) => {
+    const from = p.from < lookbackStart ? lookbackStart : addDays(p.from, 1);
+    // The period ends ON the departure day, so the exclusive bound is the next day.
+    const toExclusive = addDays(p.to, 1);
+    return decompose(from, toExclusive < from ? from : toExclusive);
+  });
 
-  const remaining = Math.max(0, FIVE_YEARS_DAYS - priorDays);
-  const end = parseDate(residencyStart);
-  end.setUTCDate(end.getUTCDate() + remaining);
-  return toIso(end);
+  const prior = normalise(priorParts);
+
+  // Five years less whatever prior presence already consumed.
+  let remainingMonths = (5 - prior.years) * 12 - prior.months;
+  let remainingDays = -prior.days;
+  if (remainingMonths < 0) remainingMonths = 0;
+
+  // The current stay is counted from the day after residency begins (2-4の3).
+  // Advancing the budget from there lands on the exclusive end of the five-year
+  // period — which, by 2-3(3), is exactly the first day of worldwide taxation.
+  const countFrom = addDays(residencyStart, 1);
+  return addDays(addMonths(countFrom, remainingMonths), remainingDays);
+}
+
+function addDays(d: IsoDate, n: number): IsoDate {
+  const date = parseDate(d);
+  date.setUTCDate(date.getUTCDate() + n);
+  return toIso(date);
 }
 
 /** Which phase applies on a given date. */
