@@ -31,6 +31,8 @@ export function Glossary({ onClose }: { onClose: () => void }) {
   const count = searchTerms(query).length;
 
   return (
+    <>
+    <button className="scrim" aria-label="Close dictionary" onClick={onClose} />
     <div className="drawer" role="dialog" aria-label="Term dictionary">
       <div className="drawer__head">
         <div>
@@ -111,5 +113,6 @@ export function Glossary({ onClose }: { onClose: () => void }) {
         ))}
       </div>
     </div>
+    </>
   );
 }

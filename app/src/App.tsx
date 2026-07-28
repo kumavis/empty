@@ -2,11 +2,14 @@ import { useMemo, useState } from 'react';
 import { Glossary } from './components/Glossary';
 import { T } from './components/Term';
 import { runScenario } from './domain/engine';
-import { nonPermanentResidentEnd } from './domain/phases';
 import type { Scenario } from './domain/types';
 
 const YEN = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const yen = (n: number) => `¥${YEN.format(Math.round(n))}`;
+const compact = (n: number) => {
+  const m = Math.round(n / 100_000) / 10;
+  return `¥${m}m`;
+};
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 
 /**
@@ -43,6 +46,12 @@ const DEFAULT: Scenario = {
   fxJpyPerUsd: 150,
 };
 
+const PHASE_LABEL: Record<string, string> = {
+  nonResident: 'Non-resident',
+  nonPermanentResident: 'Non-permanent',
+  permanentResident: 'Worldwide',
+};
+
 export default function App() {
   const [scenario, setScenario] = useState<Scenario>(DEFAULT);
   const [showGlossary, setShowGlossary] = useState(false);
@@ -50,7 +59,7 @@ export default function App() {
   const result = useMemo(() => runScenario(scenario), [scenario]);
 
   /** The counterfactual that isolates the value of remittance discipline. */
-  const remittingResult = useMemo(
+  const remitting = useMemo(
     () =>
       runScenario({
         ...scenario,
@@ -60,23 +69,28 @@ export default function App() {
   );
 
   const set = (patch: Partial<Scenario>) => setScenario((s) => ({ ...s, ...patch }));
-
   const setIncome = (year: number, patch: Partial<Scenario['income'][number]>) =>
     setScenario((s) => ({
       ...s,
       income: s.income.map((y) => (y.year === year ? { ...y, ...patch } : y)),
     }));
 
-  const nprEnd = nonPermanentResidentEnd(scenario.residencyStart, scenario.priorPresence);
+  const fx = scenario.fxJpyPerUsd;
+  const avgRate =
+    result.years.length > 0
+      ? result.years.reduce((s, y) => s + y.effectiveRate, 0) / result.years.length
+      : 0;
 
   return (
     <div className="app">
       <header className="header">
         <div>
-          <h1>US → Japan tax calculator</h1>
-          <p className="muted">
-            Interactive model of the three <T id="resident" /> phases, the{' '}
-            <T id="remittance-basis" />, and the US <T id="foreign-tax-credit" />.
+          <p className="eyebrow">Interactive model · research, not advice</p>
+          <h1>Moving from the US to Japan: what the tax actually costs</h1>
+          <p className="header__sub">
+            Models the three <T id="resident" /> phases, the{' '}
+            <T id="remittance-basis" /> that shelters foreign income during the second, and the
+            US <T id="foreign-tax-credit" /> that decides how much of the shelter survives.
           </p>
         </div>
         <button className="btn btn--primary" onClick={() => setShowGlossary(true)}>
@@ -85,12 +99,68 @@ export default function App() {
       </header>
 
       <div className="banner">
-        <strong>Research, not tax advice.</strong> Figures rest on the open questions flagged in{' '}
-        <code>docs/</code> — notably Japanese <T id="inhabitant-tax" /> rules and the capital gain
-        rate differential adjustment. Treat output as directional.
+        <span className="banner__mark" aria-hidden="true">※</span>
+        <span>
+          <strong>Research, not tax advice.</strong> Figures rest on open questions recorded
+          alongside the model — principally Japanese <T id="inhabitant-tax" /> rules and the
+          capital gain rate differential adjustment. A transition year is not apportioned. Treat
+          the output as directional, and the reasoning as the deliverable.
+        </span>
       </div>
 
-      <div className="layout">
+      {/* Summary before detail: the answer, then how it was reached. */}
+      <div className="tiles">
+        <div className="tile">
+          <span className="tile__label">Combined tax</span>
+          <span className="tile__value">{compact(result.totals.combined)}</span>
+          <span className="tile__note">over {result.years.length} years</span>
+        </div>
+        <div className="tile tile--jp">
+          <span className="tile__label">Japan</span>
+          <span className="tile__value">{compact(result.totals.japan)}</span>
+          <span className="tile__note">{pct(result.totals.japan / result.totals.combined)} of total</span>
+        </div>
+        <div className="tile tile--us">
+          <span className="tile__label">United States</span>
+          <span className="tile__value">{compact(result.totals.us)}</span>
+          <span className="tile__note">after foreign tax credit</span>
+        </div>
+        <div className="tile">
+          <span className="tile__label">Worldwide tax from</span>
+          <span className="tile__value">{result.nprEndsOn}</span>
+          <span className="tile__note">shelter ends · avg rate {pct(avgRate)}</span>
+        </div>
+      </div>
+
+      <section className="card">
+        <h2>The boundary</h2>
+        <div className="tlwrap">
+        <div className="tl">
+          {result.years.map((y) => (
+            <div
+              key={y.year}
+              className={`tl__seg tl__seg--${y.phase} ${y.phaseChangedOn ? 'tl__seg--boundary' : ''}`}
+            >
+              <span className="tl__yr">{y.year}</span>
+              {y.phaseChangedOn && <span className="tl__mark">{y.phaseChangedOn}</span>}
+              <span className="tl__amt">{compact(y.combined)}</span>
+            </div>
+          ))}
+        </div>
+        </div>
+        <div className="legend">
+          <span className="legend__item">
+            <span className="swatch swatch--nonPermanentResident" />
+            <T id="non-permanent-resident" /> — foreign income shelterable
+          </span>
+          <span className="legend__item">
+            <span className="swatch swatch--permanentResident" />
+            <T id="permanent-resident-tax" /> — worldwide
+          </span>
+        </div>
+      </section>
+
+      <div className="body">
         <aside className="panel">
           <h2>Scenario</h2>
 
@@ -104,10 +174,8 @@ export default function App() {
               onChange={(e) => set({ residencyStart: e.target.value })}
             />
             <small>
-              A question of fact, not of immigration status — usually arrival day, but not the
-              date of any visa or residence card. Worldwide taxation begins{' '}
-              <strong>{nprEnd}</strong>, counting from the day after entry per NTA circular
-              2-4の3.
+              A question of fact, not of immigration status — usually arrival day, but never the
+              date on a visa or residence card.
             </small>
           </label>
 
@@ -119,8 +187,7 @@ export default function App() {
               onChange={(e) => set({ departure: e.target.value || undefined })}
             />
             <small>
-              Leaving in December rather than January avoids a year of{' '}
-              <T id="inhabitant-tax" />.
+              Leaving in December rather than January avoids a year of <T id="inhabitant-tax" />.
             </small>
           </label>
 
@@ -137,7 +204,7 @@ export default function App() {
               }
             >
               <option value="table1">Work visa — Appended Table 1</option>
-              <option value="table2">Permanent Resident / Spouse — Appended Table 2</option>
+              <option value="table2">Permanent Resident / Spouse — Table 2</option>
             </select>
             <small>
               <T id="table-1-status" /> time never counts toward the <T id="exit-tax" />.
@@ -167,31 +234,32 @@ export default function App() {
           </label>
 
           <label className="field">
-            <span>Pre-positioned funds (before residency)</span>
+            <span>Pre-positioned funds</span>
             <input
               type="number"
               step={1_000_000}
               value={scenario.prePositionedFunds}
               onChange={(e) => set({ prePositionedFunds: Number(e.target.value) })}
             />
-            <small>Transfers before residency fall outside the remittance regime entirely.</small>
+            <small>Moved before residency, so outside the remittance regime entirely.</small>
           </label>
 
           <label className="field">
             <span>JPY per USD</span>
             <input
               type="number"
-              value={scenario.fxJpyPerUsd}
+              value={fx}
               onChange={(e) => set({ fxJpyPerUsd: Number(e.target.value) || 1 })}
             />
           </label>
 
-          <h3>Annual remittance to Japan</h3>
-          <p className="muted small">
-            The lever. Exposure is <code>min(remittance − Japan-source income, foreign income)</code>.
+          <h3>Remittance by year</h3>
+          <p className="muted small" style={{ marginBottom: 10 }}>
+            The lever. Exposure is the remittance less Japan-source income, capped at the year's
+            foreign income.
           </p>
           {scenario.income.map((y) => (
-            <label key={y.year} className="field field--inline">
+            <label key={y.year} className="field--inline">
               <span>{y.year}</span>
               <input
                 type="number"
@@ -203,33 +271,7 @@ export default function App() {
           ))}
         </aside>
 
-        <main className="results">
-          <section className="card">
-            <h2>Phase timeline</h2>
-            <div className="timeline">
-              {result.years.map((y) => (
-                <div key={y.year} className={`tl tl--${y.phase}`} title={y.phase}>
-                  <span className="tl__year">{y.year}</span>
-                  {y.phaseChangedOn && <span className="tl__flag">→ {y.phaseChangedOn}</span>}
-                </div>
-              ))}
-            </div>
-            <p className="legend">
-              <span className="legend__item">
-                <span className="key key--nonResident" />
-                <T id="non-resident" />
-              </span>
-              <span className="legend__item">
-                <span className="key key--nonPermanentResident" />
-                <T id="non-permanent-resident" />
-              </span>
-              <span className="legend__item">
-                <span className="key key--permanentResident" />
-                <T id="permanent-resident-tax" />
-              </span>
-            </p>
-          </section>
-
+        <div className="stack">
           {result.warnings.length > 0 && (
             <section className="card card--warn">
               <h2>Findings</h2>
@@ -242,25 +284,28 @@ export default function App() {
           )}
 
           <section className="card">
-            <h2>Remittance discipline is worth…</h2>
+            <h2>What remittance discipline is worth</h2>
             <div className="compare">
               <div>
-                <span className="muted">This scenario</span>
-                <strong>{yen(result.totals.combined)}</strong>
+                <span className="compare__k">This scenario</span>
+                <span className="compare__v">{yen(result.totals.combined)}</span>
               </div>
               <div>
-                <span className="muted">Remitting ¥30m every year</span>
-                <strong>{yen(remittingResult.totals.combined)}</strong>
+                <span className="compare__k">Remitting ¥30m yearly</span>
+                <span className="compare__v">{yen(remitting.totals.combined)}</span>
               </div>
               <div className="compare__delta">
-                <span className="muted">Difference</span>
-                <strong>{yen(remittingResult.totals.combined - result.totals.combined)}</strong>
+                <span className="compare__k">Difference</span>
+                <span className="compare__v">
+                  {yen(remitting.totals.combined - result.totals.combined)}
+                </span>
               </div>
             </div>
             <p className="muted small">
-              Smaller than the Japanese tax avoided, because <T id="section-865-sourcing" /> leaves
-              an unremitted gain US-source and fully US-taxable. The shelter saves Japanese tax,
-              not US tax.
+              Smaller than the Japanese tax avoided, because <T id="section-865-sourcing" />{' '}
+              leaves an unremitted gain US-source and fully US-taxable. The shelter saves Japanese
+              tax, not US tax — the correction that most English-language writing on this misses,
+              because it is written for non-Americans.
             </p>
           </section>
 
@@ -270,13 +315,13 @@ export default function App() {
               <table>
                 <thead>
                   <tr>
-                    <th>Year</th>
-                    <th>Phase</th>
-                    <th>Deemed remitted</th>
-                    <th>Japan tax</th>
-                    <th>US tax</th>
-                    <th>Combined</th>
-                    <th>Effective</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Phase</th>
+                    <th scope="col">Deemed remitted</th>
+                    <th scope="col">Japan</th>
+                    <th scope="col">US</th>
+                    <th scope="col">Combined</th>
+                    <th scope="col">Effective</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,17 +329,11 @@ export default function App() {
                     <tr key={y.year}>
                       <td>{y.year}</td>
                       <td>
-                        <span className={`pill pill--${y.phase}`}>
-                          {y.phase === 'nonPermanentResident'
-                            ? 'Non-permanent'
-                            : y.phase === 'permanentResident'
-                              ? 'Worldwide'
-                              : 'Non-resident'}
-                        </span>
+                        <span className={`pill pill--${y.phase}`}>{PHASE_LABEL[y.phase]}</span>
                       </td>
                       <td>{y.japan.deemedRemitted ? yen(y.japan.deemedRemitted) : '—'}</td>
-                      <td>{yen(y.japan.total)}</td>
-                      <td>{yen(y.us.total * scenario.fxJpyPerUsd)}</td>
+                      <td className="num--jp">{yen(y.japan.total)}</td>
+                      <td className="num--us">{yen(y.us.total * fx)}</td>
                       <td>
                         <strong>{yen(y.combined)}</strong>
                       </td>
@@ -305,11 +344,9 @@ export default function App() {
                 <tfoot>
                   <tr>
                     <td colSpan={3}>Total</td>
-                    <td>{yen(result.totals.japan)}</td>
-                    <td>{yen(result.totals.us)}</td>
-                    <td>
-                      <strong>{yen(result.totals.combined)}</strong>
-                    </td>
+                    <td className="num--jp">{yen(result.totals.japan)}</td>
+                    <td className="num--us">{yen(result.totals.us)}</td>
+                    <td>{yen(result.totals.combined)}</td>
                     <td />
                   </tr>
                 </tfoot>
@@ -332,8 +369,20 @@ export default function App() {
                 </div>
               ))}
           </section>
-        </main>
+        </div>
       </div>
+
+      <footer className="foot">
+        <span>
+          Built on 38 archived primary sources — Japanese statutes from the e-Gov API, National
+          Tax Agency guidance and circulars, the Internal Revenue Code, IRS publications, and the
+          US–Japan Convention. Every term in the dictionary cites the text it comes from.
+        </span>
+        <span>
+          Rate tables are 2025 figures. Projecting later years reuses them, since inventing
+          brackets would be worse than reusing known ones.
+        </span>
+      </footer>
 
       {showGlossary && <Glossary onClose={() => setShowGlossary(false)} />}
     </div>
