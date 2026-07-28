@@ -1,0 +1,510 @@
+Please help us improve our site!
+
+×
+
+No thank you
+
+Skip to main content
+
+[ ](https://www.cornell.edu "Cornell University") [Cornell Law School](https://www.lawschool.cornell.edu/ "Cornell Law School") [Search Cornell](https://www.cornell.edu/search/ "Search Cornell University")
+
+Toggle navigation
+
+[](/)
+
+Please help us improve our site!
+
+[ Support Us! ](/donate)
+
+Search
+
+  * [About LII](/lii/about/about_lii)
+    * [Who We Are](/lii/about/who_we_are)
+    * [What We Do](/lii/about/what_we_do)
+    * [Who Pays For This](/lii/about/who_pays_for_this)
+    * [Contact Us](/lii/about/contact_us)
+  * [Get the law](/lii/get_the_law)
+    * [Constitution](/constitution "U.S. Constitution")
+    * [Supreme Court](/supremecourt/text/home "Supreme Court")
+    * [U.S. Code](/uscode/text "U.S. Code")
+    * [CFR](/cfr/text "C.F.R.")
+    * [Federal Rules](/rules "Federal Rules")
+      * [Federal Rules of Appellate Procedure](/rules/frap)
+      * [Federal Rules of Civil Procedure](/rules/frcp)
+      * [Federal Rules of Criminal Procedure](/rules/frcrmp)
+      * [Federal Rules of Evidence](/rules/fre)
+      * [Federal Rules of Bankruptcy Procedure](/rules/frbp)
+    * [U.C.C.](/ucc "U.C.C.")
+    * Law by jurisdiction
+      * [State law](/states)
+      * [Uniform laws](/uniform)
+      * [Federal law](/federal)
+      * [World law](/world)
+  * [Lawyer directory](https://lawyers.law.cornell.edu/)
+  * [Legal encyclopedia](/wex)
+    * [Business law](/wex/category/business_law)
+    * [Constitutional law](/wex/category/constitutional_law)
+    * [Criminal law](/wex/category/criminal_law_and_procedure)
+    * [Family law](/wex/category/family_law)
+    * [Employment law](/wex/category/employment_law)
+    * [Money and Finances](/wex/category/money_and_financial_problems)
+    * [More...](/wex/wex_articles)
+  * [Help out](/lii/help_out)
+    * [Give](/donate)
+    * [Sponsor](/lii/help_out/sponsor)
+    * [Advertise](/lii/help_out/advertise)
+    * [Create](/lii/help_out/create)
+    * [Promote](/lii/help_out/promote)
+    * [Join Lawyer Directory](/lii/help_out/join_directory)
+
+
+  * 
+
+
+  
+  
+
+
+  1. [LII](/)
+  2. [U.S. Code](/uscode/text)
+  3. [Title 26](/uscode/text/26)
+  4. [Subtitle A](/uscode/text/26/subtitle-A)
+  5. [CHAPTER 1](/uscode/text/26/subtitle-A/chapter-1)
+  6. [Subchapter N](/uscode/text/26/subtitle-A/chapter-1/subchapter-N)
+  7. [PART I](/uscode/text/26/subtitle-A/chapter-1/subchapter-N/part-I)
+  8. § 865
+
+
+Quick search by citation:
+
+Title
+
+Section
+
+Go!
+
+#  26 U.S. Code § 865 - Source rules for personal property sales 
+
+  * U.S. Code 
+  * Notes 
+  * Authorities (CFR) 
+
+
+[prev](/uscode/text/26/864 " Definitions and special rules") | next 
+
+(a) General ruleExcept as otherwise provided in this section, income from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of personal property—
+
+(1)
+
+by a [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=) shall be sourced in the United States, or
+
+(2)
+
+by a [nonresident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2032936163-397779289&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) shall be sourced outside the United States.
+
+(b) Exception for inventory propertyIn the case of income derived from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of [inventory property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=)—
+
+(1)
+
+this section shall not apply, and
+
+(2)
+
+such income shall be sourced under the rules of sections 861(a)(6), 862(a)(6), and 863.
+
+Notwithstanding the preceding sentence, any income from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of any[ unprocessed timber ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2088764766-1193708693&term_occur=999&term_src=)which is a softwood and was cut from an area in the United States shall be sourced in the United States and the rules of sections 862(a)(6) and 863(b) shall not apply to any such income. For purposes of the preceding sentence, the term [“unprocessed timber”](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2088764766-1193708693&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) means any log, cant, or similar form of timber.
+
+(c) Exception for depreciable personal property
+
+(1) In generalGain (not in excess of the [depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)) from the[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of [depreciable personal property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1824942377-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) shall be allocated between sources in the United States and sources outside the United States—
+
+(A)
+
+by treating the same proportion of such gain as sourced in the United States as the [United States depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-713302004-397783131&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) with respect to such property bear to the total[ depreciation adjustments,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) and
+
+(B)
+
+by treating the remaining portion of such gain as sourced outside the United States.
+
+(2) Gain in excess of depreciation
+
+Gain (in excess of the [depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)) from the[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of [depreciable personal property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1824942377-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) shall be sourced as if such property were[ inventory property.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(3) United States depreciation adjustmentsFor purposes of this subsection—
+
+(A) In general
+
+The term “[United States depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-713302004-397783131&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means the portion of the[ depreciation adjustments ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)to the adjusted basis of the property which are attributable to the[ depreciation deductions ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2067070241-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)allowable in computing taxable income from sources in the United States.
+
+(B) Special rule for certain propertyExcept in the case of property of a kind described in section 168(g)(4), if, for any taxable year—
+
+(i)
+
+such property is used predominantly in the United States, or
+
+(ii)
+
+such property is used predominantly outside the United States,
+
+all of the [depreciation deductions](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2067070241-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) allowable for such year shall be treated as having been allocated to income from sources in the United States (or, where clause (ii) applies, from sources outside the United States).
+
+(4) Other definitionsFor purposes of this subsection—
+
+(A) Depreciable personal property
+
+The term “[depreciable personal property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1824942377-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means any personal property if the adjusted basis of such property includes[ depreciation adjustments.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(B) Depreciation adjustments
+
+The term “[depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means adjustments reflected in the adjusted basis of any property on account of[ depreciation deductions ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2067070241-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)(whether allowed with respect to such property or other property and whether allowed to the taxpayer or to any other person).
+
+(C) Depreciation deductions
+
+The term “[depreciation deductions](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2067070241-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means any deductions for depreciation or amortization or any other deduction allowable under any provision of this chapter which treats an otherwise capital expenditure as a deductible expense.
+
+(d) Exception for intangibles
+
+(1) In generalIn the case of any [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of an[ intangible—](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(A)
+
+this section shall apply only to the extent the payments in consideration of such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) are not contingent on the productivity, use, or[ disposition ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-583380919-317025006&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)of the[ intangible,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) and
+
+(B)
+
+to the extent such payments are so contingent, the source of such payments shall be determined under this part in the same manner as if such payments were royalties.
+
+(2) Intangible
+
+For purposes of paragraph (1), the term “[intangible](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means any patent, copyright, secret process or formula, goodwill, trademark, trade brand, franchise, or other like property.
+
+(3) Special rule in the case of goodwill
+
+To the extent this section applies to the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of goodwill, payments in consideration of such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) shall be treated as from sources in the country in which such goodwill was generated.
+
+(4) Coordination with subsection (c)
+
+(A) Gain not in excess of depreciation adjustments sourced under subsection (c)
+
+Notwithstanding paragraph (1), any gain from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of an[ intangible ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)shall be sourced under subsection (c) to the extent such gain does not exceed the [depreciation adjustments](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-10829459-397783130&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) with respect to such[ intangible.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(B) Subsection (c)(2) not to apply to intangibles
+
+Paragraph (2) of subsection (c) shall not apply to any gain from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of an[ intangible.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(e) Special rules for sales through offices or fixed places of business
+
+(1) Sales by residents
+
+(A) In general
+
+In the case of income not sourced under subsection (b), (c), (d)(1)(B) or (3), or (f), if a [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=) maintains an office or other fixed place of business in a foreign country, income from[ sales ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of personal property attributable to such office or other fixed place of business shall be sourced outside the United States.
+
+(B) Tax must be imposed
+
+Subparagraph (A) shall not apply unless an income tax equal to at least 10 percent of the income from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) is actually paid to a foreign country with respect to such income.
+
+(2) Sales by nonresidents
+
+(A) In general
+
+Notwithstanding any other provisions of this part, if a [nonresident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2032936163-397779289&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) maintains an office or other fixed place of business in the United States, income from any[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of personal property (including [inventory property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=)) attributable to such office or other fixed place of business shall be sourced in the United States. The preceding sentence shall not apply for purposes of [section 971](/uscode/text/26/971) (defining export trade corporation).
+
+(B) Exception
+
+Subparagraph (A) shall not apply to any [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of [inventory property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=) which is sold for use,[ disposition,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-583380919-317025006&term_occur=999&term_src=) or consumption outside the United States if an office or other fixed place of business of the taxpayer in a foreign country materially participated in the[ sale.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(3) Sales attributable to an office or other fixed place of business
+
+The principles of [section 864(c)(5)](/uscode/text/26/864#c_5) shall apply in determining whether a taxpayer has an office or other fixed place of business and whether a[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)is attributable to such an office or other fixed place of business.
+
+(f) Stock of affiliatesIf—
+
+(1)
+
+a [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=) sells stock in an[ affiliate ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)which is a foreign corporation,
+
+(2)
+
+such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) occurs in a foreign country in which such [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=) is engaged in the active conduct of a trade or business, and
+
+(3)
+
+more than 50 percent of the gross income of such [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=) for the 3-year period ending with the close of such [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)’s taxable year immediately preceding the year in which the[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)occurred was derived from the active conduct of a trade or business in such foreign country,
+
+any gain from such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) shall be sourced outside the United States. For purposes of paragraphs (2) and (3), the [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=) may elect to treat an[ affiliate ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)and all other corporations which are wholly owned (directly or indirectly) by the[ affiliate ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)as one corporation.
+
+(g) United States resident; nonresidentFor purposes of this section—
+
+(1) In generalExcept as otherwise provided in this subsection—
+
+(A) United States residentThe term “[United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=)” means—
+
+(i) any individual who—
+
+(I)
+
+is a United States citizen or a resident alien and does not have a tax home (as defined in [section 911(d)(3)](/uscode/text/26/911#d_3)) in a foreign country, or
+
+(II)
+
+is a [nonresident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2032936163-397779289&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) alien and has a tax home (as so defined) in the United States, and
+
+(ii)
+
+any corporation, trust, or estate which is a United States person (as defined in [section 7701(a)(30)](/uscode/text/26/7701#a_30)).
+
+(B) Nonresident
+
+The term “[nonresident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2032936163-397779289&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)” means any person other than a [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=).
+
+(2) Special rules for United States citizens and resident aliens
+
+For purposes of this section, a United States citizen or resident alien shall not be treated as a [nonresident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2032936163-397779289&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) with respect to any[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of personal property unless an income tax equal to at least 10 percent of the gain derived from such[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)is actually paid to a foreign country with respect to that gain.
+
+(3) Special rule for certain stock sales by residents of Puerto [Rico](/topn/racketeer_influenced_and_corrupt_organizations_act_rico)Paragraph (2) shall not apply to the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) by an individual who was a bona fide resident of Puerto [Rico](/topn/racketeer_influenced_and_corrupt_organizations_act_rico) during the entire taxable year of stock in a corporation if—
+
+(A)
+
+such corporation is engaged in the active conduct of a trade or business in Puerto [Rico](/topn/racketeer_influenced_and_corrupt_organizations_act_rico), and
+
+(B)
+
+more than 50 percent of its gross income for the 3-year period ending with the close of such corporation’s taxable year immediately preceding the year in which such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) occurred was derived from the active conduct of a trade or business in Puerto [Rico](/topn/racketeer_influenced_and_corrupt_organizations_act_rico).
+
+For purposes of the preceding sentence, the taxpayer may elect to treat a corporation and all other corporations which are wholly owned (directly or indirectly) by such corporation as one corporation.
+
+(h) Treatment of gains from sale of certain stock or intangibles and from certain liquidations
+
+(1) In generalIn the case of gain to which this subsection applies—
+
+(A)
+
+such gain shall be sourced outside the United States, but
+
+(B)
+
+subsections (a), (b), and (c) of section 904 and sections 907 and 960 shall be applied separately with respect to such gain.
+
+(2) Gain to which subsection appliesThis subsection shall apply to—
+
+(A) Gain from sale of certain stock or intangiblesAny gain—
+
+(i)
+
+which is from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of stock in a foreign corporation or an[ intangible ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-966942115-397782171&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)(as defined in subsection (d)(2)) and which would otherwise be sourced in the United States under this section,
+
+(ii)
+
+which, under a treaty obligation of the United States (applied without regard to this section), would be sourced outside the United States, and
+
+(iii)
+
+with respect to which the taxpayer chooses the benefits of this subsection.
+
+(B) Gain from liquidation in possessionAny gain which is derived from the receipt of any distribution in liquidation of a corporation—
+
+(i)
+
+which is organized in a possession of the United States, and
+
+(ii)
+
+more than 50 percent of the gross income of which during the 3-taxable year period ending with the close of the taxable year immediately preceding the taxable year in which the distribution is received is from the active conduct of a trade or business in such possession.
+
+(i) Other definitionsFor purposes of this section—
+
+(1) Inventory property
+
+The term “[inventory property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=)” means personal property described in paragraph (1) of section 1221(a).
+
+(2) Sale includes exchange
+
+The term “[sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)” includes an exchange or any other[ disposition.](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-583380919-317025006&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865)
+
+(3) Treatment of possessions
+
+Any possession of the United States shall be treated as a foreign country.
+
+(4) Affiliate
+
+The term “[affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)” means a member of the same affiliated group (within the meaning of [section 1504(a)](/uscode/text/26/1504#a) without regard to section 1504(b)).
+
+(5) Treatment of partnerships
+
+In the case of a partnership, except as provided in regulations, this section shall be applied at the partner level.
+
+(j) RegulationsThe Secretary shall prescribe such regulations as may be necessary or appropriate to carry out the purpose of this section, including regulations—
+
+(1)
+
+relating to the treatment of losses from [sales](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=title:26:subtitle:A:chapter:1:subchapter:N:part:I:section:865) of personal property,
+
+(2)
+
+applying the rules of this section to income derived from trading in futures contracts, forward contracts, options contracts, and other instruments, and
+
+(3)
+
+providing that, subject to such conditions (which may include provisions comparable to [section 877](/uscode/text/26/877)) as may be provided in such regulations, subsections (e)(1)(B) and (g)(2) shall not apply for purposes of sections 931 and 933.
+
+(k) Cross references
+
+(1)
+
+For provisions relating to the characterization as dividends for source purposes of gains from the [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of stock in certain foreign corporations, see section 1248.
+
+(2)
+
+For sourcing of income from certain foreign currency transactions, see section 988.
+
+(Added [Pub. L. 99–514, title XII, § 1211(a)](/rio/citation/Pub._L._99-514), Oct. 22, 1986, [100 Stat. 2533](/rio/citation/100_Stat._2533); amended [Pub. L. 100–647, title I, § 1012(d)(1)](/rio/citation/Pub._L._100-647)–(6), (8), (9), (11), (12), Nov. 10, 1988, [102 Stat. 3497–3499](/rio/citation/102_Stat._3497-3499); [Pub. L. 101–508, title XI, § 11813(b)(18)](/rio/citation/Pub._L._101-508), Nov. 5, 1990, [104 Stat. 1388–555](/rio/citation/104_Stat._1388-555); [Pub. L. 103–66, title XIII, § 13239(c)](/rio/citation/Pub._L._103-66), Aug. 10, 1993, [107 Stat. 509](/rio/citation/107_Stat._509); [Pub. L. 104–188, title I, § 1704(f)(4)(A)](/rio/citation/Pub._L._104-188), Aug. 20, 1996, [110 Stat. 1880](/rio/citation/110_Stat._1880); [Pub. L. 106–170, title V, § 532(c)(1)(E)](/rio/citation/Pub._L._106-170), Dec. 17, 1999, [113 Stat. 1930](/rio/citation/113_Stat._1930); [Pub. L. 115–97, title I, § 14301(c)(6)](/rio/citation/Pub._L._115-97), Dec. 22, 2017, [131 Stat. 2222](/rio/citation/131_Stat._2222); [Pub. L. 115–141, div. U, title IV, § 401(d)(1)(D)(xi)](/rio/citation/Pub._L._115-141), Mar. 23, 2018, [132 Stat. 1208](/rio/citation/132_Stat._1208).)
+
+**Editorial Notes**
+
+Amendments
+
+2018—Subsec. (j)(3). [Pub. L. 115–141](/rio/citation/Pub._L._115-141) substituted “and 933” for “, 933, and 936”.
+
+2017—Subsec. (h)(1)(B). [Pub. L. 115–97](/rio/citation/Pub._L._115-97) substituted “907” for “902, 907,”.
+
+1999—Subsec. (i)(1). [Pub. L. 106–170](/rio/citation/Pub._L._106-170) substituted “section 1221(a)” for “section 1221”.
+
+1996—Subsec. (b)(2). [Pub. L. 104–188](/rio/citation/Pub._L._104-188) substituted “863” for “863(b)”.
+
+1993—Subsec. (b). [Pub. L. 103–66](/rio/citation/Pub._L._103-66) inserted at end “Notwithstanding the preceding sentence, any income from the[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of any[ unprocessed timber ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2088764766-1193708693&term_occur=999&term_src=)which is a softwood and was cut from an area in the United States shall be sourced in the United States and the rules of sections 862(a)(6) and 863(b) shall not apply to any such income. For purposes of the preceding sentence, the term [‘unprocessed timber’](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-2088764766-1193708693&term_occur=999&term_src=) means any log, cant, or similar form of timber.”
+
+1990—Subsec. (c)(3)(B). [Pub. L. 101–508](/rio/citation/Pub._L._101-508) substituted “section 168(g)(4)” for “section 48(a)(2)(B)”.
+
+1988—Subsec. (d)(2). [Pub. L. 100–647, § 1012(d)(12)](/rio/citation/Pub._L._100-647), inserted “franchise,” after “trade brand,”.
+
+Subsec. (d)(4). [Pub. L. 100–647, § 1012(d)(1)](/rio/citation/Pub._L._100-647), added par. (4).
+
+Subsec. (e)(1)(A). [Pub. L. 100–647, § 1012(d)(2)](/rio/citation/Pub._L._100-647), (9), substituted “(d)(1)(B) or (3)” for “(d)” and “in a foreign country” for first reference to “outside the United States”.
+
+Subsec. (e)(2)(B). [Pub. L. 100–647, § 1012(d)(5)](/rio/citation/Pub._L._100-647), amended subpar. (B) generally. Prior to amendment, subpar. (B) read as follows: “Subparagraph (A) shall not apply to—
+
+“(i) any [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) of [inventory property](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=) which is sold for use,[ disposition,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-583380919-317025006&term_occur=999&term_src=) or consumption outside the United States if an office or other fixed place of business of the taxpayer outside the United States materially participated in the[ sale,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) or
+
+“(ii) any amount included in gross income under section 951(a)(1)(A).”
+
+Subsec. (f). [Pub. L. 100–647, § 1012(d)(4)](/rio/citation/Pub._L._100-647), amended subsec. (f) generally. Prior to amendment, subsec. (f) read as follows: “If—
+
+“(1) a [United States resident](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-826863439-397779289&term_occur=999&term_src=) sells stock in an[ affiliate ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)which is a foreign corporation,
+
+“(2) such [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=) is engaged in the active conduct of a trade or business, and
+
+“(3) such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) occurs in the foreign country in which the [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=) derived more than 50 percent of its gross income for the 3-year period ending with the close of the [affiliate](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1588692301-397777364&term_occur=999&term_src=)’s taxable year immediately preceding the year during which such[ sale ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)occurred,
+
+any gain from such [sale](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) shall be sourced outside the United States.”
+
+Subsec. (g)(1)(A)(i). [Pub. L. 100–647, § 1012(d)(11)](/rio/citation/Pub._L._100-647), amended cl. (i) generally. Prior to amendment, cl. (i) read as follows: “any individual who has a tax home (as defined in section 911(d)(3)) in the United States, and”.
+
+Subsec. (g)(1)(A)(ii). [Pub. L. 100–647, § 1012(d)(3)(A)](/rio/citation/Pub._L._100-647), struck out “partnership,” after “corporation,”.
+
+Subsec. (g)(3). [Pub. L. 100–647, § 1012(d)(6)(A)](/rio/citation/Pub._L._100-647), added par. (3).
+
+Subsec. (h). [Pub. L. 100–647, § 1012(d)(8)](/rio/citation/Pub._L._100-647), added subsec. (h) and redesignated former subsec. (h) as (i).
+
+[Pub. L. 100–647, § 1012(d)(3)(B)](/rio/citation/Pub._L._100-647), added par. (5) to subsec. (h) prior to redesignation as subsec. (i).
+
+Subsec. (i). [Pub. L. 100–647, § 1012(d)(8)](/rio/citation/Pub._L._100-647), redesignated former subsec. (h) as (i). Former subsec. (i) redesignated (j).
+
+[Pub. L. 100–647, § 1012(d)(6)(B)](/rio/citation/Pub._L._100-647), added par. (3) to subsec. (i) prior to redesignation as subsec. (j).
+
+Subsec. (i)(5). [Pub. L. 100–647, § 1012(d)(3)(B)](/rio/citation/Pub._L._100-647), added par. (5) to subsec. (h) prior to redesignation as subsec. (i).
+
+Subsec. (j). [Pub. L. 100–647, § 1012(d)(8)](/rio/citation/Pub._L._100-647), redesignated former subsec. (i) as (j). Former subsec. (j) redesignated (k).
+
+Subsec. (j)(3). [Pub. L. 100–647, § 1012(d)(6)(B)](/rio/citation/Pub._L._100-647), added par. (3) to subsec. (i) prior to redesignation as subsec. (j).
+
+Subsec. (k). [Pub. L. 100–647, § 1012(d)(8)](/rio/citation/Pub._L._100-647), redesignated former subsec. (j) as (k).
+
+**Statutory Notes and Related Subsidiaries**
+
+Effective Date of 2017 Amendment
+
+Amendment by [Pub. L. 115–97](/rio/citation/Pub._L._115-97) applicable to taxable years of foreign corporations beginning after Dec. 31, 2017, and to taxable years of United States shareholders in which or with which such taxable years of foreign corporations end, see [section 14301(d) of Pub. L. 115–97](/rio/citation/Pub._L._115-97), set out as a note under [section 78 of this title](/uscode/text/26/78).
+
+Effective Date of 1999 Amendment
+
+Amendment by [Pub. L. 106–170](/rio/citation/Pub._L._106-170) applicable to any instrument held, acquired, or entered into, any transaction entered into, and supplies held or acquired on or after Dec. 17, 1999, see [section 532(d) of Pub. L. 106–170](/rio/citation/Pub._L._106-170), set out as a note under [section 170 of this title](/uscode/text/26/170).
+
+Effective Date of 1996 Amendment
+
+[Pub. L. 104–188, title I, § 1704(f)(4)(B)](/rio/citation/Pub._L._104-188), Aug. 20, 1996, [110 Stat. 1880](/rio/citation/110_Stat._1880), provided that: 
+
+“The amendment made by subparagraph (A) [amending this section] shall take effect as if included in the amendments made by section 1211 of the [Tax Reform Act of 1986](/topn/tax_reform_act_of_1986) [[Pub. L. 99–514](/rio/citation/Pub._L._99-514)].”
+
+Effective Date of 1993 Amendment
+
+[Pub. L. 103–66, title XIII, § 13239(e)](/rio/citation/Pub._L._103-66), Aug. 10, 1993, [107 Stat. 509](/rio/citation/107_Stat._509), provided that: 
+
+“The amendments made by this section [amending this section and sections [927](/uscode/text/26/927), [954](/uscode/text/26/954), and [993](/uscode/text/26/993) of this title] shall apply to[ sales,](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=) exchanges, or other[ dispositions ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-583380919-317025006&term_occur=999&term_src=)after the date of the enactment of this Act [Aug. 10, 1993].”
+
+Effective Date of 1990 Amendment
+
+Amendment by [Pub. L. 101–508](/rio/citation/Pub._L._101-508) applicable to property placed in service after Dec. 31, 1990, but not applicable to any transition property (as defined in [section 49(e) of this title](/uscode/text/26/49#e)), any property with respect to which qualified progress expenditures were previously taken into account under [section 46(d) of this title](/uscode/text/26/46#d), and any property described in [section 46(b)(2)(C) of this title](/uscode/text/26/46#b_2_C), as such sections were in effect on Nov. 4, 1990, see [section 11813(c) of Pub. L. 101–508](/rio/citation/Pub._L._101-508), set out as a note under [section 45K of this title](/uscode/text/26/45K).
+
+Effective Date of 1988 Amendment
+
+[Pub. L. 100–647, title I, § 1012(d)(5)](/rio/citation/Pub._L._100-647), Nov. 10, 1988, [102 Stat. 3497](/rio/citation/102_Stat._3497), provided that the amendment made by that section is effective with respect to taxable years beginning after Dec. 31, 1987.
+
+Amendment by section 1012(d)(1)–(4), (6), (8), (9), (11), (12) of [Pub. L. 100–647](/rio/citation/Pub._L._100-647) effective, except as otherwise provided, as if included in the provision of the [Tax Reform Act of 1986](/topn/tax_reform_act_of_1986), [Pub. L. 99–514](/rio/citation/Pub._L._99-514), to which such amendment relates, see [section 1019(a) of Pub. L. 100–647](/rio/citation/Pub._L._100-647), set out as a note under [section 1 of this title](/uscode/text/26/1).
+
+Effective Date
+
+[Pub. L. 99–514, title XII, § 1211(c)](/rio/citation/Pub._L._99-514), Oct. 22, 1986, [100 Stat. 2536](/rio/citation/100_Stat._2536), provided that:
+
+“(1) In general.—
+
+Except as provided in paragraph (2), the amendments made by this section [enacting this section, amending sections [861](/uscode/text/26/861) to [864](/uscode/text/26/864), [871](/uscode/text/26/871), [881](/uscode/text/26/881), and [904](/uscode/text/26/904) of this title, and enacting provisions set out below] shall apply to taxable years beginning after December 31, 1986.
+
+“(2) Special rule for foreign persons.—
+
+In the case of any foreign person other than any [controlled foreign corporations](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1229130538-317025006&term_occur=999&term_src=) (within the meaning of section 957(a) of the [Internal Revenue Code of 1954](/topn/internal_revenue_code_of_1954) [now 1986]), the amendments made by this section shall apply to transactions entered into after March 18, 1986.”
+
+Savings Provision
+
+For provisions that nothing in amendment by [Pub. L. 115–141](/rio/citation/Pub._L._115-141) be construed to affect treatment of certain transactions occurring, property acquired, or items of income, loss, deduction, or credit taken into account prior to Mar. 23, 2018, for purposes of determining liability for tax for periods ending after Mar. 23, 2018, see [section 401(e) of Pub. L. 115–141](/rio/citation/Pub._L._115-141), set out as a note under [section 23 of this title](/uscode/text/26/23).
+
+For provisions that nothing in amendment by [Pub. L. 101–508](/rio/citation/Pub._L._101-508) be construed to affect treatment of certain transactions occurring, property acquired, or items of income, loss, deduction, or credit taken into account prior to Nov. 5, 1990, for purposes of determining liability for tax for periods ending after Nov. 5, 1990, see [section 11821(b) of Pub. L. 101–508](/rio/citation/Pub._L._101-508), set out as a note under [section 45K of this title](/uscode/text/26/45K).
+
+Applicability of Certain Amendments by [Pub. L. 99–514](/rio/citation/Pub._L._99-514) in Relation to Treaty Obligations of United States
+
+For nonapplication of amendment by [section 1211(a) of Pub. L. 99–514](/rio/citation/Pub._L._99-514) (enacting this section) to the extent application of such amendment would be contrary to any treaty obligation of the United States in effect on Oct. 22, 1986, with provision that for such purposes any amendment by title I of [Pub. L. 100–647](/rio/citation/Pub._L._100-647) be treated as if it had been included in the provision of [Pub. L. 99–514](/rio/citation/Pub._L._99-514) to which such amendment relates, see section 1012(aa)(3), (4) of [Pub. L. 100–647](/rio/citation/Pub._L._100-647), set out as a note under [section 861 of this title](/uscode/text/26/861).
+
+Study of Source Rules for Sales of Inventory Property
+
+[Pub. L. 99–514, title XII, § 1211(d)](/rio/citation/Pub._L._99-514), Oct. 22, 1986, [100 Stat. 2536](/rio/citation/100_Stat._2536), directed Secretary of the Treasury or his delegate to conduct a study of source rules for[ sales ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-3522631-397777366&term_occur=999&term_src=)of[ inventory property ](/definitions/uscode.php?width=840&height=800&iframe=true&def_id=26-USC-1044147225-397777367&term_occur=999&term_src=)and, not later than Sept. 30, 1987 (due date extended to Jan. 1, 1992, by [Pub. L. 101–508, title XI, § 11831(b)](/rio/citation/Pub._L._101-508), Nov. 5, 1990, [104 Stat. 1388–559](/rio/citation/104_Stat._1388-559)), to submit to Committee on Ways and Means of House of Representatives and Committee on Finance of Senate a report of such study (together with recommendations he deemed advisable).
+
+CFR Title | Parts  
+---|---  
+26 |  [ 1 ](/cfr/text/26/part-1 "PART 1—INCOME TAXES"), [ 301 ](/cfr/text/26/part-301 "PART 301—PROCEDURE AND ADMINISTRATION")  
+  
+##  U.S. Code Toolbox 
+
+[Law about... Articles from Wex](/wex/wex_articles)
+
+[Table of Popular Names](/topn)
+
+[Parallel Table of Authorities](/ptoa)
+
+[How current is this?](/uscode/about/how-current)
+
+* * *
+
+* * *
+
+  * [Accessibility](/lii/about/accessibility)
+  * [About LII](/lii/about/about_lii)
+  * [Contact us](/lii/about/contact_us)
+  * [Advertise here](/lii/help_out/sponsor)
+  * [Help](/lii/help)
+  * [Terms of use](/lii/terms/documentation)
+  * [Privacy](/lii/terms/privacy_policy)
+
+
+  * [ ](/ "LII home page")
+
+
